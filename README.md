@@ -3,6 +3,7 @@
 A modern Java terminal UI library that brings AWT-like components to the terminal using ncurses. Built with cutting-edge Java 21 features including Virtual Threads, Foreign Function & Memory API, Record Patterns, and Sealed Interfaces.
 
 ![Status](https://img.shields.io/badge/status-working-brightgreen)
+![Version](https://img.shields.io/badge/version-1.2-blue)
 ![Java](https://img.shields.io/badge/java-21-orange)
 ![License](https://img.shields.io/badge/license-GPL--3.0-blue)
 
