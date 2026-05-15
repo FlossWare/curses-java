@@ -1,6 +1,6 @@
 # Java Module System Support
 
-JCurses-AWT is ready for Java 9+ module system (JPMS) deployment.
+jcurses is ready for Java 9+ module system (JPMS) deployment.
 
 ## Quick Start
 

@@ -1,5 +1,5 @@
 /**
- * JCurses-AWT: Terminal UI library with AWT-like components using ncurses.
+ * jcurses: Terminal UI library with AWT-like components using ncurses.
  *
  * This module provides a modern Java 21 terminal UI framework with:
  * - 28+ widgets (buttons, labels, text fields, tables, menus, etc.)
