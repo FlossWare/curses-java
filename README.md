@@ -1,4 +1,4 @@
-# JCurses-AWT
+# jcurses
 
 A modern Java terminal UI library that brings AWT-like components to the terminal using ncurses. Built with cutting-edge Java 21 features including Virtual Threads, Foreign Function & Memory API, Record Patterns, and Sealed Interfaces.
 

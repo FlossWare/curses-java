@@ -1,6 +1,6 @@
 # CI/CD Pipeline
 
-JCurses-AWT uses GitHub Actions for automated continuous integration and deployment.
+jcurses uses GitHub Actions for automated continuous integration and deployment.
 
 ## Overview
 
