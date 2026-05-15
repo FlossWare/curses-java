@@ -1,0 +1,60 @@
+╔════════════════════════════════════════════════════════════╗
+║          JCurses Interactive Demo - Quick Start            ║
+╚════════════════════════════════════════════════════════════╝
+
+🚀 RUN THE INTERACTIVE DEMO:
+
+   ./run-interactive.sh
+
+   Quick test (auto-exits after 3s):
+
+   ./test-interactive.sh
+
+   OR manually:
+
+   mvn clean compile
+   java --enable-preview --enable-native-access=ALL-UNNAMED \
+     -cp target/classes org.flossware.jcurses.InteractiveDemo
+
+
+⌨️  CONTROLS:
+
+   TAB or ↓        Move to next widget
+   ↑               Move to previous widget  
+   SPACE or ENTER  Activate widget (click/toggle)
+   ESC or Q        Quit application
+
+
+📋 REQUIREMENTS:
+
+   ✓ Java 21 or later
+   ✓ ncurses library installed
+   ✓ Real terminal (not IDE terminal)
+
+
+📦 INSTALL NCURSES:
+
+   Ubuntu/Debian:  sudo apt-get install libncurses-dev
+   Fedora/RHEL:    sudo dnf install ncurses-devel
+   Arch:           sudo pacman -S ncurses
+   macOS:          brew install ncurses
+
+
+🎮 WHAT YOU CAN DO:
+
+   • Click buttons to trigger actions
+   • Toggle checkboxes on/off
+   • Adjust slider values with +/- buttons
+   • Fill and reset progress bars
+   • Cycle through dropdown options
+   • See real-time visual feedback!
+
+
+📚 MORE INFO:
+
+   Static demo:        mvn exec:exec
+   Full docs:          cat README.md
+   Interactive guide:  cat INTERACTIVE_DEMO.md
+
+
+═══════════════════════════════════════════════════════════════
