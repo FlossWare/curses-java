@@ -22,6 +22,7 @@ public abstract class Component {
         } finally {
             renderLock.unlock();
         }
+        repaint();
     }
 
     public void setSize(int width, int height) {
@@ -32,6 +33,7 @@ public abstract class Component {
         } finally {
             renderLock.unlock();
         }
+        repaint();
     }
 
     public int getX() {
