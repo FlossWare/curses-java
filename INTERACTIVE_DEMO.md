@@ -13,7 +13,9 @@ The fastest way to run the interactive demo:
 The interactive demo is a **fully functional terminal UI application** where you can:
 
 - ✅ Navigate between widgets using keyboard
-- ✅ Click buttons to trigger actions
+- ✅ Click buttons and widgets with the mouse
+- ✅ Drag windows by their title bar to move them
+- ✅ Resize windows by dragging edges and corners
 - ✅ Toggle checkboxes on/off
 - ✅ Adjust slider values
 - ✅ Fill progress bars
@@ -62,7 +64,9 @@ If you're using an IDE (IntelliJ, Eclipse, VS Code):
    ```
 3. Run in a terminal (not the IDE's built-in terminal)
 
-## Keyboard Controls
+## Controls
+
+### Keyboard
 
 | Key | Action |
 |-----|--------|
@@ -70,6 +74,15 @@ If you're using an IDE (IntelliJ, Eclipse, VS Code):
 | `↑` | Move focus to previous widget |
 | `SPACE` or `ENTER` | Activate the focused widget |
 | `ESC` or `Q` | Quit the application |
+
+### Mouse
+
+| Action | Result |
+|--------|--------|
+| **Click** on button/widget | Activate the widget |
+| **Drag** window title bar | Move the window |
+| **Drag** window edge | Resize width or height |
+| **Drag** window corner | Resize both dimensions |
 
 ## What You'll See
 
@@ -103,6 +116,13 @@ When you run the demo, you'll see a terminal UI with:
 The `>` and `<` brackets show which widget currently has focus.
 
 ## Interactive Features
+
+### Window Manipulation
+- **Drag title bar**: Click and drag the top edge of any window to move it around
+- **Drag edges**: Click and drag the left, right, top, or bottom edge to resize
+- **Drag corners**: Click and drag any corner to resize both width and height
+- **Toggle Draggable**: In the demo window, disable/enable drag-to-move functionality
+- **Toggle Resizable**: In the demo window, disable/enable resize functionality
 
 ### Buttons
 - **Click Me! / Press Me!**: Updates the welcome message

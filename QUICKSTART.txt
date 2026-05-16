@@ -17,12 +17,20 @@
      -cp target/classes org.flossware.jcurses.InteractiveDemo
 
 
-⌨️  CONTROLS:
+⌨️  KEYBOARD CONTROLS:
 
    TAB or ↓        Move to next widget
-   ↑               Move to previous widget  
+   ↑               Move to previous widget
    SPACE or ENTER  Activate widget (click/toggle)
    ESC or Q        Quit application
+
+
+🖱️  MOUSE CONTROLS:
+
+   Click           Activate buttons and widgets
+   Drag title bar  Move windows around
+   Drag edges      Resize window width/height
+   Drag corners    Resize both dimensions
 
 
 📋 REQUIREMENTS:
@@ -43,10 +51,13 @@
 🎮 WHAT YOU CAN DO:
 
    • Click buttons to trigger actions
+   • Drag windows by title bar to move them
+   • Resize windows by dragging edges/corners
    • Toggle checkboxes on/off
    • Adjust slider values with +/- buttons
    • Fill and reset progress bars
    • Cycle through dropdown options
+   • Toggle draggable/resizable flags
    • See real-time visual feedback!
 
 
