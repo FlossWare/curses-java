@@ -79,8 +79,9 @@ public class WindowDragManager {
         try {
             long buttonState = event.button();
 
-            // Check for drag start (BUTTON1_PRESSED)
-            if ((buttonState & NcursesBridge.BUTTON1_PRESSED) != 0) {
+            // Check for drag start (BUTTON1_PRESSED or BUTTON1_CLICKED)
+            // ncurses may send different events depending on REPORT_MOUSE_POSITION setting
+            if ((buttonState & (NcursesBridge.BUTTON1_PRESSED | NcursesBridge.BUTTON1_CLICKED)) != 0) {
                 if (currentDrag == null) {
                     // Start new drag
                     return startDrag(event, window, draggable);
