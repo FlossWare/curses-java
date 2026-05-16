@@ -30,7 +30,8 @@ public class NcursesBridge {
     public static final long BUTTON1_DOUBLE_CLICKED = 0x00000008L;
     public static final long BUTTON1_PRESSED = 0x00000002L;
     public static final long BUTTON1_RELEASED = 0x00000001L;
-    public static final long ALL_MOUSE_EVENTS = 0x0FFFFFFFL;
+    public static final long REPORT_MOUSE_POSITION = 0x08000000L;
+    public static final long ALL_MOUSE_EVENTS = 0x1FFFFFFFL;  // Includes REPORT_MOUSE_POSITION
 
     // Color constants (ncurses standard colors)
     public static final int COLOR_BLACK = 0;
