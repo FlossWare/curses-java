@@ -10,6 +10,7 @@ A modern Java terminal UI library that brings AWT-like components to the termina
 ## ✨ Features
 
 - 🎮 **Fully Interactive** - Real keyboard & mouse navigation and widget interaction
+- 🖱️ **Window Manipulation** - Drag to move windows, resize by dragging edges and corners
 - 🎨 **Color Support** - 8 standard colors with predefined color pairs and 3 built-in themes
 - 📝 **Advanced Text Editing** - Selection, cut/copy/paste, undo/redo, word navigation in text fields
 - 📜 **Scrollable Views** - JScrollPane with viewport clipping and scrollbar integration
@@ -20,7 +21,7 @@ A modern Java terminal UI library that brings AWT-like components to the termina
 - 🎭 **Themes** - Default, Dark, and Light themes with pluggable architecture
 - 🧩 **Module System** - Java 9+ JPMS support (opt-in)
 - 📦 **Zero Dependencies** - Only ncurses (native) and test libraries
-- ✅ **Comprehensive Tests** - 289 unit tests with 80%+ coverage
+- ✅ **Comprehensive Tests** - 303 unit tests with 80%+ coverage
 
 ## 🚀 Quick Start
 
@@ -33,6 +34,7 @@ A modern Java terminal UI library that brings AWT-like components to the termina
 - `TAB` / `↓` - Navigate to next widget
 - `↑` - Navigate to previous widget
 - `SPACE` / `ENTER` - Activate widget
+- `MOUSE` - Click widgets, drag title bars to move windows, drag edges/corners to resize
 - `ESC` / `Q` - Quit
 
 ## 📋 Requirements
@@ -92,6 +94,10 @@ java --enable-preview --enable-native-access=ALL-UNNAMED \
 - ✅ Fill and reset progress bars
 - ✅ Cycle through combo box options
 - ✅ Navigate with keyboard, see visual focus indicator
+- ✅ Drag window title bars to move windows
+- ✅ Drag window edges to resize width/height
+- ✅ Drag window corners to resize both dimensions
+- ✅ Toggle draggable/resizable flags to control window behavior
 
 ### Static Rendering Demo
 
@@ -108,7 +114,7 @@ Great for seeing all components at once without interaction.
 ### Containers
 | Component | Description |
 |-----------|-------------|
-| **JFrame** | Top-level window with title bar |
+| **JFrame** | Top-level window with title bar, draggable and resizable with mouse |
 | **JPanel** | Generic container with optional border |
 | **JDialog** | Modal/non-modal dialog window |
 | **JFileDialog** | File selection dialog |
@@ -172,6 +178,13 @@ JFrame frame = new JFrame("My App");
 frame.setSize(60, 20);
 frame.setVisible(true);
 
+// Windows are draggable and resizable by default
+// Drag the title bar to move, drag edges/corners to resize
+frame.setDraggable(true);   // Enable/disable drag-to-move
+frame.setResizable(true);   // Enable/disable resize
+frame.setMinWidth(20);      // Set minimum size constraints
+frame.setMinHeight(10);
+
 JPanel panel = new JPanel();
 panel.setLocation(2, 2);
 panel.setSize(56, 16);
@@ -233,10 +246,11 @@ jcurses/
 ## 🎯 Current Status
 
 **Working:**
-- ✅ Full component hierarchy (54 Java source files)
-- ✅ All 28 widgets + 7 support classes implemented
+- ✅ Full component hierarchy (56 Java source files)
+- ✅ All 28 widgets + 9 support classes implemented
 - ✅ Interactive keyboard navigation (TAB, arrows, SPACE, ENTER)
 - ✅ Mouse event handling with click detection and component dispatch
+- ✅ Window drag-to-move and resize operations (title bar, edges, corners)
 - ✅ Color support with 8 standard colors and predefined color pairs
 - ✅ Advanced text editing (selection, cut/copy/paste, undo/redo, word navigation)
 - ✅ Scrolling in JScrollPane with viewport clipping and scrollbar integration
@@ -247,7 +261,7 @@ jcurses/
 - ✅ Module system support (opt-in with module-info.java.template)
 - ✅ Theme system (Default, Dark, Light themes with pluggable architecture)
 - ✅ ASCII rendering (cross-platform compatible)
-- ✅ **Comprehensive unit tests** (289 tests across 41 test classes)
+- ✅ **Comprehensive unit tests** (303 tests across 43 test classes)
 - ✅ Thread-safety tests with Virtual Threads
 - ✅ Code coverage reporting (JaCoCo)
 
@@ -346,9 +360,10 @@ mvn test -Dtest=JButtonTest
 ```
 
 **Test Coverage:**
-- ✅ 289 tests across 41 test classes
+- ✅ 303 tests across 43 test classes
 - ✅ All 28 widgets tested
 - ✅ Mouse event handling tests
+- ✅ Window drag/resize tests (WindowDragManager, JFrame integration)
 - ✅ Color system tests (Color, ColorPair)
 - ✅ Advanced text editing tests
 - ✅ Scrolling tests (JScrollPane)

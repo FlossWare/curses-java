@@ -239,6 +239,58 @@ public class InteractiveDemo {
         frame.add(status);
 
         root.add(frame);
+
+        // Create draggable/resizable demo window
+        JFrame dragFrame = new JFrame("Draggable Window - Try dragging me!");
+        dragFrame.setLocation(70, 10);
+        dragFrame.setSize(45, 12);
+        dragFrame.setVisible(true);
+
+        JLabel dragLabel1 = new JLabel("DRAG & RESIZE DEMO");
+        dragLabel1.setLocation(73, 12);
+        dragLabel1.setSize(39, 1);
+        dragLabel1.setAlignment(JLabel.ALIGN_CENTER);
+
+        JLabel dragLabel2 = new JLabel("* Drag title bar to move");
+        dragLabel2.setLocation(72, 14);
+        dragLabel2.setSize(41, 1);
+
+        JLabel dragLabel3 = new JLabel("* Drag edges to resize");
+        dragLabel3.setLocation(72, 15);
+        dragLabel3.setSize(41, 1);
+
+        JLabel dragLabel4 = new JLabel("* Drag corners to resize both");
+        dragLabel4.setLocation(72, 16);
+        dragLabel4.setSize(41, 1);
+
+        JButton toggleDragBtn = new JButton("Toggle Draggable");
+        toggleDragBtn.setLocation(74, 18);
+        toggleDragBtn.setSize(20, 1);
+        toggleDragBtn.addActionListener(() -> {
+            dragFrame.setDraggable(!dragFrame.isDraggable());
+            label1.setText("Draggable: " + dragFrame.isDraggable());
+            markDirty();
+        });
+        focusableComponents.add(toggleDragBtn);
+
+        JButton toggleResizeBtn = new JButton("Toggle Resizable");
+        toggleResizeBtn.setLocation(96, 18);
+        toggleResizeBtn.setSize(20, 1);
+        toggleResizeBtn.addActionListener(() -> {
+            dragFrame.setResizable(!dragFrame.isResizable());
+            label1.setText("Resizable: " + dragFrame.isResizable());
+            markDirty();
+        });
+        focusableComponents.add(toggleResizeBtn);
+
+        dragFrame.add(dragLabel1);
+        dragFrame.add(dragLabel2);
+        dragFrame.add(dragLabel3);
+        dragFrame.add(dragLabel4);
+        dragFrame.add(toggleDragBtn);
+        dragFrame.add(toggleResizeBtn);
+
+        root.add(dragFrame);
         root.markDirty();
     }
 
