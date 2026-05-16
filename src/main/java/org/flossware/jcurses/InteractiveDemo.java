@@ -38,7 +38,7 @@ public class InteractiveDemo {
 
         NcursesBridge.init();
         NcursesBridge.setNonBlocking(false);
-        NcursesBridge.enableMouse(NcursesBridge.ALL_MOUSE_EVENTS);
+        NcursesBridge.enableMouse(NcursesBridge.ALL_MOUSE_EVENTS | NcursesBridge.REPORT_MOUSE_POSITION);
 
         // Initialize color support
         initializeColors();
