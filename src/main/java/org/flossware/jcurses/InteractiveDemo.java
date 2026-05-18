@@ -14,6 +14,7 @@ public class InteractiveDemo {
     private static boolean running = true;
     private static DiffEngine diffEngine;
     private static char[][] buffer;
+    private static JIndeterminateProgress indeterminateProgress;
 
     // Ncurses key codes
     private static final int KEY_UP = 259;
@@ -212,6 +213,79 @@ public class InteractiveDemo {
         });
         focusableComponents.add(comboNext);
 
+        // Indeterminate progress bar
+        indeterminateProgress = new JIndeterminateProgress();
+        indeterminateProgress.setLocation(4, 26);
+        indeterminateProgress.setSize(40, 1);
+        indeterminateProgress.setBlockSize(3);
+
+        JButton startIndBtn = new JButton("Start");
+        startIndBtn.setLocation(46, 26);
+        startIndBtn.setSize(10, 1);
+        startIndBtn.addActionListener(() -> {
+            indeterminateProgress.start();
+            label1.setText("Indeterminate progress started");
+            markDirty();
+        });
+        focusableComponents.add(startIndBtn);
+
+        JButton stopIndBtn = new JButton("Stop");
+        stopIndBtn.setLocation(58, 26);
+        stopIndBtn.setSize(10, 1);
+        stopIndBtn.addActionListener(() -> {
+            indeterminateProgress.stop();
+            label1.setText("Indeterminate progress stopped");
+            markDirty();
+        });
+        focusableComponents.add(stopIndBtn);
+
+        // Dialog demo
+        JButton dialogBtn = new JButton("Show Dialog");
+        dialogBtn.setLocation(4, 29);
+        dialogBtn.setSize(18, 1);
+
+        // Create dialog (will show when button is clicked)
+        JDialog dialog = new JDialog("Sample Dialog");
+        dialog.setLocation(30, 15);
+        dialog.setSize(50, 12);
+        dialog.setModal(true);
+        dialog.setStatusText("Dialog ready | Click button to update status");
+
+        JLabel dialogLabel = new JLabel("This is a modal dialog with status bar");
+        dialogLabel.setLocation(32, 17);
+        dialogLabel.setSize(46, 1);
+        dialogLabel.setAlignment(JLabel.ALIGN_CENTER);
+
+        JButton updateStatusBtn = new JButton("Update Status");
+        updateStatusBtn.setLocation(35, 20);
+        updateStatusBtn.setSize(18, 1);
+        updateStatusBtn.addActionListener(() -> {
+            dialog.setStatusText("Status updated at " + System.currentTimeMillis() % 10000);
+            markDirty();
+        });
+        focusableComponents.add(updateStatusBtn);
+
+        JButton closeDialogBtn = new JButton("Close Dialog");
+        closeDialogBtn.setLocation(56, 20);
+        closeDialogBtn.setSize(18, 1);
+        closeDialogBtn.addActionListener(() -> {
+            root.remove(dialog);
+            label1.setText("Dialog closed");
+            markDirty();
+        });
+        focusableComponents.add(closeDialogBtn);
+
+        dialog.add(dialogLabel);
+        dialog.add(updateStatusBtn);
+        dialog.add(closeDialogBtn);
+
+        dialogBtn.addActionListener(() -> {
+            dialog.show();
+            label1.setText("Dialog shown");
+            markDirty();
+        });
+        focusableComponents.add(dialogBtn);
+
         // Status bar
         JStatusBar status = new JStatusBar("Ready | TAB=Navigate | SPACE/ENTER=Activate | ESC=Quit");
         status.setLocation(2, 36);
@@ -234,6 +308,10 @@ public class InteractiveDemo {
         panel.add(resetBtn);
         panel.add(combo);
         panel.add(comboNext);
+        panel.add(indeterminateProgress);
+        panel.add(startIndBtn);
+        panel.add(stopIndBtn);
+        panel.add(dialogBtn);
 
         frame.add(panel);
         frame.add(status);
@@ -314,6 +392,9 @@ public class InteractiveDemo {
     }
 
     private static void runEventLoop() throws Throwable {
+        long lastTickTime = System.currentTimeMillis();
+        final int TICK_INTERVAL_MS = 100;
+
         while (running) {
             // Render if dirty
             if (RootPane.getInstance().isDirty()) {
@@ -330,6 +411,15 @@ public class InteractiveDemo {
                 } else {
                     handleKey(ch);
                 }
+            }
+
+            // Tick indeterminate progress bar periodically
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - lastTickTime >= TICK_INTERVAL_MS) {
+                if (indeterminateProgress != null) {
+                    indeterminateProgress.tick();
+                }
+                lastTickTime = currentTime;
             }
 
             // Small delay to avoid spinning
