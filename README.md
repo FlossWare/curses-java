@@ -148,7 +148,7 @@ Great for seeing all components at once without interaction.
 |-----------|-------------|
 | **JFrame** | Top-level window with title bar, draggable and resizable with mouse |
 | **JPanel** | Generic container with optional border |
-| **JDialog** | Modal/non-modal dialog window |
+| **JDialog** | Modal/non-modal dialog window with title and status bar support |
 | **JFileDialog** | File selection dialog |
 | **JScrollPane** | Scrollable view container |
 | **JSplitPane** | Resizable split view (H/V) |
@@ -174,6 +174,7 @@ Great for seeing all components at once without interaction.
 |-----------|-------------|
 | **JLabel** | Text label with alignment |
 | **JProgressBar** | Progress indicator (0-100%) |
+| **JIndeterminateProgress** | Animated progress indicator for unknown duration |
 | **JSlider** | Value slider with live indicator |
 | **JScrollBar** | Horizontal/vertical scrollbar |
 | **JTable** | Data table with rows/columns |
