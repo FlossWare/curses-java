@@ -25,9 +25,19 @@ A modern Java terminal UI library that brings AWT-like components to the termina
 
 ## 🚀 Quick Start
 
+**Linux/macOS:**
 ```bash
-# Run the interactive demo
 ./run-interactive.sh
+```
+
+**Windows (Command Prompt):**
+```cmd
+run-interactive.bat
+```
+
+**Windows (PowerShell):**
+```powershell
+.\run-interactive.ps1
 ```
 
 **Controls:**
@@ -65,16 +75,38 @@ brew install ncurses
 
 Full keyboard-driven terminal UI:
 
+**Linux/macOS:**
 ```bash
 ./run-interactive.sh
+```
+
+**Windows (Command Prompt):**
+```cmd
+run-interactive.bat
+```
+
+**Windows (PowerShell):**
+```powershell
+.\run-interactive.ps1
 ```
 
 ### Quick Test
 
 Test if the interactive demo works (auto-exits after 3 seconds):
 
+**Linux/macOS:**
 ```bash
 ./test-interactive.sh
+```
+
+**Windows (Command Prompt):**
+```cmd
+test-interactive.bat
+```
+
+**Windows (PowerShell):**
+```powershell
+.\test-interactive.ps1
 ```
 
 ### Manual Run

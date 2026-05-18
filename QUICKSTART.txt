@@ -4,11 +4,20 @@
 
 🚀 RUN THE INTERACTIVE DEMO:
 
+   Linux/macOS:
    ./run-interactive.sh
+
+   Windows (Command Prompt):
+   run-interactive.bat
+
+   Windows (PowerShell):
+   .\run-interactive.ps1
 
    Quick test (auto-exits after 3s):
 
-   ./test-interactive.sh
+   Linux/macOS:          ./test-interactive.sh
+   Windows (Cmd):        test-interactive.bat
+   Windows (PowerShell): .\test-interactive.ps1
 
    OR manually:
 

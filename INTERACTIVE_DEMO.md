@@ -4,8 +4,19 @@
 
 The fastest way to run the interactive demo:
 
+**Linux/macOS:**
 ```bash
 ./run-interactive.sh
+```
+
+**Windows (Command Prompt):**
+```cmd
+run-interactive.bat
+```
+
+**Windows (PowerShell):**
+```powershell
+.\run-interactive.ps1
 ```
 
 ## What is the Interactive Demo?
@@ -26,16 +37,38 @@ The interactive demo is a **fully functional terminal UI application** where you
 
 ### Method 1: Using the Script (Easiest)
 
+**Linux/macOS:**
 ```bash
 ./run-interactive.sh
+```
+
+**Windows (Command Prompt):**
+```cmd
+run-interactive.bat
+```
+
+**Windows (PowerShell):**
+```powershell
+.\run-interactive.ps1
 ```
 
 ### Method 2: Quick Test (Automated)
 
 Test if the interactive demo works without manual interaction:
 
+**Linux/macOS:**
 ```bash
 ./test-interactive.sh
+```
+
+**Windows (Command Prompt):**
+```cmd
+test-interactive.bat
+```
+
+**Windows (PowerShell):**
+```powershell
+.\test-interactive.ps1
 ```
 
 This script automatically runs the demo for 3 seconds then exits. Great for verifying the setup works before diving into the full interactive experience.
