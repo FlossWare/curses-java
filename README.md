@@ -3,7 +3,7 @@
 A modern Java terminal UI library that brings AWT-like components to the terminal using ncurses. Built with cutting-edge Java 21 features including Virtual Threads, Foreign Function & Memory API, Record Patterns, and Sealed Interfaces.
 
 ![Status](https://img.shields.io/badge/status-working-brightgreen)
-![Version](https://img.shields.io/badge/version-1.2-blue)
+![Version](https://img.shields.io/badge/version-1.14-blue)
 ![Java](https://img.shields.io/badge/java-21-orange)
 ![License](https://img.shields.io/badge/license-GPL--3.0-blue)
 
@@ -15,13 +15,13 @@ A modern Java terminal UI library that brings AWT-like components to the termina
 - 📝 **Advanced Text Editing** - Selection, cut/copy/paste, undo/redo, word navigation in text fields
 - 📜 **Scrollable Views** - JScrollPane with viewport clipping and scrollbar integration
 - ☕ **Modern Java 21** - Virtual Threads, Foreign Function API, Record Patterns, Sealed Interfaces
-- 🎯 **28+ Widgets** - Complete AWT-compatible component set
+- 🎯 **29 Widgets** - Complete AWT-compatible component set
 - 🔒 **Thread-Safe** - ReentrantLock protection for all components
 - ⚡ **Fast Rendering** - Differential updates, dirty rectangles, layout caching
 - 🎭 **Themes** - Default, Dark, and Light themes with pluggable architecture
 - 🧩 **Module System** - Java 9+ JPMS support (opt-in)
 - 📦 **Zero Dependencies** - Only ncurses (native) and test libraries
-- ✅ **Comprehensive Tests** - 303 unit tests with 80%+ coverage
+- ✅ **Comprehensive Tests** - 344 unit tests with 80%+ coverage
 
 ## 🚀 Quick Start
 
@@ -245,7 +245,7 @@ RootPane.getInstance().add(frame);
 # Compile
 mvn clean compile
 
-# Run all tests (289 tests)
+# Run all tests (344 tests)
 mvn test
 
 # Run tests with coverage report
@@ -263,7 +263,7 @@ mvn package
 ```
 jcurses/
 ├── src/main/java/org/flossware/jcurses/
-│   ├── api/              # 28 UI components + 7 support classes
+│   ├── api/              # 29 UI components + 7 support classes
 │   ├── events/           # Event system (4 sealed event types)
 │   ├── ffi/              # ncurses FFI bridge
 │   ├── render/           # Rendering engine (diff engine, event processor)
@@ -279,8 +279,8 @@ jcurses/
 ## 🎯 Current Status
 
 **Working:**
-- ✅ Full component hierarchy (56 Java source files)
-- ✅ All 28 widgets + 9 support classes implemented
+- ✅ Full component hierarchy (57 Java source files)
+- ✅ All 29 widgets + 9 support classes implemented
 - ✅ Interactive keyboard navigation (TAB, arrows, SPACE, ENTER)
 - ✅ Mouse event handling with click detection and component dispatch
 - ✅ Window drag-to-move and resize operations (title bar, edges, corners)
@@ -294,7 +294,7 @@ jcurses/
 - ✅ Module system support (opt-in with module-info.java.template)
 - ✅ Theme system (Default, Dark, Light themes with pluggable architecture)
 - ✅ ASCII rendering (cross-platform compatible)
-- ✅ **Comprehensive unit tests** (303 tests across 43 test classes)
+- ✅ **Comprehensive unit tests** (344 tests across 46 test classes)
 - ✅ Thread-safety tests with Virtual Threads
 - ✅ Code coverage reporting (JaCoCo)
 
@@ -393,7 +393,7 @@ mvn test -Dtest=JButtonTest
 ```
 
 **Test Coverage:**
-- ✅ 303 tests across 43 test classes
+- ✅ 344 tests across 46 test classes
 - ✅ All 28 widgets tested
 - ✅ Mouse event handling tests
 - ✅ Window drag/resize tests (WindowDragManager, JFrame integration)
@@ -416,7 +416,7 @@ src/test/java/
 │   ├── ColorTest, ColorPairTest, MouseListenerTest
 │   ├── containers/ (JPanel, JFrame tests)
 │   ├── layouts/ (BorderLayout, FlowLayout, JGridLayout tests)
-│   ├── widgets/ (28 widget tests + advanced tests)
+│   ├── widgets/ (29 widget tests + advanced tests)
 │   └── edit/ (Clipboard, text editing support)
 ├── events/ (KeyEvent, MouseEvent, WindowEvent tests)
 ├── theme/ (ThemeTest for Default, Dark, Light themes)
