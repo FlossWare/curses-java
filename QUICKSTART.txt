@@ -66,6 +66,10 @@
    • Adjust slider values with +/- buttons
    • Fill and reset progress bars
    • Cycle through dropdown options
+   • Sort table columns by clicking headers
+   • Select multiple table rows with checkboxes
+   • Browse files with file selection dialog
+   • Watch animated indeterminate progress
    • Toggle draggable/resizable flags
    • See real-time visual feedback!
 

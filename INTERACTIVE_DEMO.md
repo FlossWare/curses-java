@@ -31,6 +31,9 @@ The interactive demo is a **fully functional terminal UI application** where you
 - ✅ Adjust slider values
 - ✅ Fill progress bars
 - ✅ Cycle through dropdown options
+- ✅ Sort table columns by clicking headers
+- ✅ Select multiple table rows
+- ✅ Browse files with file dialog
 - ✅ See real-time visual feedback
 
 ## Running the Demo
@@ -182,6 +185,32 @@ The `>` and `<` brackets show which widget currently has focus.
 ### Combo Box
 - Use "Next" button to cycle through options
 - Current selection shown with `▼` indicator
+
+### Table Demo
+- **Show Table Demo**: Opens a window with a sortable, selectable table
+- **Column Sorting**: Click column headers to sort (ascending → descending → unsorted)
+  - `^` indicates ascending sort
+  - `v` indicates descending sort
+- **Multi-Row Selection**: Click rows to select/deselect
+  - `[*]` indicates selected row
+  - `[ ]` indicates unselected row
+- **Multiple columns**: Name, Age, City, Role, Status
+
+### File Dialog
+- **Open File Dialog**: Browse and select files from the filesystem
+- Shows current directory path
+- Lists directories with `[D]` prefix
+- Lists files with `[F]` prefix
+
+### Indeterminate Progress
+- **Start/Stop**: Control animated progress indicator
+- Shows ongoing activity for operations of unknown duration
+- Animated bouncing block moves left and right
+
+### Dialog Windows
+- **Show Dialog**: Opens modal dialog with status bar
+- **Update Status**: Changes status bar text
+- Demonstrates title bar and status bar features
 
 ## Troubleshooting
 

@@ -2,7 +2,7 @@
 
 ## Overview
 
-The jcurses project has comprehensive unit tests covering all 54 source files with 289 tests across 41 test classes.
+The jcurses project has comprehensive unit tests covering all 57 source files with 367 tests across 46 test classes.
 
 ## Running Tests
 
@@ -26,9 +26,9 @@ mvn test -Dtest="org.flossware.jcurses.api.widgets.*"
 ## Test Results
 
 **Current Status:**
-- ✅ **289 tests** passing
+- ✅ **367 tests** passing
 - ✅ **0 failures**, **0 errors**, **0 skipped**
-- ✅ **41 test classes**
+- ✅ **46 test classes**
 - ✅ **80%+ code coverage** (target)
 
 ## Test Categories
@@ -50,8 +50,8 @@ mvn test -Dtest="org.flossware.jcurses.api.widgets.*"
 - `ColorTest` - Color enum and ncurses codes
 - `ColorPairTest` - Foreground/background color pairs
 
-### Widget Tests (153 tests)
-All 28 widgets tested including:
+### Widget Tests (176 tests)
+All 29 widgets tested including:
 - Interactive widgets (JButton, JCheckbox, JSlider, etc.)
 - Display widgets (JLabel, JProgressBar, etc.)
 - Container widgets (JPanel, JFrame, JDialog, etc.)
@@ -216,6 +216,6 @@ Planned test additions:
 
 ---
 
-**Test Suite Status:** ✅ All 231 tests passing  
-**Last Updated:** 2026-05-14  
+**Test Suite Status:** ✅ All 367 tests passing  
+**Last Updated:** 2026-05-19  
 **Coverage:** 80%+ target achieved
