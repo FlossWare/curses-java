@@ -244,9 +244,59 @@ public class InteractiveDemo {
         dialogBtn.setLocation(4, 29);
         dialogBtn.setSize(18, 1);
 
+        // Table demo button
+        JButton tableBtn = new JButton("Show Table Demo");
+        tableBtn.setLocation(24, 29);
+        tableBtn.setSize(18, 1);
+
+        // Create table demo frame
+        JFrame tableFrame = new JFrame("Table Demo - Click headers to sort, click rows to select");
+        tableFrame.setLocation(15, 5);
+        tableFrame.setSize(90, 20);
+
+        JTable demoTable = new JTable();
+        demoTable.setLocation(17, 7);
+        demoTable.setSize(86, 15);
+        demoTable.setColumnWidth(12);
+        demoTable.setMultiSelectionEnabled(true);
+
+        demoTable.setColumnNames("Name", "Age", "City", "Role", "Status");
+        demoTable.addRow("Alice Smith", "30", "NYC", "Engineer", "Active");
+        demoTable.addRow("Bob Johnson", "25", "LA", "Designer", "Active");
+        demoTable.addRow("Charlie Lee", "35", "SF", "Manager", "Away");
+        demoTable.addRow("Diana Prince", "28", "NYC", "Engineer", "Active");
+        demoTable.addRow("Eve Adams", "32", "LA", "Designer", "Busy");
+        demoTable.addRow("Frank Miller", "45", "SF", "Director", "Active");
+        demoTable.addRow("Grace Hopper", "40", "NYC", "Architect", "Active");
+
+        JLabel tableHelp = new JLabel("Click column headers to sort (^=asc, v=desc) | Click rows to select | [*]=selected");
+        tableHelp.setLocation(17, 23);
+        tableHelp.setSize(86, 1);
+
+        JButton closeTableBtn = new JButton("Close Table");
+        closeTableBtn.setLocation(85, 23);
+        closeTableBtn.setSize(15, 1);
+        closeTableBtn.addActionListener(() -> {
+            root.remove(tableFrame);
+            label1.setText("Table demo closed");
+            markDirty();
+        });
+        focusableComponents.add(closeTableBtn);
+
+        tableFrame.add(demoTable);
+        tableFrame.add(tableHelp);
+        tableFrame.add(closeTableBtn);
+
+        tableBtn.addActionListener(() -> {
+            root.add(tableFrame);
+            label1.setText("Table demo opened - Click headers to sort!");
+            markDirty();
+        });
+        focusableComponents.add(tableBtn);
+
         // File dialog demo
         JButton fileDialogBtn = new JButton("Open File Dialog");
-        fileDialogBtn.setLocation(24, 29);
+        fileDialogBtn.setLocation(44, 29);
         fileDialogBtn.setSize(20, 1);
 
         // Create file dialog (will show when button is clicked)
@@ -343,6 +393,7 @@ public class InteractiveDemo {
         panel.add(startIndBtn);
         panel.add(stopIndBtn);
         panel.add(dialogBtn);
+        panel.add(tableBtn);
         panel.add(fileDialogBtn);
 
         frame.add(panel);

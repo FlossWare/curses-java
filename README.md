@@ -3,7 +3,7 @@
 A modern Java terminal UI library that brings AWT-like components to the terminal using ncurses. Built with cutting-edge Java 21 features including Virtual Threads, Foreign Function & Memory API, Record Patterns, and Sealed Interfaces.
 
 ![Status](https://img.shields.io/badge/status-working-brightgreen)
-![Version](https://img.shields.io/badge/version-1.14-blue)
+![Version](https://img.shields.io/badge/version-1.15-blue)
 ![Java](https://img.shields.io/badge/java-21-orange)
 ![License](https://img.shields.io/badge/license-GPL--3.0-blue)
 
@@ -21,7 +21,7 @@ A modern Java terminal UI library that brings AWT-like components to the termina
 - 🎭 **Themes** - Default, Dark, and Light themes with pluggable architecture
 - 🧩 **Module System** - Java 9+ JPMS support (opt-in)
 - 📦 **Zero Dependencies** - Only ncurses (native) and test libraries
-- ✅ **Comprehensive Tests** - 344 unit tests with 80%+ coverage
+- ✅ **Comprehensive Tests** - 367 unit tests with 80%+ coverage
 
 ## 🚀 Quick Start
 
@@ -177,7 +177,7 @@ Great for seeing all components at once without interaction.
 | **JIndeterminateProgress** | Animated progress indicator for unknown duration |
 | **JSlider** | Value slider with live indicator |
 | **JScrollBar** | Horizontal/vertical scrollbar |
-| **JTable** | Data table with rows/columns |
+| **JTable** | Data table with column sorting and multi-row selection |
 | **JStatusBar** | Status text display |
 | **JSeparator** | Visual divider line |
 
@@ -245,7 +245,7 @@ RootPane.getInstance().add(frame);
 # Compile
 mvn clean compile
 
-# Run all tests (344 tests)
+# Run all tests (367 tests)
 mvn test
 
 # Run tests with coverage report
@@ -294,7 +294,7 @@ jcurses/
 - ✅ Module system support (opt-in with module-info.java.template)
 - ✅ Theme system (Default, Dark, Light themes with pluggable architecture)
 - ✅ ASCII rendering (cross-platform compatible)
-- ✅ **Comprehensive unit tests** (344 tests across 46 test classes)
+- ✅ **Comprehensive unit tests** (367 tests across 46 test classes)
 - ✅ Thread-safety tests with Virtual Threads
 - ✅ Code coverage reporting (JaCoCo)
 
@@ -393,7 +393,7 @@ mvn test -Dtest=JButtonTest
 ```
 
 **Test Coverage:**
-- ✅ 344 tests across 46 test classes
+- ✅ 367 tests across 46 test classes
 - ✅ All 28 widgets tested
 - ✅ Mouse event handling tests
 - ✅ Window drag/resize tests (WindowDragManager, JFrame integration)
