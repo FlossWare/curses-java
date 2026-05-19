@@ -14,6 +14,7 @@ public class JFileDialog extends JDialog {
     private final List<File> files = new ArrayList<>();
 
     public JFileDialog(String title, int mode) {
+        super(title);
         this.mode = mode;
         loadDirectory(currentDirectory);
     }
