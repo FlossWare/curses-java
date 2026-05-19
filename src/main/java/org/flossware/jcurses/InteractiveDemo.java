@@ -244,6 +244,37 @@ public class InteractiveDemo {
         dialogBtn.setLocation(4, 29);
         dialogBtn.setSize(18, 1);
 
+        // File dialog demo
+        JButton fileDialogBtn = new JButton("Open File Dialog");
+        fileDialogBtn.setLocation(24, 29);
+        fileDialogBtn.setSize(20, 1);
+
+        // Create file dialog (will show when button is clicked)
+        JFileDialog fileDialog = new JFileDialog("Select a File", JFileDialog.LOAD);
+        fileDialog.setLocation(25, 10);
+        fileDialog.setSize(60, 20);
+        fileDialog.setModal(true);
+        fileDialog.setStatusText("Browse and select a file");
+
+        JButton closeFileDialogBtn = new JButton("Close");
+        closeFileDialogBtn.setLocation(70, 27);
+        closeFileDialogBtn.setSize(10, 1);
+        closeFileDialogBtn.addActionListener(() -> {
+            root.remove(fileDialog);
+            label1.setText("File dialog closed");
+            markDirty();
+        });
+        focusableComponents.add(closeFileDialogBtn);
+
+        fileDialog.add(closeFileDialogBtn);
+
+        fileDialogBtn.addActionListener(() -> {
+            fileDialog.show();
+            label1.setText("File dialog opened");
+            markDirty();
+        });
+        focusableComponents.add(fileDialogBtn);
+
         // Create dialog (will show when button is clicked)
         JDialog dialog = new JDialog("Sample Dialog");
         dialog.setLocation(30, 15);
@@ -312,6 +343,7 @@ public class InteractiveDemo {
         panel.add(startIndBtn);
         panel.add(stopIndBtn);
         panel.add(dialogBtn);
+        panel.add(fileDialogBtn);
 
         frame.add(panel);
         frame.add(status);
