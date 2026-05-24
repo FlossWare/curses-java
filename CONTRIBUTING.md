@@ -172,6 +172,30 @@ git push origin feature/my-feature-name
 - Push updates to your branch
 - Be patient and professional
 
+## Versioning Strategy
+
+jcurses uses **automatic continuous versioning**:
+
+- **Every push to `main`** automatically increments the minor version (X.Y format)
+- Version bumps are automated via CI/CD (no manual intervention)
+- Current version is displayed in README.md badge and pom.xml
+- This enables rapid iteration and clear tracking of changes
+
+### What This Means for Contributors
+
+- **Don't manually edit version numbers** in pom.xml - they're auto-updated
+- Each merged PR will trigger a new version release
+- Version numbers reflect iteration count, not semantic versioning
+- Focus on quality code - versioning is handled automatically
+
+### Rationale
+
+This approach prioritizes:
+- **Fast iteration** - No manual release process
+- **Continuous deployment** - Every merge is a release
+- **Clear history** - Each version maps to specific commits
+- **Automation** - Reduce manual overhead
+
 ## Code Style
 
 ### Java Conventions
