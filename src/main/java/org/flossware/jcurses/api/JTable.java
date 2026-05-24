@@ -339,22 +339,30 @@ public class JTable extends Component {
 
     /**
      * Legacy method for backward compatibility.
-     * @deprecated Use selectRow() instead
+     *
+     * @deprecated Since 1.18. Use {@link #selectRow(int)} instead for single selection,
+     *             or {@link #selectRow(int, boolean)} with multiselect enabled.
+     *             This method will be removed in version 2.0.
      */
-    @Deprecated
+    @Deprecated(since = "1.18", forRemoval = true)
     public void setSelectedRow(int row) {
         selectRow(row);
     }
 
     /**
      * Legacy method for backward compatibility.
-     * @deprecated Use getSelectedRows() instead
+     * Returns the first selected row or -1 if none selected.
+     *
+     * @return the first selected row index, or -1 if no row is selected
+     * @deprecated Since 1.18. Use {@link #getSelectedRows()} instead which returns
+     *             all selected rows as a Set, supporting multi-row selection.
+     *             This method will be removed in version 2.0.
      */
-    @Deprecated
+    @Deprecated(since = "1.18", forRemoval = true)
     public int getSelectedRow() {
         renderLock.lock();
         try {
-            return selectedRows.isEmpty() ? -1 : selectedRows.iterator().next();
+            return selectedRows.isEmpty() ? NO_INDEX : selectedRows.iterator().next();
         } finally {
             renderLock.unlock();
         }
