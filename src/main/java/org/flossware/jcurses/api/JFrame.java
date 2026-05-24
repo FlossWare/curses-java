@@ -124,4 +124,15 @@ public class JFrame extends Container implements DraggableWindow {
         }
     }
 
+    @Override
+    public boolean handleMouseEvent(MouseEvent event) {
+        // Try drag/resize on frame borders/title bar first
+        if (WindowDragManager.getInstance().handleMouseEvent(event, this)) {
+            return true;  // Consumed by drag operation
+        }
+
+        // Otherwise, delegate to children (existing Container behavior)
+        return super.handleMouseEvent(event);
+    }
+
 }

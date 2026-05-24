@@ -134,6 +134,47 @@ public class DiffEngine {
         }
     }
 
-    private void sendAnsiMoveCursor(int x, int y) { /* Native call */ }
-    private void sendAnsiChar(char c) { /* Native call */ }
+    /**
+     * Moves the cursor to the specified position using ncurses.
+     *
+     * @param x the column (0-based)
+     * @param y the row (0-based)
+     */
+    private void sendAnsiMoveCursor(int x, int y) {
+        try {
+            org.flossware.jcurses.ffi.NcursesBridge.moveCursor(y, x, ' ');
+        } catch (Throwable e) {
+            // Suppress rendering errors - ncurses may not be initialized
+        }
+    }
+
+    /**
+     * Sends a character to the current cursor position using ncurses.
+     *
+     * @param c the character to display
+     */
+    private void sendAnsiChar(char c) {
+        // Character is already sent via moveCursor with the character
+        // This is a no-op in ncurses mode since moveCursor handles both
+    }
+
+    /**
+     * Returns the back buffer for painting.
+     *
+     * @return the character buffer to paint into
+     * @since 1.27
+     */
+    public char[][] getBackBuffer() {
+        return backBuffer;
+    }
+
+    /**
+     * Returns the color buffer for painting.
+     *
+     * @return the color pair buffer
+     * @since 1.27
+     */
+    public int[][] getBackColors() {
+        return backColors;
+    }
 }

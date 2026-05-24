@@ -2,6 +2,7 @@ package org.flossware.jcurses.api;
 
 import java.util.SequencedCollection;
 import java.util.LinkedHashSet;
+import org.flossware.jcurses.events.MouseEvent;
 
 /**
  * A dialog window component with optional title and status bar support.
@@ -9,12 +10,19 @@ import java.util.LinkedHashSet;
  * <p>Dialogs can be modal or non-modal and appear on top of other windows.
  * They support an optional title bar and status bar for better user experience.
  *
+ * <p>Dialogs implement {@link DraggableWindow}, allowing users to move and resize
+ * them by dragging the title bar, edges, and corners.
+ *
  * @since 1.0
  */
-public class JDialog extends Container {
+public class JDialog extends Container implements DraggableWindow {
     private boolean modal = true;
     private String title = "";
     private JStatusBar statusBar = null;
+    private boolean draggable = true;
+    private boolean resizable = true;
+    private int minWidth = 10;
+    private int minHeight = 3;
 
     /**
      * Create a dialog with no title.
@@ -168,5 +176,94 @@ public class JDialog extends Container {
         }
 
         super.paint(buffer);
+    }
+
+    // DraggableWindow interface implementation
+
+    @Override
+    public boolean isDraggable() {
+        return draggable;
+    }
+
+    /**
+     * Set whether this dialog can be dragged.
+     *
+     * @param draggable true to enable dragging, false to disable
+     */
+    public void setDraggable(boolean draggable) {
+        renderLock.lock();
+        try {
+            this.draggable = draggable;
+        } finally {
+            renderLock.unlock();
+        }
+    }
+
+    @Override
+    public boolean isResizable() {
+        return resizable;
+    }
+
+    /**
+     * Set whether this dialog can be resized.
+     *
+     * @param resizable true to enable resizing, false to disable
+     */
+    public void setResizable(boolean resizable) {
+        renderLock.lock();
+        try {
+            this.resizable = resizable;
+        } finally {
+            renderLock.unlock();
+        }
+    }
+
+    @Override
+    public int getMinWidth() {
+        return minWidth;
+    }
+
+    /**
+     * Set the minimum width for this dialog.
+     *
+     * @param minWidth the minimum width (clamped to at least 5)
+     */
+    public void setMinWidth(int minWidth) {
+        renderLock.lock();
+        try {
+            this.minWidth = Math.max(5, minWidth);
+        } finally {
+            renderLock.unlock();
+        }
+    }
+
+    @Override
+    public int getMinHeight() {
+        return minHeight;
+    }
+
+    /**
+     * Set the minimum height for this dialog.
+     *
+     * @param minHeight the minimum height (clamped to at least 3)
+     */
+    public void setMinHeight(int minHeight) {
+        renderLock.lock();
+        try {
+            this.minHeight = Math.max(3, minHeight);
+        } finally {
+            renderLock.unlock();
+        }
+    }
+
+    @Override
+    public boolean handleMouseEvent(MouseEvent event) {
+        // Try drag/resize on dialog borders/title bar first
+        if (WindowDragManager.getInstance().handleMouseEvent(event, this)) {
+            return true;  // Consumed by drag operation
+        }
+
+        // Otherwise, delegate to children (existing Container behavior)
+        return super.handleMouseEvent(event);
     }
 }
