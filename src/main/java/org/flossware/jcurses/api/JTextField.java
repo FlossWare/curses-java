@@ -161,11 +161,26 @@ public class JTextField extends Component {
 
         String content = Clipboard.getInstance().getContent();
         if (!content.isEmpty()) {
+            // Sanitize content to prevent terminal escape sequence injection
+            content = sanitizeInput(content);
             if (hasSelection()) {
                 deleteSelection();
             }
             insertString(content);
         }
+    }
+
+    /**
+     * Sanitize input string by removing control characters except newline and tab.
+     * Prevents terminal escape sequence injection attacks.
+     */
+    private String sanitizeInput(String input) {
+        if (input == null) {
+            return "";
+        }
+        // Remove all control characters except newline and tab
+        // For single-line text field, also remove newlines
+        return input.replaceAll("[\\p{Cntrl}&&[^\\t]]", "");
     }
 
     private void insertString(String str) {
@@ -201,11 +216,20 @@ public class JTextField extends Component {
     public void moveToWordStart() {
         renderLock.lock();
         try {
-            while (cursorPosition > 0 && !Character.isLetterOrDigit(text.charAt(cursorPosition - 1))) {
+            int maxIterations = text.length() + 1;
+            int iterations = 0;
+
+            // Skip non-alphanumeric characters
+            while (cursorPosition > 0 && !Character.isLetterOrDigit(text.charAt(cursorPosition - 1)) && iterations < maxIterations) {
                 cursorPosition--;
+                iterations++;
             }
-            while (cursorPosition > 0 && Character.isLetterOrDigit(text.charAt(cursorPosition - 1))) {
+
+            // Skip alphanumeric characters
+            iterations = 0;
+            while (cursorPosition > 0 && Character.isLetterOrDigit(text.charAt(cursorPosition - 1)) && iterations < maxIterations) {
                 cursorPosition--;
+                iterations++;
             }
         } finally {
             renderLock.unlock();
@@ -216,11 +240,20 @@ public class JTextField extends Component {
     public void moveToWordEnd() {
         renderLock.lock();
         try {
-            while (cursorPosition < text.length() && !Character.isLetterOrDigit(text.charAt(cursorPosition))) {
+            int maxIterations = text.length() + 1;
+            int iterations = 0;
+
+            // Skip non-alphanumeric characters
+            while (cursorPosition < text.length() && !Character.isLetterOrDigit(text.charAt(cursorPosition)) && iterations < maxIterations) {
                 cursorPosition++;
+                iterations++;
             }
-            while (cursorPosition < text.length() && Character.isLetterOrDigit(text.charAt(cursorPosition))) {
+
+            // Skip alphanumeric characters
+            iterations = 0;
+            while (cursorPosition < text.length() && Character.isLetterOrDigit(text.charAt(cursorPosition)) && iterations < maxIterations) {
                 cursorPosition++;
+                iterations++;
             }
         } finally {
             renderLock.unlock();

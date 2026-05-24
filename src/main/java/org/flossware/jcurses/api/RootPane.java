@@ -21,13 +21,13 @@ public class RootPane extends Container {
         return instance;
     }
 
-    public void markDirty() {
+    public synchronized void markDirty() {
         dirty = true;
         // Mark entire screen dirty
         markDirtyRegion(0, 0, width, height);
     }
 
-    public void markDirtyRegion(int x, int y, int w, int h) {
+    public synchronized void markDirtyRegion(int x, int y, int w, int h) {
         dirty = true;
         dirtyMinX = Math.min(dirtyMinX, x);
         dirtyMinY = Math.min(dirtyMinY, y);
@@ -35,11 +35,11 @@ public class RootPane extends Container {
         dirtyMaxY = Math.max(dirtyMaxY, y + h);
     }
 
-    public boolean isDirty() {
+    public synchronized boolean isDirty() {
         return dirty;
     }
 
-    public void clearDirty() {
+    public synchronized void clearDirty() {
         dirty = false;
         dirtyMinX = Integer.MAX_VALUE;
         dirtyMinY = Integer.MAX_VALUE;
@@ -51,7 +51,7 @@ public class RootPane extends Container {
      * Get the dirty rectangle bounds.
      * Returns [minX, minY, maxX, maxY] or null if not dirty.
      */
-    public int[] getDirtyBounds() {
+    public synchronized int[] getDirtyBounds() {
         if (!dirty) {
             return null;
         }
