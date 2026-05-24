@@ -6,7 +6,7 @@
 
     <groupId>org.flossware</groupId>
     <artifactId>jcurses</artifactId>
-    <version>1.26</version>
+    <version>1.27</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -15,7 +15,7 @@
         <exec.mainClass>org.flossware.jcurses.Main</exec.mainClass>
         <message>Automated Version Bump ${project.version} [ci skip]</message>
         <!-- Reproducible builds - https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->
-        <project.build.outputTimestamp>2026-05-24T06:32:59Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2026-05-24T06:34:42Z</project.build.outputTimestamp>
     </properties>
 
     <dependencies>
