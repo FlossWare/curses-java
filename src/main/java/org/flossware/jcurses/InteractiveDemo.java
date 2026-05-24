@@ -255,8 +255,8 @@ public class InteractiveDemo {
         tableFrame.setSize(90, 20);
 
         JTable demoTable = new JTable();
-        demoTable.setLocation(17, 7);
-        demoTable.setSize(86, 15);
+        demoTable.setLocation(2, 2);
+        demoTable.setSize(86, 12);
         demoTable.setColumnWidth(12);
         demoTable.setMultiSelectionEnabled(true);
 
@@ -269,12 +269,12 @@ public class InteractiveDemo {
         demoTable.addRow("Frank Miller", "45", "SF", "Director", "Active");
         demoTable.addRow("Grace Hopper", "40", "NYC", "Architect", "Active");
 
-        JLabel tableHelp = new JLabel("Click column headers to sort (^=asc, v=desc) | Click rows to select | [*]=selected");
-        tableHelp.setLocation(17, 23);
-        tableHelp.setSize(86, 1);
+        JLabel tableHelp = new JLabel("Click headers to sort | Click rows to select | [*]=selected");
+        tableHelp.setLocation(2, 16);
+        tableHelp.setSize(60, 1);
 
         JButton closeTableBtn = new JButton("Close Table");
-        closeTableBtn.setLocation(85, 23);
+        closeTableBtn.setLocation(70, 16);
         closeTableBtn.setSize(15, 1);
         closeTableBtn.addActionListener(() -> {
             root.remove(tableFrame);
@@ -307,7 +307,7 @@ public class InteractiveDemo {
         fileDialog.setStatusText("Browse and select a file");
 
         JButton closeFileDialogBtn = new JButton("Close");
-        closeFileDialogBtn.setLocation(70, 27);
+        closeFileDialogBtn.setLocation(48, 17);
         closeFileDialogBtn.setSize(10, 1);
         closeFileDialogBtn.addActionListener(() -> {
             root.remove(fileDialog);
@@ -333,12 +333,12 @@ public class InteractiveDemo {
         dialog.setStatusText("Dialog ready | Click button to update status");
 
         JLabel dialogLabel = new JLabel("This is a modal dialog with status bar");
-        dialogLabel.setLocation(32, 17);
+        dialogLabel.setLocation(2, 2);
         dialogLabel.setSize(46, 1);
         dialogLabel.setAlignment(JLabel.ALIGN_CENTER);
 
         JButton updateStatusBtn = new JButton("Update Status");
-        updateStatusBtn.setLocation(35, 20);
+        updateStatusBtn.setLocation(5, 5);
         updateStatusBtn.setSize(18, 1);
         updateStatusBtn.addActionListener(() -> {
             dialog.setStatusText("Status updated at " + System.currentTimeMillis() % 10000);
@@ -347,7 +347,7 @@ public class InteractiveDemo {
         focusableComponents.add(updateStatusBtn);
 
         JButton closeDialogBtn = new JButton("Close Dialog");
-        closeDialogBtn.setLocation(56, 20);
+        closeDialogBtn.setLocation(26, 5);
         closeDialogBtn.setSize(18, 1);
         closeDialogBtn.addActionListener(() -> {
             root.remove(dialog);
