@@ -278,6 +278,15 @@ class JDialogTest extends ComponentTestBase {
     }
 
     @Test
+    @DisplayName("should not crash with null title")
+    void testPaintWithNullTitle() {
+        widget.setTitle(null);
+        widget.setSize(30, 10);
+
+        assertDoesNotThrow(() -> widget.paint(buffer));
+    }
+
+    @Test
     @DisplayName("should handle mouse events for dragging")
     void testHandleMouseEvent() {
         widget.setLocation(10, 10);

@@ -168,6 +168,16 @@ class JIndeterminateProgressTest extends ComponentTestBase {
     }
 
     @Test
+    @DisplayName("should handle zero width gracefully")
+    void testZeroWidth() {
+        progress.setSize(0, 1);
+        progress.start();
+
+        assertDoesNotThrow(() -> progress.tick());
+        assertDoesNotThrow(() -> progress.paint(createBuffer()));
+    }
+
+    @Test
     @DisplayName("should be thread-safe")
     void testThreadSafety() throws InterruptedException {
         progress.start();
