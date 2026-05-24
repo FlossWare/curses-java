@@ -1,9 +1,6 @@
 package org.flossware.jcurses.api;
 
 import org.flossware.jcurses.api.edit.Clipboard;
-import org.flossware.jcurses.api.edit.TextEditCommand;
-
-import java.util.Stack;
 
 import static org.flossware.jcurses.api.Constants.*;
 
@@ -16,10 +13,6 @@ public class JTextField extends Component {
     // Selection support
     private int selectionStart = NO_INDEX;
     private int selectionEnd = NO_INDEX;
-
-    // Undo/Redo support
-    private final Stack<TextEditCommand> undoStack = new Stack<>();
-    private final Stack<TextEditCommand> redoStack = new Stack<>();
 
     public JTextField() {
         this("");
@@ -176,11 +169,9 @@ public class JTextField extends Component {
      * Prevents terminal escape sequence injection attacks.
      */
     private String sanitizeInput(String input) {
-        if (input == null) {
-            return "";
-        }
         // Remove all control characters except newline and tab
         // For single-line text field, also remove newlines
+        // Note: Clipboard.getContent() never returns null, always returns ""
         return input.replaceAll("[\\p{Cntrl}&&[^\\t]]", "");
     }
 
@@ -313,44 +304,6 @@ public class JTextField extends Component {
             renderLock.unlock();
         }
         repaint();
-    }
-
-    // Undo/Redo support
-    public void undo() {
-        if (canUndo()) {
-            TextEditCommand cmd = undoStack.pop();
-            cmd.undo();
-            redoStack.push(cmd);
-            repaint();
-        }
-    }
-
-    public void redo() {
-        if (canRedo()) {
-            TextEditCommand cmd = redoStack.pop();
-            cmd.execute();
-            undoStack.push(cmd);
-            repaint();
-        }
-    }
-
-    public boolean canUndo() {
-        return !undoStack.isEmpty();
-    }
-
-    public boolean canRedo() {
-        return !redoStack.isEmpty();
-    }
-
-    private void executeCommand(TextEditCommand command) {
-        command.execute();
-        undoStack.push(command);
-        redoStack.clear();
-
-        // Limit undo stack size
-        if (undoStack.size() > Constants.MAX_UNDO_SIZE) {
-            undoStack.remove(0);
-        }
     }
 
     @Override

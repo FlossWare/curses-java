@@ -250,11 +250,10 @@ public class JTable extends Component {
             if (sortColumn == columnIndex) {
                 if (sortDirection == SORT_ASCENDING) {
                     sortDirection = SORT_DESCENDING;
-                } else if (sortDirection == SORT_DESCENDING) {
+                } else {
+                    // Must be SORT_DESCENDING, toggle to SORT_NONE and reset column
                     sortDirection = SORT_NONE;
                     sortColumn = NO_INDEX;
-                } else {
-                    sortDirection = SORT_ASCENDING;
                 }
             } else {
                 sortColumn = columnIndex;
