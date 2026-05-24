@@ -3,8 +3,11 @@ package org.flossware.jcurses.ffi;
 import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
 import java.util.NoSuchElementException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class NcursesBridge {
+    private static final Logger logger = LoggerFactory.getLogger(NcursesBridge.class);
     private static SymbolLookup ncurses;
     private static MethodHandle initscr;
     private static MethodHandle endwin;
@@ -193,22 +196,21 @@ public class NcursesBridge {
 
             initialized = true;
         } catch (UnsatisfiedLinkError e) {
-            System.err.println("Error: ncurses library not found: " + e.getMessage());
-            System.err.println("Please install ncurses: 'sudo dnf install ncurses-devel' (Fedora) or 'sudo apt install libncurses-dev' (Debian/Ubuntu)");
+            logger.error("ncurses library not found: {}", e.getMessage());
+            logger.error("Please install ncurses: 'sudo dnf install ncurses-devel' (Fedora) or 'sudo apt install libncurses-dev' (Debian/Ubuntu)");
             initialized = false;
         } catch (IllegalArgumentException e) {
-            System.err.println("Error: Could not load ncurses library: " + e.getMessage());
+            logger.error("Could not load ncurses library: {}", e.getMessage());
             initialized = false;
         } catch (NoSuchElementException e) {
-            System.err.println("Error: Incompatible ncurses version (missing required symbols): " + e.getMessage());
+            logger.error("Incompatible ncurses version (missing required symbols): {}", e.getMessage());
             initialized = false;
         } catch (Throwable e) {
             // Catch Throwable for critical errors during FFI setup, but rethrow Errors
             if (e instanceof Error && !(e instanceof LinkageError)) {
                 throw (Error) e;
             }
-            System.err.println("Error: Failed to initialize ncurses: " + e.getClass().getName() + ": " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Failed to initialize ncurses: {}: {}", e.getClass().getName(), e.getMessage(), e);
             initialized = false;
         }
     }
