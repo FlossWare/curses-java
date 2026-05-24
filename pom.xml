@@ -93,7 +93,8 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
                 <configuration>
-                    <argLine>--enable-preview --enable-native-access=ALL-UNNAMED</argLine>
+                    <!-- @{argLine} is set by jacoco-maven-plugin's prepare-agent goal -->
+                    <argLine>@{argLine} --enable-preview --enable-native-access=ALL-UNNAMED</argLine>
                     <includes>
                         <include>**/*Test.java</include>
                         <include>**/*Tests.java</include>
@@ -121,6 +122,17 @@
                         <goals>
                             <goal>report</goal>
                         </goals>
+                        <configuration>
+                            <excludes>
+                                <!-- Exclude demo applications -->
+                                <exclude>org/flossware/jcurses/Main.class</exclude>
+                                <exclude>org/flossware/jcurses/InteractiveDemo.class</exclude>
+                                <!-- Exclude FFI/native layer (requires ncurses runtime) -->
+                                <exclude>org/flossware/jcurses/ffi/**</exclude>
+                                <!-- Exclude render layer (requires ncurses runtime) -->
+                                <exclude>org/flossware/jcurses/render/**</exclude>
+                            </excludes>
+                        </configuration>
                     </execution>
                     <execution>
                         <id>jacoco-check</id>
@@ -128,6 +140,15 @@
                             <goal>check</goal>
                         </goals>
                         <configuration>
+                            <excludes>
+                                <!-- Exclude demo applications -->
+                                <exclude>org/flossware/jcurses/Main.class</exclude>
+                                <exclude>org/flossware/jcurses/InteractiveDemo.class</exclude>
+                                <!-- Exclude FFI/native layer (requires ncurses runtime) -->
+                                <exclude>org/flossware/jcurses/ffi/**</exclude>
+                                <!-- Exclude render layer (requires ncurses runtime) -->
+                                <exclude>org/flossware/jcurses/render/**</exclude>
+                            </excludes>
                             <rules>
                                 <rule>
                                     <element>PACKAGE</element>
@@ -135,7 +156,12 @@
                                         <limit>
                                             <counter>LINE</counter>
                                             <value>COVEREDRATIO</value>
-                                            <minimum>0.70</minimum>
+                                            <minimum>0.90</minimum>
+                                        </limit>
+                                        <limit>
+                                            <counter>BRANCH</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.80</minimum>
                                         </limit>
                                     </limits>
                                 </rule>
