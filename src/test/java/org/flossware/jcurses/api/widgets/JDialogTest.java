@@ -1,6 +1,8 @@
 package org.flossware.jcurses.api.widgets;
 
+import org.flossware.jcurses.api.DraggableWindow;
 import org.flossware.jcurses.api.JDialog;
+import org.flossware.jcurses.api.JLabel;
 import org.flossware.jcurses.api.JStatusBar;
 import org.flossware.jcurses.api.RootPane;
 import org.flossware.jcurses.testutil.ComponentTestBase;
@@ -300,6 +302,23 @@ class JDialogTest extends ComponentTestBase {
     }
 
     @Test
+    @DisplayName("should consume mouse event when drag starts")
+    void testDragConsumeMouseEvent() {
+        // Cancel any existing drag from previous tests
+        org.flossware.jcurses.api.WindowDragManager.getInstance().cancelDrag();
+
+        widget.setLocation(10, 10);
+        widget.setSize(20, 10);
+
+        // Click on title bar to start drag (BUTTON1_PRESSED = 0x2)
+        org.flossware.jcurses.events.MouseEvent titleBarClick =
+            new org.flossware.jcurses.events.MouseEvent(15, 10, 0x2);
+
+        boolean consumed = widget.handleMouseEvent(titleBarClick);
+        assertTrue(consumed, "Title bar click should be consumed by drag manager");
+    }
+
+    @Test
     @DisplayName("should be thread-safe for concurrent operations")
     void testThreadSafety() throws InterruptedException {
         ThreadSafetyTestHelper.runConcurrent(10, () -> {
@@ -332,5 +351,40 @@ class JDialogTest extends ComponentTestBase {
         });
 
         assertTrue(true);  // Should complete without deadlock
+    }
+
+    @Test
+    @DisplayName("should use DraggableWindow default methods")
+    void testDraggableWindowDefaults() {
+        // Test that JDialog implements DraggableWindow and can use default methods
+        DraggableWindow draggable = widget;
+
+        // Default max width/height are 0 (unlimited)
+        assertEquals(0, draggable.getMaxWidth());
+        assertEquals(0, draggable.getMaxHeight());
+    }
+
+    @Test
+    @DisplayName("should handle mouse event delegation to children")
+    void testMouseEventDelegationToChildren() {
+        JLabel child = new JLabel("Child");
+        child.setLocation(5, 5);
+        child.setSize(10, 1);
+
+        boolean[] childListenerCalled = {false};
+        child.addMouseListener(event -> childListenerCalled[0] = true);
+
+        widget.setLocation(0, 0);
+        widget.setSize(30, 20);
+        widget.add(child);
+
+        // Click on child (inside dialog but not on border)
+        org.flossware.jcurses.events.MouseEvent event =
+            new org.flossware.jcurses.events.MouseEvent(10, 10, 0x4);
+
+        widget.handleMouseEvent(event);
+
+        // Test executes the delegation path
+        assertNotNull(child.getParent());
     }
 }

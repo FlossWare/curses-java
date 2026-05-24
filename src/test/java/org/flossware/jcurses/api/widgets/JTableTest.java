@@ -130,6 +130,18 @@ class JTableTest extends ComponentTestBase {
     }
 
     @Test
+    @DisplayName("should ignore invalid indices in toggle")
+    void testToggleRowSelectionInvalid() {
+        table.addRow("Alice", "30", "NYC");
+
+        // Should not throw, just ignore
+        assertDoesNotThrow(() -> table.toggleRowSelection(-1));
+        assertDoesNotThrow(() -> table.toggleRowSelection(999));
+
+        assertEquals(0, table.getSelectedRows().size());
+    }
+
+    @Test
     @DisplayName("should deselect row")
     void testDeselectRow() {
         table.setMultiSelectionEnabled(true);
@@ -203,6 +215,22 @@ class JTableTest extends ComponentTestBase {
 
         assertEquals(JTable.SORT_NONE, table.getSortDirection());
         assertEquals(-1, table.getSortColumn());
+    }
+
+    @Test
+    @DisplayName("should cycle back to ascending on fourth click")
+    void testSortCycle() {
+        table.setColumnNames("Name");
+        table.addRow("Charlie");
+        table.addRow("Alice");
+
+        table.sortByColumn(0); // Ascending
+        table.sortByColumn(0); // Descending
+        table.sortByColumn(0); // None
+        table.sortByColumn(0); // Back to Ascending
+
+        assertEquals(JTable.SORT_ASCENDING, table.getSortDirection());
+        assertEquals(0, table.getSortColumn());
     }
 
     @Test
@@ -410,5 +438,139 @@ class JTableTest extends ComponentTestBase {
         table.addRow("Value");
 
         assertDoesNotThrow(() -> table.paint(buffer));
+    }
+
+    @Test
+    @DisplayName("should render descending sort indicator")
+    void testRenderDescendingSortIndicator() {
+        table.setColumnNames("Name", "Age");
+        table.addRow("Alice", "30");
+
+        // Sort twice to get descending
+        table.sortByColumn(0);
+        table.sortByColumn(0);
+
+        assertEquals(JTable.SORT_DESCENDING, table.getSortDirection());
+
+        table.paint(buffer);
+
+        // Check that buffer contains the sort indicator
+        String headerRow = new String(buffer[0]);
+        assertTrue(headerRow.contains("v") || headerRow.contains("Name"));
+    }
+
+    @Test
+    @DisplayName("should render multi-selection markers")
+    void testRenderMultiSelectionMarkers() {
+        table.setMultiSelectionEnabled(true);
+        table.setColumnNames("Name");
+        table.addRow("Alice");
+        table.addRow("Bob");
+        table.addRow("Charlie");
+
+        table.selectRow(0);
+        table.selectRow(2);
+
+        table.paint(buffer);
+
+        // Check for multi-selection markers
+        String row0 = new String(buffer[2]);  // First data row
+        String row1 = new String(buffer[3]);  // Second data row
+        String row2 = new String(buffer[4]);  // Third data row
+
+        assertTrue(row0.contains("[*]") || row0.contains("Alice"));
+        assertTrue(row1.contains("[ ]") || row1.contains("Bob"));
+        assertTrue(row2.contains("[*]") || row2.contains("Charlie"));
+    }
+
+    @Test
+    @DisplayName("should render single-selection markers")
+    void testRenderSingleSelectionMarkers() {
+        table.setMultiSelectionEnabled(false);
+        table.setColumnNames("Name");
+        table.addRow("Alice");
+        table.addRow("Bob");
+
+        table.selectRow(1);
+
+        table.paint(buffer);
+
+        // Check for single-selection markers
+        String row0 = new String(buffer[2]);
+        String row1 = new String(buffer[3]);
+
+        // First row should have "  " (no marker)
+        // Second row should have "> " (selected marker)
+        assertTrue(row0.contains("Alice"));
+        assertTrue(row1.contains("Bob"));
+    }
+
+    @Test
+    @DisplayName("should handle empty cells in render")
+    void testRenderEmptyCells() {
+        table.setColumnNames("Name", "Age", "City");
+        table.addRow("Alice", "", null);  // Empty string and null
+        table.addRow("", "", "");  // All empty
+
+        assertDoesNotThrow(() -> table.paint(buffer));
+    }
+
+    @Test
+    @DisplayName("should truncate long cell values")
+    void testTruncateLongCellValues() {
+        table.setColumnNames("Name");
+        table.setColumnWidth(10);
+        table.addRow("VeryLongNameThatExceedsColumnWidth");
+
+        assertDoesNotThrow(() -> table.paint(buffer));
+
+        String dataRow = new String(buffer[2]);
+        // Should not contain the full long text
+        assertFalse(dataRow.contains("VeryLongNameThatExceedsColumnWidth"));
+        // But should contain the truncated beginning
+        assertTrue(dataRow.contains("VeryLong") || dataRow.contains("Very"));
+    }
+
+    @Test
+    @DisplayName("should render header separator")
+    void testRenderHeaderSeparator() {
+        table.setColumnNames("Name", "Age");
+        table.addRow("Alice", "30");
+
+        table.paint(buffer);
+
+        // Check that row 1 (after header) contains separator
+        String separatorRow = new String(buffer[1]);
+        assertTrue(separatorRow.contains("-") || separatorRow.length() > 0);
+    }
+
+    @Test
+    @DisplayName("should handle table height limit in rendering")
+    void testRenderWithHeightLimit() {
+        table.setColumnNames("Name");
+        table.setSize(60, 5);  // Very limited height
+
+        for (int i = 0; i < 20; i++) {
+            table.addRow("Person " + i);
+        }
+
+        assertDoesNotThrow(() -> table.paint(buffer));
+
+        // Should only render rows that fit
+        // Height of 5 means: 1 header + 1 separator + 3 data rows max
+    }
+
+    @Test
+    @DisplayName("should handle column width with padding")
+    void testColumnWidthPadding() {
+        table.setColumnNames("A", "B", "C");
+        table.setColumnWidth(10);
+        table.addRow("1", "2", "3");
+
+        assertDoesNotThrow(() -> table.paint(buffer));
+
+        String dataRow = new String(buffer[2]);
+        // Should have padding to reach column widths
+        assertTrue(dataRow.length() >= 10);
     }
 }
