@@ -6,7 +6,7 @@
 
     <groupId>org.flossware</groupId>
     <artifactId>jcurses</artifactId>
-    <version>1.18</version>
+    <version>1.19</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
