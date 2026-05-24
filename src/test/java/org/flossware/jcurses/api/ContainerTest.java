@@ -232,6 +232,73 @@ class ContainerTest extends ComponentTestBase {
         assertTrue(layout.layoutCount >= 100);
     }
 
+    @Test
+    @DisplayName("should revalidate layout when invalid")
+    void testRevalidate() {
+        TestLayoutManager layout = new TestLayoutManager();
+        container.setLayout(layout);
+        container.setSize(20, 10);
+
+        container.revalidate();
+
+        assertTrue(layout.wasLaidOut);
+    }
+
+    @Test
+    @DisplayName("should not revalidate when layout is valid")
+    void testRevalidateWhenValid() {
+        TestLayoutManager layout = new TestLayoutManager();
+        container.setLayout(layout);
+        container.setSize(20, 10);
+        container.doLayout();
+
+        // Reset flag and count
+        layout.layoutCount = 0;
+
+        // Revalidate without changing size or invalidating
+        container.revalidate();
+
+        // Should not layout again since it's still valid
+        assertEquals(0, layout.layoutCount);
+    }
+
+    @Test
+    @DisplayName("should revalidate when size changes")
+    void testRevalidateOnSizeChange() {
+        TestLayoutManager layout = new TestLayoutManager();
+        container.setLayout(layout);
+        container.setSize(20, 10);
+        container.doLayout();
+
+        layout.layoutCount = 0;
+
+        // Change size
+        container.setSize(30, 15);
+        container.revalidate();
+
+        // Should layout again since size changed
+        assertEquals(1, layout.layoutCount);
+    }
+
+    @Test
+    @DisplayName("should invalidate layout")
+    void testInvalidateLayout() {
+        TestLayoutManager layout = new TestLayoutManager();
+        container.setLayout(layout);
+        container.setSize(20, 10);
+        container.doLayout();
+
+        layout.layoutCount = 0;
+
+        // Invalidate layout
+        container.invalidateLayout();
+
+        // Revalidate should now trigger layout
+        container.revalidate();
+
+        assertEquals(1, layout.layoutCount);
+    }
+
     /**
      * Test layout manager that tracks if it was called.
      */
