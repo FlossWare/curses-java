@@ -72,6 +72,35 @@
             <artifactId>slf4j-simple</artifactId>
             <version>2.0.16</version>
         </dependency>
+
+        <!-- jqwik for Property-Based Testing -->
+        <dependency>
+            <groupId>net.jqwik</groupId>
+            <artifactId>jqwik</artifactId>
+            <version>1.8.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- API Guardian for API Stability Annotations -->
+        <dependency>
+            <groupId>org.apiguardian</groupId>
+            <artifactId>apiguardian-api</artifactId>
+            <version>1.1.2</version>
+        </dependency>
+
+        <!-- JMH for Performance Benchmarks -->
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-core</artifactId>
+            <version>1.37</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-generator-annprocess</artifactId>
+            <version>1.37</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -260,6 +289,109 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <!-- Software Bill of Materials (SBOM) Generation -->
+            <plugin>
+                <groupId>org.cyclonedx</groupId>
+                <artifactId>cyclonedx-maven-plugin</artifactId>
+                <version>2.7.11</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>makeAggregateBom</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <outputName>jcurses-sbom</outputName>
+                    <outputFormat>all</outputFormat>
+                </configuration>
+            </plugin>
+
+            <!-- Mutation Testing with PITest -->
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>1.15.8</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-junit5-plugin</artifactId>
+                        <version>1.2.1</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <targetClasses>
+                        <param>org.flossware.jcurses.api.*</param>
+                        <param>org.flossware.jcurses.events.*</param>
+                        <param>org.flossware.jcurses.theme.*</param>
+                    </targetClasses>
+                    <targetTests>
+                        <param>org.flossware.jcurses.*</param>
+                    </targetTests>
+                    <mutationThreshold>75</mutationThreshold>
+                    <coverageThreshold>80</coverageThreshold>
+                    <timestampedReports>false</timestampedReports>
+                    <outputFormats>
+                        <outputFormat>HTML</outputFormat>
+                        <outputFormat>XML</outputFormat>
+                    </outputFormats>
+                </configuration>
+            </plugin>
+
+            <!-- OWASP Dependency Vulnerability Check -->
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>9.0.9</version>
+                <configuration>
+                    <failBuildOnCVSS>7</failBuildOnCVSS>
+                    <skipTestScope>true</skipTestScope>
+                </configuration>
+            </plugin>
+
+            <!-- Checkstyle Code Quality -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.3.1</version>
+                <configuration>
+                    <configLocation>google_checks.xml</configLocation>
+                    <consoleOutput>true</consoleOutput>
+                    <failsOnError>false</failsOnError>
+                    <violationSeverity>warning</violationSeverity>
+                </configuration>
+            </plugin>
+
+            <!-- SpotBugs Static Analysis -->
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>4.8.3.0</version>
+                <configuration>
+                    <effort>Max</effort>
+                    <threshold>Low</threshold>
+                    <failOnError>false</failOnError>
+                    <xmlOutput>true</xmlOutput>
+                </configuration>
+            </plugin>
+
+            <!-- License Compliance Checking -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>2.4.0</version>
+                <configuration>
+                    <licenseName>gpl_v3</licenseName>
+                    <failOnMissingHeader>false</failOnMissingHeader>
+                    <failOnNotUptodateHeader>false</failOnNotUptodateHeader>
+                    <roots>
+                        <root>src/main/java</root>
+                        <root>src/test/java</root>
+                    </roots>
+                </configuration>
             </plugin>
         </plugins>
     </build>
