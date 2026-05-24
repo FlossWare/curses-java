@@ -393,4 +393,46 @@ class JTextFieldTest extends ComponentTestBase {
         assertTrue(widget.getText().contains("X"));
         assertTrue(widget.getText().contains("world"));
     }
+
+    @Test
+    @DisplayName("should handle insertChar with unlimited max length")
+    void testInsertCharUnlimitedMaxLength() {
+        widget.setMaxLength(-1);  // Unlimited
+        widget.setText("Hello");
+        widget.moveToEnd();
+        widget.insertChar('!');
+
+        assertEquals("Hello!", widget.getText());
+    }
+
+    @Test
+    @DisplayName("should handle insertChar at max length")
+    void testInsertCharAtMaxLength() {
+        widget.setMaxLength(5);
+        widget.setText("Hello");
+        widget.moveToEnd();
+        widget.insertChar('!');  // Should be rejected
+
+        assertEquals("Hello", widget.getText());
+    }
+
+    @Test
+    @DisplayName("should handle paste without selection")
+    void testPasteWithoutSelection() {
+        widget.setText("Hello");
+        widget.moveToEnd();
+        Clipboard.getInstance().setContent(" World");
+        widget.paste();
+
+        assertEquals("Hello World", widget.getText());
+    }
+
+    @Test
+    @DisplayName("should handle render with zero width")
+    void testRenderWithZeroWidth() {
+        widget.setSize(0, 1);
+        widget.setText("Hello");
+
+        assertDoesNotThrow(() -> widget.paint(buffer));
+    }
 }

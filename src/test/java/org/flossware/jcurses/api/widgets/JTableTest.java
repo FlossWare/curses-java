@@ -573,4 +573,80 @@ class JTableTest extends ComponentTestBase {
         // Should have padding to reach column widths
         assertTrue(dataRow.length() >= 10);
     }
+
+    @Test
+    @DisplayName("should handle toggle row selection when multi-selection enabled")
+    void testToggleRowSelectionMultiEnabled() {
+        table.setMultiSelectionEnabled(true);
+        table.addRow("Alice", "30");
+        table.addRow("Bob", "25");
+
+        table.toggleRowSelection(0);
+        assertTrue(table.isRowSelected(0));
+
+        table.toggleRowSelection(1);
+        assertTrue(table.isRowSelected(0));
+        assertTrue(table.isRowSelected(1));
+    }
+
+    @Test
+    @DisplayName("should handle mouse click with non-BUTTON1_CLICKED event")
+    void testHandleMouseEventNonButton1() {
+        table.setColumnNames("Name");
+        table.addRow("Alice");
+
+        // Use a different button event
+        MouseEvent otherButton = new MouseEvent(10, 5, 0x8); // Not BUTTON1_CLICKED
+        boolean handled = table.handleMouseEvent(otherButton);
+
+        // Should delegate to super.handleMouseEvent() which returns true
+        assertTrue(handled);
+    }
+
+    @Test
+    @DisplayName("should handle mouse click on empty table")
+    void testHandleMouseEventEmptyTable() {
+        // No columns, no data
+        MouseEvent clickEvent = new MouseEvent(5, 5, 0x4);
+        boolean handled = table.handleMouseEvent(clickEvent);
+
+        // Should handle but do nothing
+        assertTrue(handled);
+    }
+
+    @Test
+    @DisplayName("should handle click on column with invalid index")
+    void testClickColumnInvalidIndex() {
+        table.setColumnNames("A", "B");
+        table.addRow("1", "2");
+
+        // Click far to the right (column index would be out of bounds)
+        MouseEvent clickEvent = new MouseEvent(100, 0, 0x4);
+        table.handleMouseEvent(clickEvent);
+
+        // Should not crash, sort column should remain unchanged
+        assertEquals(-1, table.getSortColumn());
+    }
+
+    @Test
+    @DisplayName("should handle click on data row with invalid index")
+    void testClickDataRowInvalidIndex() {
+        table.setColumnNames("Name");
+        table.addRow("Alice");
+
+        // Click beyond the last row
+        MouseEvent clickEvent = new MouseEvent(5, 20, 0x4);
+        table.handleMouseEvent(clickEvent);
+
+        // Should not crash, no selection should be made
+        assertTrue(table.getSelectedRows().isEmpty());
+    }
+
+    @Test
+    @DisplayName("should handle getSelectedRow when no selection")
+    void testGetSelectedRowEmpty() {
+        table.addRow("Alice");
+        assertEquals(-1, table.getSelectedRow());
+    }
+
 }
