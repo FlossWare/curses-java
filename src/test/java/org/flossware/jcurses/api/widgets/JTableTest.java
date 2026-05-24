@@ -339,4 +339,76 @@ class JTableTest extends ComponentTestBase {
 
         assertDoesNotThrow(() -> table.paint(buffer));
     }
+
+    @Test
+    @DisplayName("should handle sorting with null values in cells")
+    void testSortWithNullValues() {
+        table.setColumnNames("Name", "Age");
+        table.addRow("Charlie", null);
+        table.addRow(null, "30");
+        table.addRow("Alice", "25");
+
+        assertDoesNotThrow(() -> table.sortByColumn(0));
+        assertDoesNotThrow(() -> table.sortByColumn(1));
+        assertDoesNotThrow(() -> table.paint(buffer));
+    }
+
+    @Test
+    @DisplayName("should handle sorting with uneven row lengths")
+    void testSortWithUnevenRows() {
+        table.setColumnNames("Name", "Age", "City");
+        table.addRow("Charlie", "35", "SF");
+        table.addRow("Alice");  // Short row
+        table.addRow("Bob", "25");  // Medium row
+
+        // Sort by column that doesn't exist in some rows
+        assertDoesNotThrow(() -> table.sortByColumn(2));
+        assertDoesNotThrow(() -> table.paint(buffer));
+    }
+
+    @Test
+    @DisplayName("should preserve selections after sorting")
+    void testSelectionPreservationAfterSort() {
+        table.setColumnNames("Name");
+        table.addRow("Charlie");
+        table.addRow("Alice");
+        table.addRow("Bob");
+
+        table.selectRow(1);  // Select "Alice"
+        table.sortByColumn(0);  // Sort alphabetically
+
+        // Selections are by index, not by data, so index 1 should still be selected
+        // (but might be different data now)
+        assertTrue(table.getSelectedRows().contains(1));
+    }
+
+    @Test
+    @DisplayName("should handle mouse click outside table bounds")
+    void testMouseClickOutsideBounds() {
+        table.setColumnNames("Name");
+        table.addRow("Alice");
+
+        MouseEvent outsideClick = new MouseEvent(1000, 1000, 0x4);
+        boolean handled = table.handleMouseEvent(outsideClick);
+
+        assertFalse(handled);
+    }
+
+    @Test
+    @DisplayName("should handle empty table rendering")
+    void testEmptyTableRendering() {
+        table.setColumnNames("Name", "Age", "City");
+        // No rows added
+
+        assertDoesNotThrow(() -> table.paint(buffer));
+    }
+
+    @Test
+    @DisplayName("should handle table with no columns")
+    void testNoColumnsRendering() {
+        // No columns set
+        table.addRow("Value");
+
+        assertDoesNotThrow(() -> table.paint(buffer));
+    }
 }
