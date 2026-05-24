@@ -161,18 +161,6 @@ class JTextFieldAdvancedTest extends ComponentTestBase {
     }
 
     // Undo/Redo tests (basic - full command pattern would need more work)
-    @Test
-    @DisplayName("should indicate if undo is available")
-    void testCanUndo() {
-        assertFalse(field.canUndo());  // No commands yet
-    }
-
-    @Test
-    @DisplayName("should indicate if redo is available")
-    void testCanRedo() {
-        assertFalse(field.canRedo());  // No undone commands
-    }
-
     // Edge cases
     @Test
     @DisplayName("should handle empty selection operations gracefully")

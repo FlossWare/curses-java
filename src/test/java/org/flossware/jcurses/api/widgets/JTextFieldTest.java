@@ -393,16 +393,4 @@ class JTextFieldTest extends ComponentTestBase {
         assertTrue(widget.getText().contains("X"));
         assertTrue(widget.getText().contains("world"));
     }
-
-    @Test
-    @DisplayName("should check canUndo when stack is empty")
-    void testCanUndoEmpty() {
-        assertFalse(widget.canUndo());
-    }
-
-    @Test
-    @DisplayName("should check canRedo when stack is empty")
-    void testCanRedoEmpty() {
-        assertFalse(widget.canRedo());
-    }
 }

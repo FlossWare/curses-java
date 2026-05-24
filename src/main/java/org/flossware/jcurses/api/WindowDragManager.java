@@ -39,14 +39,13 @@ public class WindowDragManager {
     // Hit zone constants
     private static final int HIT_ZONE_NONE = 0;
     private static final int HIT_ZONE_TITLE_BAR = 1;
-    private static final int HIT_ZONE_TOP_EDGE = 2;
-    private static final int HIT_ZONE_BOTTOM_EDGE = 3;
-    private static final int HIT_ZONE_LEFT_EDGE = 4;
-    private static final int HIT_ZONE_RIGHT_EDGE = 5;
-    private static final int HIT_ZONE_TOP_LEFT = 6;
-    private static final int HIT_ZONE_TOP_RIGHT = 7;
-    private static final int HIT_ZONE_BOTTOM_LEFT = 8;
-    private static final int HIT_ZONE_BOTTOM_RIGHT = 9;
+    private static final int HIT_ZONE_BOTTOM_EDGE = 2;
+    private static final int HIT_ZONE_LEFT_EDGE = 3;
+    private static final int HIT_ZONE_RIGHT_EDGE = 4;
+    private static final int HIT_ZONE_TOP_LEFT = 5;
+    private static final int HIT_ZONE_TOP_RIGHT = 6;
+    private static final int HIT_ZONE_BOTTOM_LEFT = 7;
+    private static final int HIT_ZONE_BOTTOM_RIGHT = 8;
 
     private WindowDragManager() {
     }
@@ -173,11 +172,6 @@ public class WindowDragManager {
             case HIT_ZONE_BOTTOM_EDGE:
                 // Resize height (expand down)
                 resizeWindow(window, draggable, 0, 0, 0, deltaY);
-                break;
-
-            case HIT_ZONE_TOP_EDGE:
-                // Resize height (expand up) - move window and adjust height
-                resizeWindow(window, draggable, 0, deltaY, 0, -deltaY);
                 break;
 
             case HIT_ZONE_TOP_LEFT:
