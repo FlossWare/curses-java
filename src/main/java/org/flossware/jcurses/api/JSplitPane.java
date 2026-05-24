@@ -64,6 +64,22 @@ public class JSplitPane extends Container {
         repaint();
     }
 
+    public double getDividerLocation() {
+        return dividerLocation;
+    }
+
+    public Component getLeftComponent() {
+        return leftTop;
+    }
+
+    public Component getRightComponent() {
+        return rightBottom;
+    }
+
+    public int getOrientation() {
+        return orientation;
+    }
+
     @Override
     public void doLayout() {
         renderLock.lock();

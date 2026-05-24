@@ -17,6 +17,50 @@ public class JTextArea extends Component {
         repaint();
     }
 
+    public void setText(String text) {
+        renderLock.lock();
+        try {
+            lines.clear();
+            if (text != null && !text.isEmpty()) {
+                String[] split = text.split("\n");
+                for (String line : split) {
+                    lines.add(line);
+                }
+            }
+        } finally {
+            renderLock.unlock();
+        }
+        repaint();
+    }
+
+    public String getText() {
+        renderLock.lock();
+        try {
+            return String.join("\n", lines);
+        } finally {
+            renderLock.unlock();
+        }
+    }
+
+    public void clear() {
+        renderLock.lock();
+        try {
+            lines.clear();
+        } finally {
+            renderLock.unlock();
+        }
+        repaint();
+    }
+
+    public int getLineCount() {
+        renderLock.lock();
+        try {
+            return lines.size();
+        } finally {
+            renderLock.unlock();
+        }
+    }
+
     @Override
     public void paint(char[][] buffer) {
         renderLock.lock();
