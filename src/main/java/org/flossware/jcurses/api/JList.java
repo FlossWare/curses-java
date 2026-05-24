@@ -9,14 +9,77 @@ public class JList extends Component {
     private final List<String> items = new ArrayList<>();
     private final SequencedSet<Integer> selectedIndices = new LinkedHashSet<>();
 
-    public void select(int index) {
+    public void addItem(String item) {
         renderLock.lock();
         try {
-            selectedIndices.addLast(index);
+            items.add(item);
         } finally {
             renderLock.unlock();
         }
         repaint();
+    }
+
+    public void removeItem(int index) {
+        renderLock.lock();
+        try {
+            if (index >= 0 && index < items.size()) {
+                items.remove(index);
+                selectedIndices.remove(index);
+            }
+        } finally {
+            renderLock.unlock();
+        }
+        repaint();
+    }
+
+    public List<String> getItems() {
+        renderLock.lock();
+        try {
+            return List.copyOf(items);
+        } finally {
+            renderLock.unlock();
+        }
+    }
+
+    public void select(int index) {
+        renderLock.lock();
+        try {
+            if (index >= 0 && index < items.size()) {
+                selectedIndices.addLast(index);
+            }
+        } finally {
+            renderLock.unlock();
+        }
+        repaint();
+    }
+
+    public void deselect(int index) {
+        renderLock.lock();
+        try {
+            selectedIndices.remove(index);
+        } finally {
+            renderLock.unlock();
+        }
+        repaint();
+    }
+
+    public void clearSelection() {
+        renderLock.lock();
+        try {
+            selectedIndices.clear();
+        } finally {
+            renderLock.unlock();
+        }
+        repaint();
+    }
+
+    public SequencedSet<Integer> getSelectedIndices() {
+        renderLock.lock();
+        try {
+            return new LinkedHashSet<>(selectedIndices);
+        } finally {
+            renderLock.unlock();
+        }
     }
 
     @Override
