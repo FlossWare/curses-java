@@ -2,6 +2,7 @@ package org.flossware.jcurses.ffi;
 
 import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
+import java.util.NoSuchElementException;
 
 public class NcursesBridge {
     private static SymbolLookup ncurses;
@@ -24,6 +25,9 @@ public class NcursesBridge {
     private static MethodHandle attroff;
     private static MemorySegment stdscr;
     private static boolean initialized = false;
+
+    // ncurses error code
+    private static final int ERR = -1;
 
     // Mouse event constants (ncurses 6.x MOUSE_VERSION 2)
     public static final long BUTTON1_CLICKED = 0x00000004L;
@@ -56,7 +60,41 @@ public class NcursesBridge {
 
     static {
         try {
-            ncurses = SymbolLookup.libraryLookup("libncurses.so.6", Arena.global());
+            // Platform-specific library detection with fallback chain
+            String osName = System.getProperty("os.name").toLowerCase();
+            String[] libraries = switch (osName) {
+                case String os when os.contains("mac") ->
+                    new String[]{"libncurses.dylib", "libncurses.6.dylib", "libncurses.5.dylib"};
+                case String os when os.contains("linux") ->
+                    new String[]{"libncurses.so.6", "libncurses.so.5", "libncurses.so"};
+                case String os when os.contains("windows") ->
+                    throw new UnsupportedOperationException(
+                        "Windows is not currently supported. Consider using WSL or PDCurses.");
+                default ->
+                    throw new UnsupportedOperationException(
+                        "Unsupported operating system: " + osName);
+            };
+
+            // Try each library in order until one succeeds
+            SymbolLookup foundLibrary = null;
+            IllegalArgumentException lastException = null;
+            for (String lib : libraries) {
+                try {
+                    foundLibrary = SymbolLookup.libraryLookup(lib, Arena.global());
+                    break;
+                } catch (IllegalArgumentException e) {
+                    lastException = e;
+                    // Try next library
+                }
+            }
+
+            if (foundLibrary == null) {
+                throw new UnsatisfiedLinkError(
+                    "Could not find ncurses library. Tried: " + String.join(", ", libraries) +
+                    ". Last error: " + (lastException != null ? lastException.getMessage() : "unknown"));
+            }
+
+            ncurses = foundLibrary;
             Linker linker = Linker.nativeLinker();
 
             initscr = linker.downcallHandle(
@@ -154,8 +192,23 @@ public class NcursesBridge {
             );
 
             initialized = true;
-        } catch (Exception e) {
-            System.err.println("Warning: Could not load ncurses library: " + e.getMessage());
+        } catch (UnsatisfiedLinkError e) {
+            System.err.println("Error: ncurses library not found: " + e.getMessage());
+            System.err.println("Please install ncurses: 'sudo dnf install ncurses-devel' (Fedora) or 'sudo apt install libncurses-dev' (Debian/Ubuntu)");
+            initialized = false;
+        } catch (IllegalArgumentException e) {
+            System.err.println("Error: Could not load ncurses library: " + e.getMessage());
+            initialized = false;
+        } catch (NoSuchElementException e) {
+            System.err.println("Error: Incompatible ncurses version (missing required symbols): " + e.getMessage());
+            initialized = false;
+        } catch (Throwable e) {
+            // Catch Throwable for critical errors during FFI setup, but rethrow Errors
+            if (e instanceof Error && !(e instanceof LinkageError)) {
+                throw (Error) e;
+            }
+            System.err.println("Error: Failed to initialize ncurses: " + e.getClass().getName() + ": " + e.getMessage());
+            e.printStackTrace();
             initialized = false;
         }
     }
@@ -164,25 +217,37 @@ public class NcursesBridge {
         return initialized;
     }
 
+    /**
+     * Check ncurses operation result and throw exception on error.
+     * @param result the return code from ncurses function
+     * @param operation description of the operation for error messages
+     * @throws RuntimeException if result indicates error (ERR)
+     */
+    private static void checkResult(int result, String operation) {
+        if (result == ERR) {
+            throw new RuntimeException("ncurses operation failed: " + operation);
+        }
+    }
+
     public static void init() throws Throwable {
         if (!initialized) {
             throw new UnsupportedOperationException("ncurses library not available");
         }
         stdscr = (MemorySegment) initscr.invokeExact();
-        int result1 = (int) cbreak.invokeExact();
-        int result2 = (int) noecho.invokeExact();
-        int result3 = (int) keypad.invokeExact(stdscr, (byte) 1);
+        checkResult((int) cbreak.invokeExact(), "cbreak");
+        checkResult((int) noecho.invokeExact(), "noecho");
+        checkResult((int) keypad.invokeExact(stdscr, (byte) 1), "keypad");
     }
 
     public static void stop() throws Throwable {
         if (initialized) {
-            int result = (int) endwin.invokeExact();
+            checkResult((int) endwin.invokeExact(), "endwin");
         }
     }
 
     public static void refresh() throws Throwable {
         if (initialized) {
-            int result = (int) refresh.invokeExact();
+            checkResult((int) refresh.invokeExact(), "refresh");
         }
     }
 
@@ -195,25 +260,26 @@ public class NcursesBridge {
 
     public static void moveCursor(int y, int x, char ch) throws Throwable {
         if (initialized) {
-            int result = (int) mvaddch.invokeExact(y, x, (int) ch);
+            checkResult((int) mvaddch.invokeExact(y, x, (int) ch), "mvaddch");
         }
     }
 
     public static void clear() throws Throwable {
         if (initialized) {
-            int result = (int) clear.invokeExact();
+            checkResult((int) clear.invokeExact(), "clear");
         }
     }
 
     public static void setNonBlocking(boolean nonBlocking) throws Throwable {
         if (initialized) {
-            int result = (int) nodelay.invokeExact(stdscr, (byte) (nonBlocking ? 1 : 0));
+            checkResult((int) nodelay.invokeExact(stdscr, (byte) (nonBlocking ? 1 : 0)), "nodelay");
         }
     }
 
     public static long enableMouse(long mask) throws Throwable {
         if (initialized) {
-            MemorySegment oldMaskPtr = Arena.global().allocate(ValueLayout.JAVA_LONG);
+            // Use ofAuto() instead of global() to allow GC to reclaim memory
+            MemorySegment oldMaskPtr = Arena.ofAuto().allocate(ValueLayout.JAVA_LONG);
             long result = (long) mousemask.invokeExact(mask, oldMaskPtr);
             return result;
         }
@@ -223,7 +289,9 @@ public class NcursesBridge {
     public static MouseEventData getMouseEvent() throws Throwable {
         if (initialized) {
             // MEVENT structure: short id, int x, int y, int z, long bstate
-            MemorySegment mevent = Arena.global().allocate(32);  // Allocate enough space for MEVENT
+            // Use ofAuto() instead of global() to allow GC to reclaim memory
+            // Critical: this method is called on every mouse event, global arena would leak memory
+            MemorySegment mevent = Arena.ofAuto().allocate(32);  // Allocate enough space for MEVENT
             int result = (int) getmouse.invokeExact(mevent);
             if (result == 0) {  // OK
                 int x = mevent.get(ValueLayout.JAVA_INT, 4);
@@ -237,13 +305,13 @@ public class NcursesBridge {
 
     public static void startColor() throws Throwable {
         if (initialized) {
-            int result = (int) start_color.invokeExact();
+            checkResult((int) start_color.invokeExact(), "start_color");
         }
     }
 
     public static void initColorPair(short pair, short fg, short bg) throws Throwable {
         if (initialized) {
-            int result = (int) init_pair.invokeExact(pair, fg, bg);
+            checkResult((int) init_pair.invokeExact(pair, fg, bg), "init_pair");
         }
     }
 
@@ -256,13 +324,13 @@ public class NcursesBridge {
 
     public static void enableAttribute(int attr) throws Throwable {
         if (initialized) {
-            int result = (int) attron.invokeExact(attr);
+            checkResult((int) attron.invokeExact(attr), "attron");
         }
     }
 
     public static void disableAttribute(int attr) throws Throwable {
         if (initialized) {
-            int result = (int) attroff.invokeExact(attr);
+            checkResult((int) attroff.invokeExact(attr), "attroff");
         }
     }
 
