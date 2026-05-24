@@ -368,62 +368,75 @@ public class JTable extends Component {
         }
     }
 
+    /**
+     * Efficiently pad a string to the specified width.
+     * Avoids String.format overhead by manually padding.
+     */
+    private void appendPadded(StringBuilder sb, String text, int width) {
+        int len = Math.min(text.length(), width);
+        sb.append(text, 0, len);
+        for (int i = len; i < width; i++) {
+            sb.append(' ');
+        }
+    }
+
     @Override
     public void paint(char[][] buffer) {
         renderLock.lock();
         try {
             int currentY = getY();
+            int startX = getX();
 
             // Render column headers with sort indicators
             if (!columnNames.isEmpty()) {
-                StringBuilder header = new StringBuilder();
+                StringBuilder header = new StringBuilder(width);
                 for (int i = 0; i < columnNames.size(); i++) {
                     String col = columnNames.get(i);
-                    String sortIndicator = "";
+                    StringBuilder columnText = new StringBuilder(columnWidth);
+                    columnText.append(col);
+
                     if (i == sortColumn) {
-                        sortIndicator = sortDirection == SORT_ASCENDING ? " ^" :
-                                       sortDirection == SORT_DESCENDING ? " v" : "";
+                        columnText.append(sortDirection == SORT_ASCENDING ? " ^" :
+                                         sortDirection == SORT_DESCENDING ? " v" : "");
                     }
 
-                    String columnText = col + sortIndicator;
-                    int maxLen = columnWidth - 1;
-                    columnText = columnText.substring(0, Math.min(columnText.length(), maxLen));
-                    header.append(String.format("%-" + columnWidth + "s", columnText));
+                    int maxLen = Math.min(columnText.length(), columnWidth - 1);
+                    appendPadded(header, columnText.substring(0, maxLen), columnWidth);
                 }
-                writeStringToBuffer(buffer, header.toString().substring(0, Math.min(header.length(), width)),
-                                   getX(), currentY);
+
+                int headerLen = Math.min(header.length(), width);
+                writeStringToBuffer(buffer, header.substring(0, headerLen), startX, currentY);
                 currentY++;
 
-                // Render header separator
-                for (int i = 0; i < Math.min(width, header.length()); i++) {
-                    writeStringToBuffer(buffer, "-", getX() + i, currentY);
+                // Render header separator - batch write instead of loop
+                char[] separator = new char[headerLen];
+                for (int i = 0; i < separator.length; i++) {
+                    separator[i] = '-';
                 }
+                writeStringToBuffer(buffer, new String(separator), startX, currentY);
                 currentY++;
             }
 
             // Render data rows with selection markers
             for (int i = 0; i < data.size() && currentY < getY() + height; i++) {
                 List<String> row = data.get(i);
-                StringBuilder rowStr = new StringBuilder();
+                StringBuilder rowStr = new StringBuilder(width);
 
                 // Add selection marker
-                if (selectedRows.contains(i)) {
-                    rowStr.append(multiSelectionEnabled ? "[*] " : "> ");
-                } else {
-                    rowStr.append(multiSelectionEnabled ? "[ ] " : "  ");
-                }
+                rowStr.append(selectedRows.contains(i) ?
+                             (multiSelectionEnabled ? "[*] " : "> ") :
+                             (multiSelectionEnabled ? "[ ] " : "  "));
 
                 // Render cells
                 for (int j = 0; j < row.size(); j++) {
                     String cell = row.get(j);
-                    String cellStr = cell == null ? "" : cell;
-                    int maxLen = columnWidth - 1;
-                    cellStr = cellStr.substring(0, Math.min(cellStr.length(), maxLen));
-                    rowStr.append(String.format("%-" + columnWidth + "s", cellStr));
+                    String cellStr = (cell == null || cell.isEmpty()) ? "" : cell;
+                    int maxLen = Math.min(cellStr.length(), columnWidth - 1);
+                    appendPadded(rowStr, cellStr.substring(0, maxLen), columnWidth);
                 }
 
-                writeStringToBuffer(buffer, rowStr.toString().substring(0, Math.min(rowStr.length(), width)),
-                                   getX(), currentY);
+                int rowLen = Math.min(rowStr.length(), width);
+                writeStringToBuffer(buffer, rowStr.substring(0, rowLen), startX, currentY);
                 currentY++;
             }
         } finally {
