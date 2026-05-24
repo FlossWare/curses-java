@@ -173,4 +173,22 @@ class JSliderTest extends ComponentTestBase {
         customSlider.setValue(60);
         assertEquals(50, customSlider.getValue());
     }
+
+    @Test
+    @DisplayName("should handle zero range gracefully")
+    void testZeroRange() {
+        JSlider zeroRangeSlider = new JSlider(50, 50, 50);
+        zeroRangeSlider.setSize(20, 1);
+
+        assertEquals(50, zeroRangeSlider.getValue());
+        assertDoesNotThrow(() -> zeroRangeSlider.paint(buffer));
+    }
+
+    @Test
+    @DisplayName("should handle zero width gracefully")
+    void testZeroWidth() {
+        slider.setSize(0, 1);
+
+        assertDoesNotThrow(() -> slider.paint(buffer));
+    }
 }
