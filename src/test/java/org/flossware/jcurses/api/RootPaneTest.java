@@ -230,4 +230,103 @@ class RootPaneTest {
 
         assertTrue(rootPane.isDirty());
     }
+
+    @Test
+    @DisplayName("should mark dirty region")
+    void testMarkDirtyRegion() {
+        rootPane.clearDirty();
+        assertFalse(rootPane.isDirty());
+
+        rootPane.markDirtyRegion(10, 5, 20, 15);
+
+        assertTrue(rootPane.isDirty());
+    }
+
+    @Test
+    @DisplayName("should get dirty bounds when dirty")
+    void testGetDirtyBounds() {
+        rootPane.markDirtyRegion(10, 5, 20, 15);
+
+        int[] bounds = rootPane.getDirtyBounds();
+
+        assertNotNull(bounds);
+        assertEquals(4, bounds.length);
+        assertEquals(10, bounds[0]); // minX
+        assertEquals(5, bounds[1]);  // minY
+        assertEquals(30, bounds[2]); // maxX (10 + 20)
+        assertEquals(20, bounds[3]); // maxY (5 + 15)
+    }
+
+    @Test
+    @DisplayName("should return null bounds when not dirty")
+    void testGetDirtyBoundsWhenClean() {
+        rootPane.clearDirty();
+
+        int[] bounds = rootPane.getDirtyBounds();
+
+        assertNull(bounds);
+    }
+
+    @Test
+    @DisplayName("should accumulate dirty regions")
+    void testAccumulateDirtyRegions() {
+        rootPane.clearDirty();
+
+        rootPane.markDirtyRegion(10, 5, 10, 10);  // Region 1: (10,5) to (20,15)
+        rootPane.markDirtyRegion(25, 15, 10, 10); // Region 2: (25,15) to (35,25)
+
+        int[] bounds = rootPane.getDirtyBounds();
+
+        // Should cover the union of both regions
+        assertEquals(10, bounds[0]); // minX from region 1
+        assertEquals(5, bounds[1]);  // minY from region 1
+        assertEquals(35, bounds[2]); // maxX from region 2
+        assertEquals(24, bounds[3]); // maxY clamped to height (24)
+    }
+
+    @Test
+    @DisplayName("should clamp dirty bounds to screen size")
+    void testDirtyBoundsClamping() {
+        rootPane.markDirtyRegion(-10, -5, 200, 100);
+
+        int[] bounds = rootPane.getDirtyBounds();
+
+        assertEquals(0, bounds[0]);   // Clamped to 0
+        assertEquals(0, bounds[1]);   // Clamped to 0
+        assertEquals(80, bounds[2]);  // Clamped to width
+        assertEquals(24, bounds[3]);  // Clamped to height
+    }
+
+    @Test
+    @DisplayName("should clear dirty region bounds")
+    void testClearDirtyRegionBounds() {
+        rootPane.markDirtyRegion(10, 5, 20, 15);
+        rootPane.clearDirty();
+
+        // After clearing, markDirtyRegion should start fresh
+        rootPane.markDirtyRegion(30, 20, 10, 3);
+
+        int[] bounds = rootPane.getDirtyBounds();
+
+        assertEquals(30, bounds[0]);
+        assertEquals(20, bounds[1]);
+        assertEquals(40, bounds[2]);
+        assertEquals(23, bounds[3]);
+    }
+
+    @Test
+    @DisplayName("should be thread-safe for dirty region operations")
+    void testConcurrentDirtyRegionOperations() throws InterruptedException {
+        ThreadSafetyTestHelper.runConcurrent(10, () -> {
+            for (int i = 0; i < 50; i++) {
+                rootPane.markDirtyRegion(i * 2, i, 10, 5);
+                rootPane.getDirtyBounds();
+                if (i % 10 == 0) {
+                    rootPane.clearDirty();
+                }
+            }
+        });
+
+        assertTrue(true);  // Should complete without exceptions
+    }
 }
