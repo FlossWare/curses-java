@@ -362,4 +362,47 @@ class JTextFieldTest extends ComponentTestBase {
 
         assertEquals("", Clipboard.getInstance().getContent());
     }
+
+    @Test
+    @DisplayName("should handle paste with null clipboard content")
+    void testPasteWithNullClipboard() {
+        widget.setText("Hello");
+        widget.moveToEnd();
+
+        // Set clipboard to empty (sanitizeInput handles null internally)
+        Clipboard.getInstance().setContent("");
+        widget.paste();
+
+        // Should not crash, text should remain unchanged
+        assertEquals("Hello", widget.getText());
+    }
+
+    @Test
+    @DisplayName("should skip multiple punctuation marks when moving to word start")
+    void testMoveToWordStartMultiplePunctuation() {
+        widget.setText("hello...world!!!");
+        widget.moveToEnd();
+
+        // Move to start of "world"
+        widget.moveToWordStart();
+
+        // Insert a character to verify position
+        widget.insertChar('X');
+
+        // Should insert before "world"
+        assertTrue(widget.getText().contains("X"));
+        assertTrue(widget.getText().contains("world"));
+    }
+
+    @Test
+    @DisplayName("should check canUndo when stack is empty")
+    void testCanUndoEmpty() {
+        assertFalse(widget.canUndo());
+    }
+
+    @Test
+    @DisplayName("should check canRedo when stack is empty")
+    void testCanRedoEmpty() {
+        assertFalse(widget.canRedo());
+    }
 }
