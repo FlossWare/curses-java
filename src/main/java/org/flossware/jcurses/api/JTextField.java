@@ -5,20 +5,21 @@ import org.flossware.jcurses.api.edit.TextEditCommand;
 
 import java.util.Stack;
 
+import static org.flossware.jcurses.api.Constants.*;
+
 public class JTextField extends Component {
     private StringBuilder text = new StringBuilder();
     private int cursorPosition = 0;
-    private int maxLength = -1;
+    private int maxLength = UNLIMITED;
     private boolean editable = true;
 
     // Selection support
-    private int selectionStart = -1;
-    private int selectionEnd = -1;
+    private int selectionStart = NO_INDEX;
+    private int selectionEnd = NO_INDEX;
 
     // Undo/Redo support
     private final Stack<TextEditCommand> undoStack = new Stack<>();
     private final Stack<TextEditCommand> redoStack = new Stack<>();
-    private static final int MAX_UNDO_SIZE = 100;
 
     public JTextField() {
         this("");
@@ -116,8 +117,8 @@ public class JTextField extends Component {
     public void clearSelection() {
         renderLock.lock();
         try {
-            selectionStart = -1;
-            selectionEnd = -1;
+            selectionStart = NO_INDEX;
+            selectionEnd = NO_INDEX;
         } finally {
             renderLock.unlock();
         }
@@ -347,7 +348,7 @@ public class JTextField extends Component {
         redoStack.clear();
 
         // Limit undo stack size
-        if (undoStack.size() > MAX_UNDO_SIZE) {
+        if (undoStack.size() > Constants.MAX_UNDO_SIZE) {
             undoStack.remove(0);
         }
     }

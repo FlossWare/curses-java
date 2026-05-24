@@ -3,9 +3,11 @@ package org.flossware.jcurses.api;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.flossware.jcurses.api.Constants.*;
+
 public class JComboBox<T> extends Component {
     private final List<T> items = new ArrayList<>();
-    private int selectedIndex = -1;
+    private int selectedIndex = NO_INDEX;
     private boolean expanded = false;
 
     public JComboBox() {

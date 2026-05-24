@@ -1,5 +1,7 @@
 package org.flossware.jcurses.api;
 
+import static org.flossware.jcurses.api.Constants.*;
+
 public class RootPane extends Container {
     private static final RootPane instance = new RootPane();
     private volatile boolean dirty = false;
@@ -13,8 +15,8 @@ public class RootPane extends Container {
     private RootPane() {
         this.x = 0;
         this.y = 0;
-        this.width = 80;
-        this.height = 24;
+        this.width = DEFAULT_TERMINAL_WIDTH;
+        this.height = DEFAULT_TERMINAL_HEIGHT;
     }
 
     public static RootPane getInstance() {
