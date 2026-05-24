@@ -1,5 +1,6 @@
 package org.flossware.jcurses.api.containers;
 
+import org.flossware.jcurses.api.FlowLayout;
 import org.flossware.jcurses.api.JLabel;
 import org.flossware.jcurses.api.JPanel;
 import org.flossware.jcurses.testutil.ComponentTestBase;
@@ -23,6 +24,18 @@ class JPanelTest extends ComponentTestBase {
     void testCreation() {
         assertNotNull(panel);
         assertFalse(panel.isBordered());
+    }
+
+    @Test
+    @DisplayName("should create panel with layout manager")
+    void testCreationWithLayout() {
+        FlowLayout layout = new FlowLayout();
+        JPanel panelWithLayout = new JPanel(layout);
+
+        assertNotNull(panelWithLayout);
+        // Layout is set but there's no getter, so we can verify by checking doLayout doesn't crash
+        panelWithLayout.setSize(20, 10);
+        assertDoesNotThrow(() -> panelWithLayout.doLayout());
     }
 
     @Test
