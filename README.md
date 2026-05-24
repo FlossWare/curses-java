@@ -19,7 +19,7 @@ A modern Java terminal UI library that brings AWT-like components to the termina
 - 🔒 **Thread-Safe** - ReentrantLock protection for all components
 - ⚡ **Fast Rendering** - Differential updates, dirty rectangles, layout caching
 - 🎭 **Themes** - Default, Dark, and Light themes with pluggable architecture
-- 🧩 **Module System** - Java 9+ JPMS support (opt-in)
+- 🧩 **Module System** - Java 9+ JPMS support (opt-in via `module-info.java.template`)
 - 📦 **Zero Dependencies** - Only ncurses (native) and test libraries
 - ✅ **Comprehensive Tests** - 367 unit tests with 80%+ coverage
 

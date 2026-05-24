@@ -2,10 +2,10 @@
  * jcurses: Terminal UI library with AWT-like components using ncurses.
  *
  * This module provides a modern Java 21 terminal UI framework with:
- * - 28+ widgets (buttons, labels, text fields, tables, menus, etc.)
+ * - 29 widgets (buttons, labels, text fields, tables, menus, etc.)
  * - Layout managers (BorderLayout, FlowLayout, JGridLayout)
  * - Event system with mouse and keyboard support
- * - Color support with predefined color pairs
+ * - Color support with 3 built-in themes
  * - Virtual Thread compatibility
  *
  * To enable module support:
@@ -24,13 +24,16 @@ module org.flossware.jcurses {
     exports org.flossware.jcurses.api;
     exports org.flossware.jcurses.api.edit;
     exports org.flossware.jcurses.events;
+    exports org.flossware.jcurses.theme;
 
     // Open packages for frameworks that need reflection access (e.g., dependency injection)
     opens org.flossware.jcurses.api;
     opens org.flossware.jcurses.api.edit;
     opens org.flossware.jcurses.events;
+    opens org.flossware.jcurses.theme;
 
     // Internal packages (not exported):
     // - org.flossware.jcurses.render (rendering engine)
     // - org.flossware.jcurses.ffi (ncurses FFI bridge)
+    // - org.flossware.jcurses (application entry points)
 }
