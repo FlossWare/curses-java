@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.SequencedCollection;
 
+import static org.flossware.jcurses.api.Constants.*;
+
 public class Container extends Component {
     protected final List<Component> children = new ArrayList<>();
     protected LayoutManager layoutManager;
     private boolean layoutValid = false;
-    private int lastLayoutWidth = -1;
-    private int lastLayoutHeight = -1;
+    private int lastLayoutWidth = NO_INDEX;
+    private int lastLayoutHeight = NO_INDEX;
 
     public SequencedCollection<Component> getChildren() {
         return children;

@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static org.flossware.jcurses.api.Constants.*;
+
 public class JTable extends Component {
     public static final int SORT_NONE = 0;
     public static final int SORT_ASCENDING = 1;
@@ -19,7 +21,7 @@ public class JTable extends Component {
     private final List<List<String>> originalData = new ArrayList<>();
     private final Set<Integer> selectedRows = new HashSet<>();
 
-    private int sortColumn = -1;
+    private int sortColumn = NO_INDEX;
     private int sortDirection = SORT_NONE;
     private boolean multiSelectionEnabled = false;
     private int columnWidth = 15;
@@ -75,7 +77,7 @@ public class JTable extends Component {
             data.clear();
             originalData.clear();
             selectedRows.clear();
-            sortColumn = -1;
+            sortColumn = NO_INDEX;
             sortDirection = SORT_NONE;
         } finally {
             renderLock.unlock();
@@ -250,7 +252,7 @@ public class JTable extends Component {
                     sortDirection = SORT_DESCENDING;
                 } else if (sortDirection == SORT_DESCENDING) {
                     sortDirection = SORT_NONE;
-                    sortColumn = -1;
+                    sortColumn = NO_INDEX;
                 } else {
                     sortDirection = SORT_ASCENDING;
                 }

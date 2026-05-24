@@ -476,7 +476,6 @@ public class InteractiveDemo {
 
     private static void runEventLoop() throws Throwable {
         long lastTickTime = System.currentTimeMillis();
-        final int TICK_INTERVAL_MS = 100;
 
         while (running) {
             // Render if dirty
@@ -498,7 +497,7 @@ public class InteractiveDemo {
 
             // Tick indeterminate progress bar periodically
             long currentTime = System.currentTimeMillis();
-            if (currentTime - lastTickTime >= TICK_INTERVAL_MS) {
+            if (currentTime - lastTickTime >= Constants.DEFAULT_TICK_INTERVAL_MS) {
                 if (indeterminateProgress != null) {
                     indeterminateProgress.tick();
                 }
