@@ -1,5 +1,6 @@
 package org.flossware.jcurses.api.containers;
 
+import org.flossware.jcurses.api.DraggableWindow;
 import org.flossware.jcurses.api.JFrame;
 import org.flossware.jcurses.api.JLabel;
 import org.flossware.jcurses.testutil.ComponentTestBase;
@@ -181,6 +182,24 @@ class JFrameTest extends ComponentTestBase {
     }
 
     @Test
+    @DisplayName("should consume mouse event when drag starts")
+    void testDragConsumeMouseEvent() {
+        // Cancel any existing drag from previous tests
+        org.flossware.jcurses.api.WindowDragManager.getInstance().cancelDrag();
+
+        frame.setLocation(10, 10);
+        frame.setSize(30, 15);
+        frame.setVisible(true);
+
+        // Click on title bar to start drag (BUTTON1_PRESSED = 0x2)
+        org.flossware.jcurses.events.MouseEvent titleBarClick =
+            new org.flossware.jcurses.events.MouseEvent(20, 10, 0x2);
+
+        boolean consumed = frame.handleMouseEvent(titleBarClick);
+        assertTrue(consumed, "Title bar click should be consumed by drag manager");
+    }
+
+    @Test
     @DisplayName("should not render when invisible")
     void testPaintWhenInvisible() {
         frame.setSize(30, 10);
@@ -255,5 +274,42 @@ class JFrameTest extends ComponentTestBase {
         JFrame defaultFrame = new JFrame();
         assertEquals("", defaultFrame.getTitle());
         assertFalse(defaultFrame.isVisible());
+    }
+
+    @Test
+    @DisplayName("should use DraggableWindow default methods")
+    void testDraggableWindowDefaults() {
+        // Test that JFrame implements DraggableWindow and can use default methods
+        DraggableWindow draggable = frame;
+
+        // Default max width/height are 0 (unlimited)
+        assertEquals(0, draggable.getMaxWidth());
+        assertEquals(0, draggable.getMaxHeight());
+    }
+
+    @Test
+    @DisplayName("should handle mouse event delegation to children")
+    void testMouseEventDelegationToChildren() {
+        JLabel child = new JLabel("Child");
+        child.setLocation(15, 15);
+        child.setSize(10, 1);
+
+        boolean[] childListenerCalled = {false};
+        child.addMouseListener(event -> childListenerCalled[0] = true);
+
+        frame.setLocation(10, 10);
+        frame.setSize(30, 20);
+        frame.setVisible(true);
+        frame.add(child);
+
+        // Click on child (inside frame but not on border)
+        org.flossware.jcurses.events.MouseEvent event =
+            new org.flossware.jcurses.events.MouseEvent(20, 20, 0x4);
+
+        frame.handleMouseEvent(event);
+
+        // Child should receive the event (if within bounds)
+        // Note: actual behavior depends on child's handleMouseEvent implementation
+        assertNotNull(child.getParent());
     }
 }

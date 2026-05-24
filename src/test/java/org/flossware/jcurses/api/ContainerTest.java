@@ -299,6 +299,42 @@ class ContainerTest extends ComponentTestBase {
         assertEquals(1, layout.layoutCount);
     }
 
+    @Test
+    @DisplayName("should draw border at negative position")
+    void testDrawBorderNegativePosition() {
+        JPanel panel = new JPanel();
+        panel.setBordered(true);
+        panel.setLocation(-5, -3);
+        panel.setSize(20, 10);
+
+        // Should not crash with negative position
+        assertDoesNotThrow(() -> panel.paint(buffer));
+    }
+
+    @Test
+    @DisplayName("should draw border at buffer edge")
+    void testDrawBorderAtBufferEdge() {
+        JPanel panel = new JPanel();
+        panel.setBordered(true);
+        panel.setLocation(75, 20);  // Near buffer edge (80x24)
+        panel.setSize(10, 5);
+
+        // Should handle positions at/beyond buffer bounds
+        assertDoesNotThrow(() -> panel.paint(buffer));
+    }
+
+    @Test
+    @DisplayName("should draw border beyond buffer bounds")
+    void testDrawBorderBeyondBounds() {
+        JPanel panel = new JPanel();
+        panel.setBordered(true);
+        panel.setLocation(100, 30);  // Beyond buffer (80x24)
+        panel.setSize(10, 5);
+
+        // Should not crash even when completely out of bounds
+        assertDoesNotThrow(() -> panel.paint(buffer));
+    }
+
     /**
      * Test layout manager that tracks if it was called.
      */
