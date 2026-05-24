@@ -97,6 +97,9 @@ public abstract class Component {
     }
 
     public void addMouseListener(MouseListener listener) {
+        if (listener == null) {
+            throw new IllegalArgumentException("listener cannot be null");
+        }
         renderLock.lock();
         try {
             mouseListeners.add(listener);
@@ -106,6 +109,9 @@ public abstract class Component {
     }
 
     public void removeMouseListener(MouseListener listener) {
+        if (listener == null) {
+            throw new IllegalArgumentException("listener cannot be null");
+        }
         renderLock.lock();
         try {
             mouseListeners.remove(listener);
@@ -119,14 +125,18 @@ public abstract class Component {
         if (event.x() >= x && event.x() < x + width &&
             event.y() >= y && event.y() < y + height) {
 
+            // Copy listener list to avoid ConcurrentModificationException
+            List<MouseListener> listeners;
             renderLock.lock();
             try {
-                // Notify all mouse listeners
-                for (MouseListener listener : mouseListeners) {
-                    listener.onMouseEvent(event);
-                }
+                listeners = new ArrayList<>(mouseListeners);
             } finally {
                 renderLock.unlock();
+            }
+
+            // Notify all mouse listeners outside lock
+            for (MouseListener listener : listeners) {
+                listener.onMouseEvent(event);
             }
             return true;
         }
