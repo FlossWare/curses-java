@@ -1,4 +1,4 @@
-# jcurses
+# curses-java
 
 A modern Java terminal UI library that brings AWT-like components to the terminal using ncurses. Built with cutting-edge Java 21 features including Virtual Threads, Foreign Function & Memory API, Record Patterns, and Sealed Interfaces.
 
@@ -116,7 +116,7 @@ Or manually:
 ```bash
 mvn clean compile
 java --enable-preview --enable-native-access=ALL-UNNAMED \
-  -cp target/classes org.flossware.jcurses.InteractiveDemo
+  -cp target/classes org.flossware.curses-java.InteractiveDemo
 ```
 
 **What you can do:**
@@ -261,8 +261,8 @@ mvn package
 ## 📁 Project Structure
 
 ```
-jcurses/
-├── src/main/java/org/flossware/jcurses/
+curses-java/
+├── src/main/java/org/flossware/curses-java/
 │   ├── api/              # 29 UI components + 7 support classes
 │   ├── events/           # Event system (4 sealed event types)
 │   ├── ffi/              # ncurses FFI bridge
