@@ -11,7 +11,7 @@
     <exec.mainClass>org.flossware.jcurses.Main</exec.mainClass>
     <junit.version>6.1.0</junit.version>
     <mockito.version>5.14.2</mockito.version>
-    <assertj.version>3.27.3</assertj.version>
+    <assertj.version>3.27.7</assertj.version>
     <slf4j.version>2.0.9</slf4j.version>
     <message>Automated Version Bump ${project.version} [ci skip]</message>
     <!-- Reproducible builds - https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->
