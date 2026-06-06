@@ -1,5 +1,3 @@
-Now I have enough context. Let me create the integration test that reproduces the concurrent modification failures:
-
 package org.flossware.curses.integration;
 
 import org.flossware.curses.api.*;
@@ -8,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.RepeatedTest;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
