@@ -229,7 +229,7 @@ public class InteractiveDemo {
         comboNext.setSize(8, 1);
         comboNext.addActionListener(() -> {
             int idx = combo.getSelectedIndex();
-            combo.setSelectedIndex((idx + 1) % 4);
+            combo.setSelectedIndex((idx + 1) % combo.getItemCount());
             label1.setText("Selected: " + combo.getSelectedItem());
             markDirty();
         });
@@ -609,7 +609,7 @@ public class InteractiveDemo {
             checkbox.setChecked(!checkbox.isChecked());
         } else if (component instanceof ComboBox<?> combo) {
             int idx = combo.getSelectedIndex();
-            combo.setSelectedIndex((idx + 1) % 4);
+            combo.setSelectedIndex((idx + 1) % combo.getItemCount());
         }
     }
 }
