@@ -77,19 +77,35 @@ public class InteractiveDemo {
         panel.setSize(terminalWidth - 4, terminalHeight - 8);
         panel.setBordered(true);
 
+        // Layout Y positions computed to fit within a standard 24-line terminal.
+        // The panel content area starts at row 4 (panel border at row 3 + 1).
+        // Widget groups are spaced with 1-line gaps instead of 2-3 to stay
+        // within bounds and avoid ArrayIndexOutOfBoundsException (issue #62).
+        int row0 = 4;   // label1 - welcome message
+        int row1 = 5;   // label2 - instructions
+        int row2 = 7;   // buttons row
+        int row3 = 9;   // checkbox 1
+        int row4 = 10;  // checkbox 2
+        int row5 = 11;  // checkbox 3
+        int row6 = 13;  // slider row
+        int row7 = 15;  // progress bar row
+        int row8 = 17;  // combo box row
+        int row9 = 19;  // indeterminate progress row
+        int row10 = 21; // dialog/table/file dialog buttons row
+
         // Create interactive widgets
         Label label1 = new Label("Welcome to Interactive JCurses!");
-        label1.setLocation(4, 5);
+        label1.setLocation(4, row0);
         label1.setSize(50, 1);
         label1.setAlignment(Label.ALIGN_LEFT);
 
         Label label2 = new Label("Use TAB to move between widgets, SPACE/ENTER to activate");
-        label2.setLocation(4, 6);
+        label2.setLocation(4, row1);
         label2.setSize(60, 1);
 
         // Buttons
         Button button1 = new Button("Click Me!");
-        button1.setLocation(4, 9);
+        button1.setLocation(4, row2);
         button1.setSize(15, 1);
         button1.addActionListener(() -> {
             label1.setText("Button 1 was clicked!");
@@ -103,7 +119,7 @@ public class InteractiveDemo {
         focusableComponents.add(button1);
 
         Button button2 = new Button("Press Me!");
-        button2.setLocation(22, 9);
+        button2.setLocation(22, row2);
         button2.setSize(15, 1);
         button2.addActionListener(() -> {
             label1.setText("Button 2 was pressed!");
@@ -117,23 +133,23 @@ public class InteractiveDemo {
         focusableComponents.add(button2);
 
         Button button3 = new Button("Toggle Below");
-        button3.setLocation(40, 9);
+        button3.setLocation(40, row2);
         button3.setSize(18, 1);
         focusableComponents.add(button3);
 
         // Checkboxes
         Checkbox check1 = new Checkbox("Enable feature 1");
-        check1.setLocation(4, 12);
+        check1.setLocation(4, row3);
         check1.setSize(25, 1);
         focusableComponents.add(check1);
 
         Checkbox check2 = new Checkbox("Enable feature 2");
-        check2.setLocation(4, 13);
+        check2.setLocation(4, row4);
         check2.setSize(25, 1);
         focusableComponents.add(check2);
 
         Checkbox check3 = new Checkbox("Enable feature 3");
-        check3.setLocation(4, 14);
+        check3.setLocation(4, row5);
         check3.setSize(25, 1);
         focusableComponents.add(check3);
 
@@ -147,12 +163,12 @@ public class InteractiveDemo {
 
         // Slider
         Slider slider = new Slider(0, 100, 50);
-        slider.setLocation(4, 17);
+        slider.setLocation(4, row6);
         slider.setSize(40, 1);
         focusableComponents.add(slider);
 
         Button sliderUp = new Button("+");
-        sliderUp.setLocation(46, 17);
+        sliderUp.setLocation(46, row6);
         sliderUp.setSize(5, 1);
         sliderUp.addActionListener(() -> {
             slider.setValue(slider.getValue() + 10);
@@ -162,7 +178,7 @@ public class InteractiveDemo {
         focusableComponents.add(sliderUp);
 
         Button sliderDown = new Button("-");
-        sliderDown.setLocation(52, 17);
+        sliderDown.setLocation(52, row6);
         sliderDown.setSize(5, 1);
         sliderDown.addActionListener(() -> {
             slider.setValue(slider.getValue() - 10);
@@ -173,12 +189,12 @@ public class InteractiveDemo {
 
         // Progress bar
         ProgressBar progress = new ProgressBar();
-        progress.setLocation(4, 20);
+        progress.setLocation(4, row7);
         progress.setSize(40, 1);
         progress.setPercent(0.0);
 
         Button progressBtn = new Button("Fill Progress");
-        progressBtn.setLocation(46, 20);
+        progressBtn.setLocation(46, row7);
         progressBtn.setSize(18, 1);
         progressBtn.addActionListener(() -> {
             double current = progress.getPercent();
@@ -189,7 +205,7 @@ public class InteractiveDemo {
         focusableComponents.add(progressBtn);
 
         Button resetBtn = new Button("Reset Progress");
-        resetBtn.setLocation(66, 20);
+        resetBtn.setLocation(66, row7);
         resetBtn.setSize(18, 1);
         resetBtn.addActionListener(() -> {
             progress.setPercent(0.0);
@@ -204,12 +220,12 @@ public class InteractiveDemo {
         combo.addItem("Option 2");
         combo.addItem("Option 3");
         combo.addItem("Option 4");
-        combo.setLocation(4, 23);
+        combo.setLocation(4, row8);
         combo.setSize(25, 1);
         focusableComponents.add(combo);
 
         Button comboNext = new Button("Next");
-        comboNext.setLocation(31, 23);
+        comboNext.setLocation(31, row8);
         comboNext.setSize(8, 1);
         comboNext.addActionListener(() -> {
             int idx = combo.getSelectedIndex();
@@ -221,12 +237,12 @@ public class InteractiveDemo {
 
         // Indeterminate progress bar
         indeterminateProgress = new IndeterminateProgress();
-        indeterminateProgress.setLocation(4, 26);
+        indeterminateProgress.setLocation(4, row9);
         indeterminateProgress.setSize(40, 1);
         indeterminateProgress.setBlockSize(3);
 
         Button startIndBtn = new Button("Start");
-        startIndBtn.setLocation(46, 26);
+        startIndBtn.setLocation(46, row9);
         startIndBtn.setSize(10, 1);
         startIndBtn.addActionListener(() -> {
             indeterminateProgress.start();
@@ -236,7 +252,7 @@ public class InteractiveDemo {
         focusableComponents.add(startIndBtn);
 
         Button stopIndBtn = new Button("Stop");
-        stopIndBtn.setLocation(58, 26);
+        stopIndBtn.setLocation(58, row9);
         stopIndBtn.setSize(10, 1);
         stopIndBtn.addActionListener(() -> {
             indeterminateProgress.stop();
@@ -247,12 +263,12 @@ public class InteractiveDemo {
 
         // Dialog demo
         Button dialogBtn = new Button("Show Dialog");
-        dialogBtn.setLocation(4, 29);
+        dialogBtn.setLocation(4, row10);
         dialogBtn.setSize(18, 1);
 
         // Table demo button
         Button tableBtn = new Button("Show Table Demo");
-        tableBtn.setLocation(24, 29);
+        tableBtn.setLocation(24, row10);
         tableBtn.setSize(18, 1);
 
         // Create table demo frame
@@ -302,7 +318,7 @@ public class InteractiveDemo {
 
         // File dialog demo
         Button fileDialogBtn = new Button("Open File Dialog");
-        fileDialogBtn.setLocation(44, 29);
+        fileDialogBtn.setLocation(44, row10);
         fileDialogBtn.setSize(20, 1);
 
         // Create file dialog (will show when button is clicked)
