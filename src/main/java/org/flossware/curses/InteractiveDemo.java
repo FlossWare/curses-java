@@ -39,22 +39,29 @@ public class InteractiveDemo {
             System.exit(1);
         }
 
-        NcursesBridge.init();
-        NcursesBridge.setNonBlocking(false);
-        NcursesBridge.enableMouse(NcursesBridge.ALL_MOUSE_EVENTS);
-
-        // Get actual terminal dimensions
-        terminalHeight = NcursesBridge.getTerminalHeight();
-        terminalWidth = NcursesBridge.getTerminalWidth();
-
-        // Initialize color support
-        initializeColors();
-
         try {
-            setupUI();
-            runEventLoop();
-        } finally {
-            NcursesBridge.stop();
+            NcursesBridge.init();
+            NcursesBridge.setNonBlocking(false);
+            NcursesBridge.enableMouse(NcursesBridge.ALL_MOUSE_EVENTS);
+
+            // Get actual terminal dimensions
+            terminalHeight = NcursesBridge.getTerminalHeight();
+            terminalWidth = NcursesBridge.getTerminalWidth();
+
+            // Initialize color support
+            initializeColors();
+
+            try {
+                setupUI();
+                runEventLoop();
+            } finally {
+                NcursesBridge.stop();
+            }
+        } catch (Exception e) {
+            System.err.println("ERROR: Failed to initialize ncurses: " + e.getMessage());
+            System.err.println("This can happen in headless/CI environments without a TTY.");
+            System.err.println("Please run this demo in a real terminal.");
+            System.exit(1);
         }
     }
 

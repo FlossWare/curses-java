@@ -2,6 +2,8 @@ package org.flossware.curses.api;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static org.flossware.curses.api.Constants.*;
 
@@ -91,7 +93,7 @@ public class ComboBox<T> extends Component {
         boolean isExpanded;
         renderLock.lock();
         try {
-            snapshot = new ArrayList<>(items);
+            snapshot = items.stream().filter(Objects::nonNull).collect(Collectors.toList());
             selIdx = selectedIndex;
             isExpanded = expanded;
         } finally {
