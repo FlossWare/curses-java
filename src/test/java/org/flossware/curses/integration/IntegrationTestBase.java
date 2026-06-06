@@ -1,6 +1,7 @@
 package org.flossware.curses.integration;
 
 import org.flossware.curses.api.*;
+import org.flossware.curses.testutil.BufferAssertions;
 import org.flossware.curses.testutil.ComponentTestBase;
 import org.flossware.curses.testutil.MockNcursesBridge;
 import org.junit.jupiter.api.AfterEach;
@@ -38,6 +39,11 @@ public abstract class IntegrationTestBase extends ComponentTestBase {
         // Initialize mock bridge
         mockBridge = MockNcursesBridge.getInstance();
         mockBridge.init();
+
+        // Re-create buffer to match mock terminal dimensions (base class creates 120x40,
+        // but MockNcursesBridge screen is 80x24 — buffer must not exceed screen size
+        // or EventLoopRunner.updateScreen() will write out-of-bounds coordinates)
+        buffer = BufferAssertions.createBuffer(mockBridge.getTerminalWidth(), mockBridge.getTerminalHeight());
 
         // Create event loop runner
         eventLoop = new EventLoopRunner(mockBridge, root, buffer);
