@@ -72,7 +72,16 @@ public class Container extends Component {
 
     @Override
     public void paint(char[][] buffer) {
-        for (Component child : children) {
+        // Copy children list to avoid ConcurrentModificationException
+        // when another thread adds/removes children during iteration
+        List<Component> snapshot;
+        renderLock.lock();
+        try {
+            snapshot = new ArrayList<>(children);
+        } finally {
+            renderLock.unlock();
+        }
+        for (Component child : snapshot) {
             child.paint(buffer);
         }
     }
