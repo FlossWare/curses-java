@@ -15,9 +15,14 @@ public class TabbedPane extends Container {
     private String activeTabLabel;
 
     public void addTab(String label, Container contents) {
-        tabs.putLast(label, contents);
-        if (activeTabLabel == null) {
-            activeTabLabel = label;
+        renderLock.lock();
+        try {
+            tabs.putLast(label, contents);
+            if (activeTabLabel == null) {
+                activeTabLabel = label;
+            }
+        } finally {
+            renderLock.unlock();
         }
     }
 
