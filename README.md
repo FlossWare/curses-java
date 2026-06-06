@@ -21,7 +21,7 @@ A modern Java terminal UI library that brings AWT-like components to the termina
 - 🎭 **Themes** - Default, Dark, and Light themes with pluggable architecture
 - 🧩 **Module System** - Java 9+ JPMS support (opt-in via `module-info.java.template`)
 - 📦 **Zero Dependencies** - Only ncurses (native) and test libraries
-- ✅ **Comprehensive Tests** - 399 unit tests with 80%+ coverage
+- ✅ **Comprehensive Tests** - 799 tests (766 unit + 33 integration) with 99% coverage
 
 ## 🚀 Quick Start
 
@@ -245,10 +245,16 @@ RootPane.getInstance().add(frame);
 # Compile
 mvn clean compile
 
-# Run all tests (399 tests)
+# Run unit tests (766 tests)
 mvn test
 
-# Run tests with coverage report
+# Run integration tests (33 tests)
+mvn jacoco:prepare-agent failsafe:integration-test
+
+# Run all tests (799 tests)
+mvn clean test jacoco:prepare-agent failsafe:integration-test failsafe:verify
+
+# Generate coverage report
 mvn clean test jacoco:report
 
 # View coverage report
@@ -269,9 +275,14 @@ curses-java/
 │   ├── render/           # Rendering engine (diff engine, event processor)
 │   ├── Main.java         # Static demo
 │   └── InteractiveDemo.java  # Interactive demo
+├── src/test/java/org/flossware/curses/
+│   ├── integration/      # 33 integration tests (4 test classes)
+│   ├── testutil/         # Test utilities (MockNcursesBridge)
+│   └── api/              # 766 unit tests
 ├── run-interactive.sh    # Launch script
 ├── test-interactive.sh   # Quick test script
 ├── README.md             # This file
+├── INTEGRATION_TESTING.md # Integration testing guide
 ├── INTERACTIVE_DEMO.md   # Detailed interactive guide
 └── QUICKSTART.txt        # Quick reference
 ```
@@ -294,9 +305,11 @@ curses-java/
 - ✅ Module system support (opt-in with module-info.java.template)
 - ✅ Theme system (Default, Dark, Light themes with pluggable architecture)
 - ✅ ASCII rendering (cross-platform compatible)
-- ✅ **Comprehensive unit tests** (399 tests across 44 test classes)
+- ✅ **Comprehensive test suite** (799 tests: 766 unit + 33 integration)
+- ✅ **Automated integration tests** (headless UI testing without terminal)
 - ✅ Thread-safety tests with Virtual Threads
-- ✅ Code coverage reporting (JaCoCo)
+- ✅ Performance benchmarks (render < 100ms for 50 components)
+- ✅ Code coverage reporting (JaCoCo - 99% instruction coverage)
 
 ## 🔬 Technology Stack
 
@@ -351,9 +364,12 @@ Make sure the terminal window has focus and you're running directly (not through
 
 ## 📖 Documentation
 
-- **README.md** (this file) - Overview and quick start
-- **INTERACTIVE_DEMO.md** - Detailed interactive demo guide
-- **QUICKSTART.txt** - Quick reference card
+- **[README.md](README.md)** (this file) - Overview and quick start
+- **[INTEGRATION_TESTING.md](INTEGRATION_TESTING.md)** - Integration testing guide (NEW!)
+- **[INTERACTIVE_DEMO.md](INTERACTIVE_DEMO.md)** - Detailed interactive demo guide
+- **[EXAMPLES_AND_SCREENSHOTS.md](EXAMPLES_AND_SCREENSHOTS.md)** - Example applications
+- **[TESTING.md](TESTING.md)** - Unit testing guide
+- **[QUICKSTART.txt](QUICKSTART.txt)** - Quick reference card
 
 ## 📄 License
 
@@ -376,24 +392,43 @@ Built with ☕ Java 21 | Powered by ncurses | Made for terminal enthusiasts
 
 ## 🧪 Testing
 
-The project includes comprehensive unit tests covering all components:
+The project includes comprehensive test coverage with both unit and integration tests:
 
 ```bash
-# Run all tests
+# Run unit tests (766 tests)
 mvn test
 
-# Run with coverage report
+# Run integration tests (33 tests - headless, no terminal needed)
+mvn jacoco:prepare-agent failsafe:integration-test
+
+# Run all tests (799 total)
+mvn clean test jacoco:prepare-agent failsafe:integration-test failsafe:verify
+
+# Generate coverage report
 mvn clean test jacoco:report
 
-# View coverage
+# View coverage report (99% instruction coverage)
 open target/site/jacoco/index.html
 
-# Run specific test
-mvn test -Dtest=JButtonTest
+# Run specific test class
+mvn test -Dtest=ButtonTest
+mvn jacoco:prepare-agent failsafe:integration-test -Dit.test=ButtonInteractionIT
 ```
 
 **Test Coverage:**
-- ✅ 399 tests across 44 test classes
+- ✅ **766 unit tests** - Component logic, rendering, thread safety
+- ✅ **33 integration tests** - End-to-end UI interactions (buttons, keyboard, mouse, tables, forms)
+- ✅ **Mock-based testing** - No terminal required, runs in CI/CD
+- ✅ **Performance benchmarks** - Render timing, event loop efficiency
+- ✅ **99% instruction coverage** - JaCoCo verified
+
+**Integration Tests:**
+- ButtonInteractionIT - 8 tests (click handlers, forms, progress bars)
+- KeyboardNavigationIT - 9 tests (SPACE, ENTER, ESC, TAB navigation)
+- TableInteractionIT - 9 tests (sorting, selection, add/delete)
+- PerformanceIT - 7 tests (render < 100ms, event loop < 50ms)
+
+See **[INTEGRATION_TESTING.md](INTEGRATION_TESTING.md)** for detailed integration testing guide.
 - ✅ All 28 widgets tested
 - ✅ Mouse event handling tests
 - ✅ Window drag/resize tests (WindowDragManager, JFrame integration)
