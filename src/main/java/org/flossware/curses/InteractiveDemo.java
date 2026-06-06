@@ -13,7 +13,6 @@ public class InteractiveDemo {
     private static int currentFocus = 0;
     private static boolean running = true;
     private static DiffEngine diffEngine;
-    private static char[][] buffer;
     private static IndeterminateProgress indeterminateProgress;
     private static int terminalWidth;
     private static int terminalHeight;
@@ -66,7 +65,6 @@ public class InteractiveDemo {
     }
 
     private static void setupUI() throws Throwable {
-        buffer = new char[terminalHeight][terminalWidth];
         diffEngine = new DiffEngine(terminalWidth, terminalHeight);
 
         RootPane root = RootPane.getInstance();
@@ -550,15 +548,12 @@ public class InteractiveDemo {
     }
 
     private static void render() throws Throwable {
-        // Clear buffer
-        for (int i = 0; i < terminalHeight; i++) {
-            for (int j = 0; j < terminalWidth; j++) {
-                buffer[i][j] = ' ';
-            }
-        }
+        // Clear back buffer for new frame
+        diffEngine.clearBackBuffer();
 
-        // Paint components
-        RootPane.getInstance().paint(buffer);
+        // Paint components into the DiffEngine's back buffer
+        char[][] backBuffer = diffEngine.getBackBuffer();
+        RootPane.getInstance().paint(backBuffer);
 
         // Highlight focused component
         if (currentFocus >= 0 && currentFocus < focusableComponents.size()) {
@@ -569,20 +564,15 @@ public class InteractiveDemo {
 
             // Draw focus indicator
             if (x > 0 && y >= 0 && y < terminalHeight) {
-                buffer[y][x - 1] = '>';
+                backBuffer[y][x - 1] = '>';
             }
             if (x + w < terminalWidth && y >= 0 && y < terminalHeight) {
-                buffer[y][x + w] = '<';
+                backBuffer[y][x + w] = '<';
             }
         }
 
-        // Send to ncurses
-        NcursesBridge.clear();
-        for (int y = 0; y < terminalHeight; y++) {
-            for (int x = 0; x < terminalWidth; x++) {
-                NcursesBridge.moveCursor(y, x, buffer[y][x]);
-            }
-        }
+        // Use DiffEngine for incremental updates - only changed cells are sent
+        diffEngine.render();
         NcursesBridge.refresh();
     }
 

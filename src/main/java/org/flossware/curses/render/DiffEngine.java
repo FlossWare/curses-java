@@ -118,8 +118,7 @@ public class DiffEngine {
                 for (int x = minX; x < maxX && x < backBuffer[y].length; x++) {
                     // Only send ANSI codes if the character has changed
                     if (backBuffer[y][x] != currentScreen[y][x]) {
-                        sendAnsiMoveCursor(x, y);
-                        sendAnsiChar(backBuffer[y][x]);
+                        sendChar(x, y, backBuffer[y][x]);
                         currentScreen[y][x] = backBuffer[y][x];
                     }
                 }
@@ -134,28 +133,12 @@ public class DiffEngine {
         }
     }
 
-    /**
-     * Moves the cursor to the specified position using ncurses.
-     *
-     * @param x the column (0-based)
-     * @param y the row (0-based)
-     */
-    private void sendAnsiMoveCursor(int x, int y) {
+    private void sendChar(int x, int y, char c) {
         try {
-            org.flossware.curses.ffi.NcursesBridge.moveCursor(y, x, ' ');
+            org.flossware.curses.ffi.NcursesBridge.moveCursor(y, x, c);
         } catch (Throwable e) {
             // Suppress rendering errors - ncurses may not be initialized
         }
-    }
-
-    /**
-     * Sends a character to the current cursor position using ncurses.
-     *
-     * @param c the character to display
-     */
-    private void sendAnsiChar(char c) {
-        // Character is already sent via moveCursor with the character
-        // This is a no-op in ncurses mode since moveCursor handles both
     }
 
     /**
@@ -176,5 +159,21 @@ public class DiffEngine {
      */
     public int[][] getBackColors() {
         return backColors;
+    }
+
+    /**
+     * Clears the back buffer, filling it with spaces.
+     *
+     * <p>Call this before painting a new frame into the back buffer
+     * to ensure no stale content remains.
+     *
+     * @since 1.28
+     */
+    public void clearBackBuffer() {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                backBuffer[y][x] = ' ';
+            }
+        }
     }
 }
