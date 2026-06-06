@@ -4,6 +4,7 @@ import java.util.SequencedMap;
 import java.util.LinkedHashMap;
 import java.util.SequencedCollection;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A container that lets the user switch between groups of components by clicking on a tab.
@@ -29,11 +30,21 @@ public class TabbedPane extends Container {
 
     @Override
     public void paint(char[][] buffer) {
+        // Create snapshot of tab labels to avoid ConcurrentModificationException
+        // when another thread adds/removes tabs during iteration
+        List<String> tabLabels;
+        renderLock.lock();
+        try {
+            tabLabels = new ArrayList<>(tabs.keySet());
+        } finally {
+            renderLock.unlock();
+        }
+
         renderLock.lock();
         try {
             // 1. Render the Tab Headers at the top of the component area
             int currentX = getX();
-            for (String label : tabs.keySet()) {
+            for (String label : tabLabels) {
                 String decorator = label.equals(activeTabLabel) ? "[" + label + "]" : " " + label + " ";
                 writeStringToBuffer(buffer, decorator, currentX, getY());
                 currentX += decorator.length() + 1;
