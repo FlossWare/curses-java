@@ -335,6 +335,82 @@ class ContainerTest extends ComponentTestBase {
         assertDoesNotThrow(() -> panel.paint(buffer));
     }
 
+    @Test
+    @DisplayName("should handle child removal during paint iteration")
+    void testPaintWithConcurrentRemoval() throws InterruptedException {
+        // This test reproduces the race condition: child removed between
+        // snapshot creation and paint iteration. The fix ensures that
+        // paint() checks parent before painting to avoid silent failures.
+        root.add(container);
+        container.setSize(20, 10);
+
+        // Add initial children
+        Component child1 = new Label("Child 1");
+        Component child2 = new Label("Child 2");
+        Component child3 = new Label("Child 3");
+        child1.setSize(5, 1);
+        child2.setSize(5, 1);
+        child3.setSize(5, 1);
+
+        container.add(child1);
+        container.add(child2);
+        container.add(child3);
+
+        clearDirtyFlag();
+
+        // Simulate concurrent paint and remove:
+        // Thread A: calls paint() and creates snapshot including child2
+        // Thread B: removes child2 (sets parent to null)
+        // Thread A: iterates snapshot and tries to paint child2
+
+        final boolean[] paintCalled = {false};
+        final boolean[] repaintFailed = {false};
+
+        // Create a custom child that tracks if paint was called
+        Component testChild = new Label("Test") {
+            @Override
+            public void paint(char[][] buffer) {
+                paintCalled[0] = true;
+                // Try to trigger repaint - if parent is null, this would fail silently
+                try {
+                    this.repaint();
+                    // If parent is null, repaint won't reach RootPane
+                    // We can detect this by checking if dirty flag was set
+                } catch (NullPointerException e) {
+                    repaintFailed[0] = true;
+                }
+                super.paint(buffer);
+            }
+        };
+        testChild.setSize(5, 1);
+        container.add(testChild);
+
+        // Spawn thread to remove child while main thread is painting
+        Thread removalThread = new Thread(() -> {
+            try {
+                Thread.sleep(5); // Let paint start
+                container.remove(testChild);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        // Start removal thread
+        removalThread.start();
+
+        // Paint should not crash even if child is removed concurrently
+        assertDoesNotThrow(() -> container.paint(buffer));
+
+        removalThread.join();
+
+        // Verify the child was removed
+        assertNull(testChild.getParent());
+
+        // Verify paint completed without throwing exception
+        // (NullPointerException from accessing parent would have been caught)
+        assertFalse(repaintFailed[0], "repaint() should not throw NPE");
+    }
+
     /**
      * Test layout manager that tracks if it was called.
      */

@@ -14,6 +14,10 @@ public class Container extends Component {
     private int lastLayoutWidth = NO_INDEX;
     private int lastLayoutHeight = NO_INDEX;
 
+    // Snapshot cache to reduce GC pressure (Issue #71)
+    private List<Component> cachedSnapshot;
+    private int lastSnapshotSize = -1;
+
     public SequencedCollection<Component> getChildren() {
         return children;
     }
@@ -24,6 +28,7 @@ public class Container extends Component {
             children.add(child);
             child.setParent(this);
             layoutValid = false;  // Invalidate layout
+            invalidateSnapshot();  // Invalidate cached snapshot
         } finally {
             renderLock.unlock();
         }
@@ -36,6 +41,7 @@ public class Container extends Component {
             children.remove(child);
             child.setParent(null);
             layoutValid = false;  // Invalidate layout
+            invalidateSnapshot();  // Invalidate cached snapshot
         } finally {
             renderLock.unlock();
         }
@@ -70,19 +76,40 @@ public class Container extends Component {
         layoutValid = false;
     }
 
+    /**
+     * Invalidates the cached children snapshot when the children list is modified.
+     * This is called internally when add/remove operations occur.
+     */
+    private void invalidateSnapshot() {
+        lastSnapshotSize = -1;
+        cachedSnapshot = null;
+    }
+
     @Override
     public void paint(char[][] buffer) {
-        // Copy children list to avoid ConcurrentModificationException
-        // when another thread adds/removes children during iteration
+        // Use cached snapshot to avoid ArrayList allocation on every frame (Issue #71)
+        // Only allocate when children list has actually changed in size.
+        // This optimization reduces GC pressure at high frame rates when children list is stable.
         List<Component> snapshot;
         renderLock.lock();
         try {
-            snapshot = new ArrayList<>(children);
+            int currentSize = children.size();
+            if (cachedSnapshot == null || lastSnapshotSize != currentSize) {
+                // Children list changed, create new snapshot
+                cachedSnapshot = new ArrayList<>(children);
+                lastSnapshotSize = currentSize;
+            }
+            snapshot = cachedSnapshot;
         } finally {
             renderLock.unlock();
         }
         for (Component child : snapshot) {
-            child.paint(buffer);
+            // Only paint if child is still owned by this container (Issue #70).
+            // A child may be removed between snapshot and iteration, causing
+            // parent=null. If paint() triggers repaint(), the parent chain walk fails.
+            if (child.getParent() == this) {
+                child.paint(buffer);
+            }
         }
     }
 
