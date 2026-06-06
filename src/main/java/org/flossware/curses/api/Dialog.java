@@ -141,8 +141,8 @@ public class Dialog extends Container implements DraggableWindow {
     public void show() {
         // In FlossWare architecture, adding to the end of a SequencedCollection
         // represents the "top" of the visual stack[cite: 5, 46].
-        RootPane.getInstance().getChildren().addLast(this);
-        repaint();
+        // Use add() to ensure snapshot cache is properly invalidated (Issue #207)
+        RootPane.getInstance().add(this);
     }
 
     @Override
