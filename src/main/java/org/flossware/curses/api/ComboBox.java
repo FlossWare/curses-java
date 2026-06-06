@@ -59,7 +59,21 @@ public class ComboBox<T> extends Component {
     }
 
     public T getSelectedItem() {
-        return selectedIndex >= 0 && selectedIndex < items.size() ? items.get(selectedIndex) : null;
+        renderLock.lock();
+        try {
+            return selectedIndex >= 0 && selectedIndex < items.size() ? items.get(selectedIndex) : null;
+        } finally {
+            renderLock.unlock();
+        }
+    }
+
+    public int getItemCount() {
+        renderLock.lock();
+        try {
+            return items.size();
+        } finally {
+            renderLock.unlock();
+        }
     }
 
     public void setExpanded(boolean expanded) {
@@ -69,16 +83,31 @@ public class ComboBox<T> extends Component {
 
     @Override
     public void paint(char[][] buffer) {
-        if (selectedIndex >= 0 && selectedIndex < items.size()) {
-            String selected = String.valueOf(items.get(selectedIndex));
+        // Take snapshot of items and selectedIndex under lock to avoid
+        // ConcurrentModificationException and ArrayIndexOutOfBoundsException
+        // when addItem()/removeItem() modify the list on another thread.
+        List<T> snapshot;
+        int selIdx;
+        boolean isExpanded;
+        renderLock.lock();
+        try {
+            snapshot = new ArrayList<>(items);
+            selIdx = selectedIndex;
+            isExpanded = expanded;
+        } finally {
+            renderLock.unlock();
+        }
+
+        if (selIdx >= 0 && selIdx < snapshot.size()) {
+            String selected = String.valueOf(snapshot.get(selIdx));
             String display = "[ " + selected + " v ]";
             writeStringToBuffer(buffer, display, getX(), getY());
 
-            if (expanded) {
+            if (isExpanded) {
                 int currentY = getY() + 1;
-                for (int i = 0; i < items.size() && currentY < getY() + height; i++) {
-                    String prefix = i == selectedIndex ? "> " : "  ";
-                    writeStringToBuffer(buffer, prefix + items.get(i), getX(), currentY);
+                for (int i = 0; i < snapshot.size() && currentY < getY() + height; i++) {
+                    String prefix = i == selIdx ? "> " : "  ";
+                    writeStringToBuffer(buffer, prefix + snapshot.get(i), getX(), currentY);
                     currentY++;
                 }
             }
