@@ -56,11 +56,17 @@ public class InteractiveDemo {
             } finally {
                 NcursesBridge.stop();
             }
-        } catch (Exception e) {
+        } catch (UnsatisfiedLinkError | IllegalStateException e) {
+            // Native library or ncurses initialization failures
             System.err.println("ERROR: Failed to initialize ncurses: " + e.getMessage());
             System.err.println("This can happen in headless/CI environments without a TTY.");
             System.err.println("Please run this demo in a real terminal.");
             System.exit(1);
+        } catch (RuntimeException e) {
+            // Programmer errors - re-throw with full stack trace for debugging
+            System.err.println("FATAL: Unexpected error during initialization:");
+            e.printStackTrace();
+            throw e;
         }
     }
 
