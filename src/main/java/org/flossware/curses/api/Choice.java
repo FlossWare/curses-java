@@ -9,7 +9,12 @@ public class Choice extends Component {
     private int selectedIndex = 0;
 
     public void add(String item) {
-        items.addLast(item); // [cite: 99]
+        renderLock.lock();
+        try {
+            items.addLast(item); // [cite: 99]
+        } finally {
+            renderLock.unlock();
+        }
         repaint();
     }
 
@@ -59,7 +64,15 @@ public class Choice extends Component {
 
     @Override
     public void paint(char[][] buffer) {
-        String label = (items.isEmpty()) ? "" : ((ArrayList<String>)items).get(selectedIndex);
+        // Take snapshot of items and selectedIndex to avoid race condition
+        // where add() modifies items while paint() is reading from selectedIndex
+        String label;
+        renderLock.lock();
+        try {
+            label = (items.isEmpty()) ? "" : ((ArrayList<String>)items).get(selectedIndex);
+        } finally {
+            renderLock.unlock();
+        }
         writeStringToBuffer(buffer, "[ " + label + " v ]", getX(), getY());
     }
 }
