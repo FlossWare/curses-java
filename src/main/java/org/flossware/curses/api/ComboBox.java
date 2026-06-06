@@ -3,7 +3,6 @@ package org.flossware.curses.api;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static org.flossware.curses.api.Constants.*;
 
@@ -16,6 +15,7 @@ public class ComboBox<T> extends Component {
     }
 
     public void addItem(T item) {
+        Objects.requireNonNull(item, "ComboBox items cannot be null");
         renderLock.lock();
         try {
             items.add(item);
@@ -93,7 +93,7 @@ public class ComboBox<T> extends Component {
         boolean isExpanded;
         renderLock.lock();
         try {
-            snapshot = items.stream().filter(Objects::nonNull).collect(Collectors.toList());
+            snapshot = new ArrayList<>(items);
             selIdx = selectedIndex;
             isExpanded = expanded;
         } finally {
