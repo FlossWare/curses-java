@@ -10,7 +10,7 @@ echo 	  > temp_input.txt
 REM Run the demo with timeout (Windows doesn't have built-in timeout command like Linux)
 REM This will run for a few seconds - press ESC or Q to exit manually
 timeout /t 1 /nobreak >nul
-type temp_input.txt | java --enable-preview --enable-native-access=ALL-UNNAMED -cp target\classes org.flossware.jcurses.InteractiveDemo 2>&1
+type temp_input.txt | java --enable-preview --enable-native-access=ALL-UNNAMED -cp target\classes org.flossware.curses.InteractiveDemo 2>&1
 
 del temp_input.txt >nul 2>&1
 

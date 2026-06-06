@@ -20,4 +20,4 @@ if (-not (Test-Path "target\classes")) {
 }
 
 # Run with ncurses in terminal
-java --enable-preview --enable-native-access=ALL-UNNAMED -cp target\classes org.flossware.jcurses.InteractiveDemo
+java --enable-preview --enable-native-access=ALL-UNNAMED -cp target\classes org.flossware.curses.InteractiveDemo

@@ -25,4 +25,4 @@ fi
 java --enable-preview \
      --enable-native-access=ALL-UNNAMED \
      -cp target/classes \
-     org.flossware.jcurses.InteractiveDemo
+     org.flossware.curses.InteractiveDemo

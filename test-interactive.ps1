@@ -5,7 +5,7 @@ Write-Host "Testing interactive demo..." -ForegroundColor Cyan
 
 # Run the demo with a timeout
 $job = Start-Job -ScriptBlock {
-    java --enable-preview --enable-native-access=ALL-UNNAMED -cp target\classes org.flossware.jcurses.InteractiveDemo 2>&1
+    java --enable-preview --enable-native-access=ALL-UNNAMED -cp target\classes org.flossware.curses.InteractiveDemo 2>&1
 }
 
 # Wait 3 seconds
