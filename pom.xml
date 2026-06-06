@@ -159,12 +159,12 @@
           <!-- Pragmatic Coverage: Exclude demos and native layers (require ncurses runtime) -->
           <excludes>
             <!-- Demo applications - example code for library usage -->
-            <exclude>org/flossware/jcurses/Main.class</exclude>
-            <exclude>org/flossware/jcurses/InteractiveDemo.class</exclude>
+            <exclude>org/flossware/curses/Main.class</exclude>
+            <exclude>org/flossware/curses/InteractiveDemo.class</exclude>
             <!-- FFI/native layer - requires ncurses runtime for testing -->
-            <exclude>org/flossware/jcurses/ffi/**</exclude>
+            <exclude>org/flossware/curses/ffi/**</exclude>
             <!-- Render layer - requires ncurses runtime for testing -->
-            <exclude>org/flossware/jcurses/render/**</exclude>
+            <exclude>org/flossware/curses/render/**</exclude>
           </excludes>
         </configuration>
         <executions>
