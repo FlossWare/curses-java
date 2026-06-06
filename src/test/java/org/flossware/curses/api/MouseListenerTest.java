@@ -13,11 +13,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("MouseListener Tests")
 class MouseListenerTest extends ComponentTestBase {
-    private JButton button;
+    private Button button;
 
     @BeforeEach
     void setUp() {
-        button = new JButton("Test Button");
+        button = new Button("Test Button");
         button.setLocation(10, 10);
         button.setSize(15, 1);
     }
@@ -99,7 +99,7 @@ class MouseListenerTest extends ComponentTestBase {
     @Test
     @DisplayName("should propagate mouse event to children in container")
     void testMouseEventPropagationToChildren() {
-        JPanel panel = new JPanel();
+        Panel panel = new Panel();
         panel.setLocation(0, 0);
         panel.setSize(50, 20);
 
@@ -118,7 +118,7 @@ class MouseListenerTest extends ComponentTestBase {
     @Test
     @DisplayName("should stop propagation when child handles event")
     void testEventPropagationStopsWhenHandled() {
-        JPanel panel = new JPanel();
+        Panel panel = new Panel();
         panel.setLocation(0, 0);
         panel.setSize(50, 20);
 

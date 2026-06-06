@@ -37,43 +37,43 @@ public class Main {
         root.setSize(120, 40);
 
         // Create a main frame
-        JFrame mainFrame = new JFrame("JCurses Widget Showcase");
+        Frame mainFrame = new Frame("JCurses Widget Showcase");
         mainFrame.setLocation(0, 0);
         mainFrame.setSize(120, 40);
         mainFrame.setLayout(new BorderLayout());
 
         // === TOP: Menu Bar ===
-        System.out.println("1. JMenuBar with JMenu and JMenuItem");
-        JMenuBar menuBar = new JMenuBar();
+        System.out.println("1. MenuBar with Menu and JMenuItem");
+        MenuBar menuBar = new MenuBar();
         menuBar.setSize(120, 1);
 
-        JMenu fileMenu = new JMenu("File");
-        JMenuItem newItem = new JMenuItem("New");
-        JMenuItem openItem = new JMenuItem("Open");
-        JMenuItem exitItem = new JMenuItem("Exit");
+        Menu fileMenu = new Menu("File");
+        MenuItem newItem = new MenuItem("New");
+        MenuItem openItem = new MenuItem("Open");
+        MenuItem exitItem = new MenuItem("Exit");
         fileMenu.addItem(newItem);
         fileMenu.addItem(openItem);
         fileMenu.addItem(exitItem);
         menuBar.addMenu("File", fileMenu);
 
-        JMenu editMenu = new JMenu("Edit");
-        JMenuItem cutItem = new JMenuItem("Cut");
-        JMenuItem copyItem = new JMenuItem("Copy");
+        Menu editMenu = new Menu("Edit");
+        MenuItem cutItem = new MenuItem("Cut");
+        MenuItem copyItem = new MenuItem("Copy");
         editMenu.addItem(cutItem);
         editMenu.addItem(copyItem);
         menuBar.addMenu("Edit", editMenu);
 
         // === TOOLBAR ===
-        System.out.println("2. JToolBar with JButtons");
-        JToolBar toolBar = new JToolBar(JToolBar.HORIZONTAL);
+        System.out.println("2. ToolBar with JButtons");
+        ToolBar toolBar = new ToolBar(ToolBar.HORIZONTAL);
         toolBar.setLocation(0, 1);
         toolBar.setSize(120, 1);
 
-        JButton newBtn = new JButton("New");
+        Button newBtn = new Button("New");
         newBtn.setSize(8, 1);
-        JButton openBtn = new JButton("Open");
+        Button openBtn = new Button("Open");
         openBtn.setSize(8, 1);
-        JButton saveBtn = new JButton("Save");
+        Button saveBtn = new Button("Save");
         saveBtn.setSize(8, 1);
 
         toolBar.add(newBtn);
@@ -81,38 +81,38 @@ public class Main {
         toolBar.add(saveBtn);
 
         // === LEFT PANEL: Form Components ===
-        System.out.println("3. JPanel with form components");
-        JPanel leftPanel = new JPanel();
+        System.out.println("3. Panel with form components");
+        Panel leftPanel = new Panel();
         leftPanel.setSize(40, 30);
         leftPanel.setBordered(true);
 
-        JLabel nameLabel = new JLabel("Name:");
+        Label nameLabel = new Label("Name:");
         nameLabel.setLocation(2, 3);
         nameLabel.setSize(10, 1);
 
-        JTextField nameField = new JTextField("John Doe");
+        TextField nameField = new TextField("John Doe");
         nameField.setLocation(13, 3);
         nameField.setSize(20, 1);
 
-        JLabel emailLabel = new JLabel("Email:");
+        Label emailLabel = new Label("Email:");
         emailLabel.setLocation(2, 5);
         emailLabel.setSize(10, 1);
 
-        JTextField emailField = new JTextField("john@example.com");
+        TextField emailField = new TextField("john@example.com");
         emailField.setLocation(13, 5);
         emailField.setSize(20, 1);
 
-        System.out.println("4. JCheckbox and JCheckboxGroup");
-        JCheckbox option1 = new JCheckbox("Subscribe to newsletter");
+        System.out.println("4. Checkbox and JCheckboxGroup");
+        Checkbox option1 = new Checkbox("Subscribe to newsletter");
         option1.setLocation(2, 7);
         option1.setSize(25, 1);
 
-        JCheckbox option2 = new JCheckbox("Receive notifications");
+        Checkbox option2 = new Checkbox("Receive notifications");
         option2.setLocation(2, 8);
         option2.setSize(25, 1);
 
         System.out.println("5. JComboBox");
-        JComboBox<String> comboBox = new JComboBox<>();
+        ComboBox<String> comboBox = new ComboBox<>();
         comboBox.addItem("Option 1");
         comboBox.addItem("Option 2");
         comboBox.addItem("Option 3");
@@ -120,12 +120,12 @@ public class Main {
         comboBox.setSize(20, 1);
 
         System.out.println("6. JSlider");
-        JSlider volumeSlider = new JSlider(0, 100, 75);
+        Slider volumeSlider = new Slider(0, 100, 75);
         volumeSlider.setLocation(2, 12);
         volumeSlider.setSize(30, 1);
 
         System.out.println("7. JProgressBar");
-        JProgressBar progressBar = new JProgressBar();
+        ProgressBar progressBar = new ProgressBar();
         progressBar.setPercent(0.65);
         progressBar.setLocation(2, 14);
         progressBar.setSize(30, 1);
@@ -142,12 +142,12 @@ public class Main {
 
         // === CENTER: Split Pane with Table and Text Area ===
         System.out.println("8. JSplitPane");
-        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+        SplitPane splitPane = new SplitPane(SplitPane.VERTICAL_SPLIT);
         splitPane.setSize(75, 30);
         splitPane.setDividerLocation(0.5);
 
         System.out.println("9. JTable");
-        JTable table = new JTable();
+        Table table = new Table();
         table.setColumnNames("ID", "Name", "Status");
         table.addRow("1", "Task Alpha", "Complete");
         table.addRow("2", "Task Beta", "In Progress");
@@ -157,7 +157,7 @@ public class Main {
         table.setSize(75, 12);
 
         System.out.println("10. JTextArea");
-        JTextArea textArea = new JTextArea();
+        TextArea textArea = new TextArea();
         textArea.append("Welcome to JCurses!");
         textArea.append("This is a terminal UI library.");
         textArea.append("Built with Java 21 features:");
@@ -172,32 +172,32 @@ public class Main {
 
         // === RIGHT PANEL: More Widgets ===
         System.out.println("11. JList");
-        JPanel rightPanel = new JPanel();
+        Panel rightPanel = new Panel();
         rightPanel.setSize(40, 30);
         rightPanel.setBordered(true);
 
-        JList list = new JList();
+        ListComponent list = new ListComponent();
         list.setLocation(2, 2);
         list.setSize(35, 8);
 
         System.out.println("12. JScrollBar");
-        JScrollBar vScrollBar = new JScrollBar(JScrollBar.VERTICAL);
+        ScrollBar vScrollBar = new ScrollBar(ScrollBar.VERTICAL);
         vScrollBar.setValue(30);
         vScrollBar.setLocation(35, 11);
         vScrollBar.setSize(1, 10);
 
-        JScrollBar hScrollBar = new JScrollBar(JScrollBar.HORIZONTAL);
+        ScrollBar hScrollBar = new ScrollBar(ScrollBar.HORIZONTAL);
         hScrollBar.setValue(50);
         hScrollBar.setLocation(2, 22);
         hScrollBar.setSize(30, 1);
 
         System.out.println("13. JSeparator");
-        JSeparator separator1 = new JSeparator(JSeparator.HORIZONTAL);
+        Separator separator1 = new Separator(Separator.HORIZONTAL);
         separator1.setLocation(2, 10);
         separator1.setSize(35, 1);
 
         System.out.println("14. JChoice");
-        JChoice choice = new JChoice();
+        Choice choice = new Choice();
         choice.add("Red");
         choice.add("Green");
         choice.add("Blue");
@@ -212,22 +212,22 @@ public class Main {
 
         // === BOTTOM: Status Bar ===
         System.out.println("15. JStatusBar");
-        JStatusBar statusBar = new JStatusBar("Ready | 43 source files | Java 21");
+        StatusBar statusBar = new StatusBar("Ready | 43 source files | Java 21");
         statusBar.setLocation(0, 37);
         statusBar.setSize(120, 1);
 
         // === DIALOG DEMO ===
         System.out.println("16. JDialog");
-        JDialog dialog = new JDialog();
+        Dialog dialog = new Dialog();
         dialog.setLocation(45, 15);
         dialog.setSize(30, 8);
 
-        JLabel dialogLabel = new JLabel("This is a dialog!");
-        dialogLabel.setAlignment(JLabel.ALIGN_CENTER);
+        Label dialogLabel = new Label("This is a dialog!");
+        dialogLabel.setAlignment(Label.ALIGN_CENTER);
         dialogLabel.setLocation(5, 3);
         dialogLabel.setSize(20, 1);
 
-        JButton okButton = new JButton("OK");
+        Button okButton = new Button("OK");
         okButton.setLocation(10, 5);
         okButton.setSize(10, 1);
 
@@ -236,17 +236,17 @@ public class Main {
 
         // === TABBED PANE DEMO ===
         System.out.println("17. JTabbedPane");
-        JTabbedPane tabbedPane = new JTabbedPane();
+        TabbedPane tabbedPane = new TabbedPane();
         tabbedPane.setLocation(2, 26);
         tabbedPane.setSize(35, 8);
 
-        JPanel tab1 = new JPanel();
-        JLabel tab1Label = new JLabel("Tab 1 Content");
+        Panel tab1 = new Panel();
+        Label tab1Label = new Label("Tab 1 Content");
         tab1Label.setLocation(2, 1);
         tab1.add(tab1Label);
 
-        JPanel tab2 = new JPanel();
-        JLabel tab2Label = new JLabel("Tab 2 Content");
+        Panel tab2 = new Panel();
+        Label tab2Label = new Label("Tab 2 Content");
         tab2Label.setLocation(2, 1);
         tab2.add(tab2Label);
 
@@ -300,7 +300,7 @@ public class Main {
         System.out.println("\nComponents demonstrated:");
         System.out.println("  ✓ JFrame, JPanel, JDialog");
         System.out.println("  ✓ JButton, JLabel, JTextField");
-        System.out.println("  ✓ JCheckbox, JComboBox, JChoice");
+        System.out.println("  ✓ JCheckbox, JComboBox, Choice");
         System.out.println("  ✓ JSlider, JProgressBar, JScrollBar");
         System.out.println("  ✓ JTable, JList, JTextArea");
         System.out.println("  ✓ JMenuBar, JToolBar, JStatusBar");

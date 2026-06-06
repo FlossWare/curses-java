@@ -15,8 +15,8 @@ class ComponentTest extends ComponentTestBase {
 
     @BeforeEach
     void setUp() {
-        // Use JLabel as a concrete implementation of Component for testing
-        component = new JLabel("Test");
+        // Use Label as a concrete implementation of Component for testing
+        component = new Label("Test");
     }
 
     @Test
@@ -40,7 +40,7 @@ class ComponentTest extends ComponentTestBase {
     @Test
     @DisplayName("should initialize with default values")
     void testDefaultValues() {
-        Component newComponent = new JLabel("New");
+        Component newComponent = new Label("New");
 
         assertEquals(0, newComponent.getX());
         assertEquals(0, newComponent.getY());
@@ -52,7 +52,7 @@ class ComponentTest extends ComponentTestBase {
     @Test
     @DisplayName("should set and get parent")
     void testSetAndGetParent() {
-        Container parent = new JPanel();
+        Container parent = new Panel();
 
         component.setParent(parent);
 
@@ -73,7 +73,7 @@ class ComponentTest extends ComponentTestBase {
     @Test
     @DisplayName("should propagate repaint through hierarchy")
     void testRepaintThroughHierarchy() {
-        Container panel = new JPanel();
+        Container panel = new Panel();
         root.add(panel);
         panel.add(component);
         clearDirtyFlag();
@@ -178,7 +178,7 @@ class ComponentTest extends ComponentTestBase {
     @Test
     @DisplayName("accessible name should be null by default")
     void testAccessibleNameDefault() {
-        Component newComponent = new JLabel("Test");
+        Component newComponent = new Label("Test");
         assertNull(newComponent.getAccessibleName());
     }
 
@@ -192,7 +192,7 @@ class ComponentTest extends ComponentTestBase {
     @Test
     @DisplayName("accessible role should be null by default")
     void testAccessibleRoleDefault() {
-        Component newComponent = new JLabel("Test");
+        Component newComponent = new Label("Test");
         assertNull(newComponent.getAccessibleRole());
     }
 
@@ -206,7 +206,7 @@ class ComponentTest extends ComponentTestBase {
     @Test
     @DisplayName("accessible description should be null by default")
     void testAccessibleDescriptionDefault() {
-        Component newComponent = new JLabel("Test");
+        Component newComponent = new Label("Test");
         assertNull(newComponent.getAccessibleDescription());
     }
 
@@ -233,7 +233,7 @@ class ComponentTest extends ComponentTestBase {
 
         String summary = component.getAccessibilitySummary();
 
-        assertTrue(summary.contains("JLabel"));
+        assertTrue(summary.contains("Label"));
         assertTrue(summary.contains("Test Label"));
         assertTrue(summary.contains("(5, 10)"));
         assertTrue(summary.contains("(20, 1)"));
@@ -242,13 +242,13 @@ class ComponentTest extends ComponentTestBase {
     @Test
     @DisplayName("getAccessibilitySummary should handle minimal info")
     void testAccessibilitySummaryMinimal() {
-        Component newComponent = new JLabel("Test");
+        Component newComponent = new Label("Test");
         newComponent.setLocation(0, 0);
         newComponent.setSize(10, 1);
 
         String summary = newComponent.getAccessibilitySummary();
 
-        assertTrue(summary.contains("JLabel"));
+        assertTrue(summary.contains("Label"));
         assertTrue(summary.contains("(0, 0)"));
         assertTrue(summary.contains("(10, 1)"));
     }
@@ -296,8 +296,8 @@ class ComponentTest extends ComponentTestBase {
         MouseListener listener = event -> listenerCalled[0] = true;
         component.addMouseListener(listener);
 
-        org.flossware.jcurses.events.MouseEvent event =
-            new org.flossware.jcurses.events.MouseEvent(15, 12, 1);
+        org.flossware.curses.events.MouseEvent event =
+            new org.flossware.curses.events.MouseEvent(15, 12, 1);
 
         boolean handled = component.handleMouseEvent(event);
 
@@ -315,8 +315,8 @@ class ComponentTest extends ComponentTestBase {
         MouseListener listener = event -> listenerCalled[0] = true;
         component.addMouseListener(listener);
 
-        org.flossware.jcurses.events.MouseEvent event =
-            new org.flossware.jcurses.events.MouseEvent(50, 50, 1);
+        org.flossware.curses.events.MouseEvent event =
+            new org.flossware.curses.events.MouseEvent(50, 50, 1);
 
         boolean handled = component.handleMouseEvent(event);
 
@@ -336,7 +336,7 @@ class ComponentTest extends ComponentTestBase {
     @Test
     @DisplayName("should have default color pair")
     void testDefaultColorPair() {
-        Component newComponent = new JLabel("Test");
+        Component newComponent = new Label("Test");
         assertEquals(ColorPair.DEFAULT, newComponent.getColorPair());
     }
 

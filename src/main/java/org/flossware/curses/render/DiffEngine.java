@@ -142,7 +142,7 @@ public class DiffEngine {
      */
     private void sendAnsiMoveCursor(int x, int y) {
         try {
-            org.flossware.jcurses.ffi.NcursesBridge.moveCursor(y, x, ' ');
+            org.flossware.curses.ffi.NcursesBridge.moveCursor(y, x, ' ');
         } catch (Throwable e) {
             // Suppress rendering errors - ncurses may not be initialized
         }

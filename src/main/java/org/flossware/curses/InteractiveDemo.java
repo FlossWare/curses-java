@@ -14,7 +14,9 @@ public class InteractiveDemo {
     private static boolean running = true;
     private static DiffEngine diffEngine;
     private static char[][] buffer;
-    private static JIndeterminateProgress indeterminateProgress;
+    private static IndeterminateProgress indeterminateProgress;
+    private static int terminalWidth;
+    private static int terminalHeight;
 
     // Ncurses key codes
     private static final int KEY_UP = 259;
@@ -41,6 +43,10 @@ public class InteractiveDemo {
         NcursesBridge.setNonBlocking(false);
         NcursesBridge.enableMouse(NcursesBridge.ALL_MOUSE_EVENTS);
 
+        // Get actual terminal dimensions
+        terminalHeight = NcursesBridge.getTerminalHeight();
+        terminalWidth = NcursesBridge.getTerminalWidth();
+
         // Initialize color support
         initializeColors();
 
@@ -52,37 +58,37 @@ public class InteractiveDemo {
         }
     }
 
-    private static void setupUI() {
-        buffer = new char[40][120];
-        diffEngine = new DiffEngine(120, 40);
+    private static void setupUI() throws Throwable {
+        buffer = new char[terminalHeight][terminalWidth];
+        diffEngine = new DiffEngine(terminalWidth, terminalHeight);
 
         RootPane root = RootPane.getInstance();
-        root.setSize(120, 40);
+        root.setSize(terminalWidth, terminalHeight);
 
         // Create main frame
-        JFrame frame = new JFrame("Interactive JCurses Demo - Press TAB to navigate, SPACE to activate, ESC to quit");
+        Frame frame = new Frame("Interactive JCurses Demo - Press TAB to navigate, SPACE to activate, ESC to quit");
         frame.setLocation(0, 0);
-        frame.setSize(120, 38);
+        frame.setSize(terminalWidth, terminalHeight - 2);
         frame.setVisible(true);
 
         // Create a panel for widgets
-        JPanel panel = new JPanel();
+        Panel panel = new Panel();
         panel.setLocation(2, 3);
-        panel.setSize(116, 32);
+        panel.setSize(terminalWidth - 4, terminalHeight - 8);
         panel.setBordered(true);
 
         // Create interactive widgets
-        JLabel label1 = new JLabel("Welcome to Interactive JCurses!");
+        Label label1 = new Label("Welcome to Interactive JCurses!");
         label1.setLocation(4, 5);
         label1.setSize(50, 1);
-        label1.setAlignment(JLabel.ALIGN_LEFT);
+        label1.setAlignment(Label.ALIGN_LEFT);
 
-        JLabel label2 = new JLabel("Use TAB to move between widgets, SPACE/ENTER to activate");
+        Label label2 = new Label("Use TAB to move between widgets, SPACE/ENTER to activate");
         label2.setLocation(4, 6);
         label2.setSize(60, 1);
 
         // Buttons
-        JButton button1 = new JButton("Click Me!");
+        Button button1 = new Button("Click Me!");
         button1.setLocation(4, 9);
         button1.setSize(15, 1);
         button1.addActionListener(() -> {
@@ -96,7 +102,7 @@ public class InteractiveDemo {
         });
         focusableComponents.add(button1);
 
-        JButton button2 = new JButton("Press Me!");
+        Button button2 = new Button("Press Me!");
         button2.setLocation(22, 9);
         button2.setSize(15, 1);
         button2.addActionListener(() -> {
@@ -110,23 +116,23 @@ public class InteractiveDemo {
         });
         focusableComponents.add(button2);
 
-        JButton button3 = new JButton("Toggle Below");
+        Button button3 = new Button("Toggle Below");
         button3.setLocation(40, 9);
         button3.setSize(18, 1);
         focusableComponents.add(button3);
 
         // Checkboxes
-        JCheckbox check1 = new JCheckbox("Enable feature 1");
+        Checkbox check1 = new Checkbox("Enable feature 1");
         check1.setLocation(4, 12);
         check1.setSize(25, 1);
         focusableComponents.add(check1);
 
-        JCheckbox check2 = new JCheckbox("Enable feature 2");
+        Checkbox check2 = new Checkbox("Enable feature 2");
         check2.setLocation(4, 13);
         check2.setSize(25, 1);
         focusableComponents.add(check2);
 
-        JCheckbox check3 = new JCheckbox("Enable feature 3");
+        Checkbox check3 = new Checkbox("Enable feature 3");
         check3.setLocation(4, 14);
         check3.setSize(25, 1);
         focusableComponents.add(check3);
@@ -140,12 +146,12 @@ public class InteractiveDemo {
         });
 
         // Slider
-        JSlider slider = new JSlider(0, 100, 50);
+        Slider slider = new Slider(0, 100, 50);
         slider.setLocation(4, 17);
         slider.setSize(40, 1);
         focusableComponents.add(slider);
 
-        JButton sliderUp = new JButton("+");
+        Button sliderUp = new Button("+");
         sliderUp.setLocation(46, 17);
         sliderUp.setSize(5, 1);
         sliderUp.addActionListener(() -> {
@@ -155,7 +161,7 @@ public class InteractiveDemo {
         });
         focusableComponents.add(sliderUp);
 
-        JButton sliderDown = new JButton("-");
+        Button sliderDown = new Button("-");
         sliderDown.setLocation(52, 17);
         sliderDown.setSize(5, 1);
         sliderDown.addActionListener(() -> {
@@ -166,12 +172,12 @@ public class InteractiveDemo {
         focusableComponents.add(sliderDown);
 
         // Progress bar
-        JProgressBar progress = new JProgressBar();
+        ProgressBar progress = new ProgressBar();
         progress.setLocation(4, 20);
         progress.setSize(40, 1);
         progress.setPercent(0.0);
 
-        JButton progressBtn = new JButton("Fill Progress");
+        Button progressBtn = new Button("Fill Progress");
         progressBtn.setLocation(46, 20);
         progressBtn.setSize(18, 1);
         progressBtn.addActionListener(() -> {
@@ -182,7 +188,7 @@ public class InteractiveDemo {
         });
         focusableComponents.add(progressBtn);
 
-        JButton resetBtn = new JButton("Reset Progress");
+        Button resetBtn = new Button("Reset Progress");
         resetBtn.setLocation(66, 20);
         resetBtn.setSize(18, 1);
         resetBtn.addActionListener(() -> {
@@ -193,7 +199,7 @@ public class InteractiveDemo {
         focusableComponents.add(resetBtn);
 
         // Combo box
-        JComboBox<String> combo = new JComboBox<>();
+        ComboBox<String> combo = new ComboBox<>();
         combo.addItem("Option 1");
         combo.addItem("Option 2");
         combo.addItem("Option 3");
@@ -202,7 +208,7 @@ public class InteractiveDemo {
         combo.setSize(25, 1);
         focusableComponents.add(combo);
 
-        JButton comboNext = new JButton("Next");
+        Button comboNext = new Button("Next");
         comboNext.setLocation(31, 23);
         comboNext.setSize(8, 1);
         comboNext.addActionListener(() -> {
@@ -214,12 +220,12 @@ public class InteractiveDemo {
         focusableComponents.add(comboNext);
 
         // Indeterminate progress bar
-        indeterminateProgress = new JIndeterminateProgress();
+        indeterminateProgress = new IndeterminateProgress();
         indeterminateProgress.setLocation(4, 26);
         indeterminateProgress.setSize(40, 1);
         indeterminateProgress.setBlockSize(3);
 
-        JButton startIndBtn = new JButton("Start");
+        Button startIndBtn = new Button("Start");
         startIndBtn.setLocation(46, 26);
         startIndBtn.setSize(10, 1);
         startIndBtn.addActionListener(() -> {
@@ -229,7 +235,7 @@ public class InteractiveDemo {
         });
         focusableComponents.add(startIndBtn);
 
-        JButton stopIndBtn = new JButton("Stop");
+        Button stopIndBtn = new Button("Stop");
         stopIndBtn.setLocation(58, 26);
         stopIndBtn.setSize(10, 1);
         stopIndBtn.addActionListener(() -> {
@@ -240,21 +246,21 @@ public class InteractiveDemo {
         focusableComponents.add(stopIndBtn);
 
         // Dialog demo
-        JButton dialogBtn = new JButton("Show Dialog");
+        Button dialogBtn = new Button("Show Dialog");
         dialogBtn.setLocation(4, 29);
         dialogBtn.setSize(18, 1);
 
         // Table demo button
-        JButton tableBtn = new JButton("Show Table Demo");
+        Button tableBtn = new Button("Show Table Demo");
         tableBtn.setLocation(24, 29);
         tableBtn.setSize(18, 1);
 
         // Create table demo frame
-        JFrame tableFrame = new JFrame("Table Demo - Click headers to sort, click rows to select");
+        Frame tableFrame = new Frame("Table Demo - Click headers to sort, click rows to select");
         tableFrame.setLocation(15, 5);
         tableFrame.setSize(90, 20);
 
-        JTable demoTable = new JTable();
+        Table demoTable = new Table();
         demoTable.setLocation(2, 2);
         demoTable.setSize(86, 12);
         demoTable.setColumnWidth(12);
@@ -269,11 +275,11 @@ public class InteractiveDemo {
         demoTable.addRow("Frank Miller", "45", "SF", "Director", "Active");
         demoTable.addRow("Grace Hopper", "40", "NYC", "Architect", "Active");
 
-        JLabel tableHelp = new JLabel("Click headers to sort | Click rows to select | [*]=selected");
+        Label tableHelp = new Label("Click headers to sort | Click rows to select | [*]=selected");
         tableHelp.setLocation(2, 16);
         tableHelp.setSize(60, 1);
 
-        JButton closeTableBtn = new JButton("Close Table");
+        Button closeTableBtn = new Button("Close Table");
         closeTableBtn.setLocation(70, 16);
         closeTableBtn.setSize(15, 1);
         closeTableBtn.addActionListener(() -> {
@@ -295,18 +301,18 @@ public class InteractiveDemo {
         focusableComponents.add(tableBtn);
 
         // File dialog demo
-        JButton fileDialogBtn = new JButton("Open File Dialog");
+        Button fileDialogBtn = new Button("Open File Dialog");
         fileDialogBtn.setLocation(44, 29);
         fileDialogBtn.setSize(20, 1);
 
         // Create file dialog (will show when button is clicked)
-        JFileDialog fileDialog = new JFileDialog("Select a File", JFileDialog.LOAD);
+        FileDialog fileDialog = new FileDialog("Select a File", FileDialog.LOAD);
         fileDialog.setLocation(25, 10);
         fileDialog.setSize(60, 20);
         fileDialog.setModal(true);
         fileDialog.setStatusText("Browse and select a file");
 
-        JButton closeFileDialogBtn = new JButton("Close");
+        Button closeFileDialogBtn = new Button("Close");
         closeFileDialogBtn.setLocation(48, 17);
         closeFileDialogBtn.setSize(10, 1);
         closeFileDialogBtn.addActionListener(() -> {
@@ -326,18 +332,18 @@ public class InteractiveDemo {
         focusableComponents.add(fileDialogBtn);
 
         // Create dialog (will show when button is clicked)
-        JDialog dialog = new JDialog("Sample Dialog");
+        Dialog dialog = new Dialog("Sample Dialog");
         dialog.setLocation(30, 15);
         dialog.setSize(50, 12);
         dialog.setModal(true);
         dialog.setStatusText("Dialog ready | Click button to update status");
 
-        JLabel dialogLabel = new JLabel("This is a modal dialog with status bar");
+        Label dialogLabel = new Label("This is a modal dialog with status bar");
         dialogLabel.setLocation(2, 2);
         dialogLabel.setSize(46, 1);
-        dialogLabel.setAlignment(JLabel.ALIGN_CENTER);
+        dialogLabel.setAlignment(Label.ALIGN_CENTER);
 
-        JButton updateStatusBtn = new JButton("Update Status");
+        Button updateStatusBtn = new Button("Update Status");
         updateStatusBtn.setLocation(5, 5);
         updateStatusBtn.setSize(18, 1);
         updateStatusBtn.addActionListener(() -> {
@@ -346,7 +352,7 @@ public class InteractiveDemo {
         });
         focusableComponents.add(updateStatusBtn);
 
-        JButton closeDialogBtn = new JButton("Close Dialog");
+        Button closeDialogBtn = new Button("Close Dialog");
         closeDialogBtn.setLocation(26, 5);
         closeDialogBtn.setSize(18, 1);
         closeDialogBtn.addActionListener(() -> {
@@ -368,9 +374,9 @@ public class InteractiveDemo {
         focusableComponents.add(dialogBtn);
 
         // Status bar
-        JStatusBar status = new JStatusBar("Ready | TAB=Navigate | SPACE/ENTER=Activate | ESC=Quit");
-        status.setLocation(2, 36);
-        status.setSize(116, 1);
+        StatusBar status = new StatusBar("Ready | TAB=Navigate | SPACE/ENTER=Activate | ESC=Quit");
+        status.setLocation(2, terminalHeight - 4);
+        status.setSize(terminalWidth - 4, 1);
 
         // Add all to panel
         panel.add(label1);
@@ -402,29 +408,29 @@ public class InteractiveDemo {
         root.add(frame);
 
         // Create draggable/resizable demo window
-        JFrame dragFrame = new JFrame("Draggable Window - Try dragging me!");
+        Frame dragFrame = new Frame("Draggable Window - Try dragging me!");
         dragFrame.setLocation(70, 10);
         dragFrame.setSize(45, 12);
         dragFrame.setVisible(true);
 
-        JLabel dragLabel1 = new JLabel("DRAG & RESIZE DEMO");
+        Label dragLabel1 = new Label("DRAG & RESIZE DEMO");
         dragLabel1.setLocation(73, 12);
         dragLabel1.setSize(39, 1);
-        dragLabel1.setAlignment(JLabel.ALIGN_CENTER);
+        dragLabel1.setAlignment(Label.ALIGN_CENTER);
 
-        JLabel dragLabel2 = new JLabel("* Drag title bar to move");
+        Label dragLabel2 = new Label("* Drag title bar to move");
         dragLabel2.setLocation(72, 14);
         dragLabel2.setSize(41, 1);
 
-        JLabel dragLabel3 = new JLabel("* Drag edges to resize");
+        Label dragLabel3 = new Label("* Drag edges to resize");
         dragLabel3.setLocation(72, 15);
         dragLabel3.setSize(41, 1);
 
-        JLabel dragLabel4 = new JLabel("* Drag corners to resize both");
+        Label dragLabel4 = new Label("* Drag corners to resize both");
         dragLabel4.setLocation(72, 16);
         dragLabel4.setSize(41, 1);
 
-        JButton toggleDragBtn = new JButton("Toggle Draggable");
+        Button toggleDragBtn = new Button("Toggle Draggable");
         toggleDragBtn.setLocation(74, 18);
         toggleDragBtn.setSize(20, 1);
         toggleDragBtn.addActionListener(() -> {
@@ -434,7 +440,7 @@ public class InteractiveDemo {
         });
         focusableComponents.add(toggleDragBtn);
 
-        JButton toggleResizeBtn = new JButton("Toggle Resizable");
+        Button toggleResizeBtn = new Button("Toggle Resizable");
         toggleResizeBtn.setLocation(96, 18);
         toggleResizeBtn.setSize(20, 1);
         toggleResizeBtn.addActionListener(() -> {
@@ -522,8 +528,8 @@ public class InteractiveDemo {
 
     private static void render() throws Throwable {
         // Clear buffer
-        for (int i = 0; i < 40; i++) {
-            for (int j = 0; j < 120; j++) {
+        for (int i = 0; i < terminalHeight; i++) {
+            for (int j = 0; j < terminalWidth; j++) {
                 buffer[i][j] = ' ';
             }
         }
@@ -539,18 +545,18 @@ public class InteractiveDemo {
             int w = focused.getWidth();
 
             // Draw focus indicator
-            if (x > 0 && y >= 0 && y < 40) {
+            if (x > 0 && y >= 0 && y < terminalHeight) {
                 buffer[y][x - 1] = '>';
             }
-            if (x + w < 120 && y >= 0 && y < 40) {
+            if (x + w < terminalWidth && y >= 0 && y < terminalHeight) {
                 buffer[y][x + w] = '<';
             }
         }
 
         // Send to ncurses
         NcursesBridge.clear();
-        for (int y = 0; y < 40; y++) {
-            for (int x = 0; x < 120; x++) {
+        for (int y = 0; y < terminalHeight; y++) {
+            for (int x = 0; x < terminalWidth; x++) {
                 NcursesBridge.moveCursor(y, x, buffer[y][x]);
             }
         }
@@ -581,11 +587,11 @@ public class InteractiveDemo {
     }
 
     private static void activateComponent(Component component) {
-        if (component instanceof JButton button) {
+        if (component instanceof Button button) {
             button.doClick();
-        } else if (component instanceof JCheckbox checkbox) {
+        } else if (component instanceof Checkbox checkbox) {
             checkbox.setChecked(!checkbox.isChecked());
-        } else if (component instanceof JComboBox<?> combo) {
+        } else if (component instanceof ComboBox<?> combo) {
             int idx = combo.getSelectedIndex();
             combo.setSelectedIndex((idx + 1) % 4);
         }

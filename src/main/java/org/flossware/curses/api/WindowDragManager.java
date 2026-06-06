@@ -18,7 +18,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *   <li>Layout invalidation</li>
  * </ul>
  *
- * <p><strong>Usage:</strong> JFrame and other window components delegate mouse events
+ * <p><strong>Usage:</strong> Frame and other window components delegate mouse events
  * to this manager via {@link #handleMouseEvent(MouseEvent, Component)}. The manager
  * determines if the event should trigger a drag/resize operation and handles the
  * drag lifecycle.

@@ -177,7 +177,7 @@ class RootPaneTest {
     @Test
     @DisplayName("should support adding and removing children")
     void testChildManagement() {
-        Component child = new JLabel("Test");
+        Component child = new Label("Test");
 
         rootPane.add(child);
         assertEquals(1, rootPane.getChildren().size());
@@ -193,11 +193,11 @@ class RootPaneTest {
     void testPaintChildren() {
         char[][] buffer = new char[24][80];
 
-        Component child1 = new JLabel("Test 1");
+        Component child1 = new Label("Test 1");
         child1.setLocation(0, 0);
         child1.setSize(10, 1);
 
-        Component child2 = new JLabel("Test 2");
+        Component child2 = new Label("Test 2");
         child2.setLocation(0, 1);
         child2.setSize(10, 1);
 
@@ -213,7 +213,7 @@ class RootPaneTest {
         rootPane.clearDirty();
         assertFalse(rootPane.isDirty());
 
-        Component child = new JLabel("Test");
+        Component child = new Label("Test");
         rootPane.add(child);
 
         assertTrue(rootPane.isDirty());
@@ -222,7 +222,7 @@ class RootPaneTest {
     @Test
     @DisplayName("should trigger dirty flag when child removed")
     void testDirtyOnChildRemove() {
-        Component child = new JLabel("Test");
+        Component child = new Label("Test");
         rootPane.add(child);
         rootPane.clearDirty();
 

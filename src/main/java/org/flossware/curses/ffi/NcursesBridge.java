@@ -26,6 +26,8 @@ public class NcursesBridge {
     private static MethodHandle color_pair;
     private static MethodHandle attron;
     private static MethodHandle attroff;
+    private static MethodHandle getmaxy;
+    private static MethodHandle getmaxx;
     private static MemorySegment stdscr;
     private static boolean initialized = false;
 
@@ -194,6 +196,18 @@ public class NcursesBridge {
                     ValueLayout.JAVA_INT)
             );
 
+            getmaxy = linker.downcallHandle(
+                ncurses.find("getmaxy").orElseThrow(),
+                FunctionDescriptor.of(ValueLayout.JAVA_INT,
+                    ValueLayout.ADDRESS)
+            );
+
+            getmaxx = linker.downcallHandle(
+                ncurses.find("getmaxx").orElseThrow(),
+                FunctionDescriptor.of(ValueLayout.JAVA_INT,
+                    ValueLayout.ADDRESS)
+            );
+
             initialized = true;
         } catch (UnsatisfiedLinkError e) {
             logger.error("ncurses library not found: {}", e.getMessage());
@@ -334,6 +348,20 @@ public class NcursesBridge {
         if (initialized) {
             checkResult((int) attroff.invokeExact(attr), "attroff");
         }
+    }
+
+    public static int getTerminalHeight() throws Throwable {
+        if (initialized && stdscr != null) {
+            return (int) getmaxy.invokeExact(stdscr);
+        }
+        return 24;  // Default fallback
+    }
+
+    public static int getTerminalWidth() throws Throwable {
+        if (initialized && stdscr != null) {
+            return (int) getmaxx.invokeExact(stdscr);
+        }
+        return 80;  // Default fallback
     }
 
     public record MouseEventData(int x, int y, long buttonState) {}

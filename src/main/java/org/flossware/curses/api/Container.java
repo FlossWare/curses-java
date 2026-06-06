@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.SequencedCollection;
 
-import static org.flossware.jcurses.api.Constants.*;
+import static org.flossware.curses.api.Constants.*;
 
 public class Container extends Component {
     protected final List<Component> children = new ArrayList<>();

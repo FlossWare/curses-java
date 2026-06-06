@@ -15,18 +15,18 @@ class BorderLayoutTest {
 
     @BeforeEach
     void setUp() {
-        container = new JPanel();
+        container = new Panel();
         container.setLocation(0, 0);
         container.setSize(100, 50);
 
         layout = new BorderLayout();
         container.setLayout(layout);
 
-        north = new JLabel("North");
-        south = new JLabel("South");
-        east = new JLabel("East");
-        west = new JLabel("West");
-        center = new JLabel("Center");
+        north = new Label("North");
+        south = new Label("South");
+        east = new Label("East");
+        west = new Label("West");
+        center = new Label("Center");
     }
 
     @Test

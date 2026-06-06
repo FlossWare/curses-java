@@ -14,7 +14,7 @@ class FlowLayoutTest {
 
     @BeforeEach
     void setUp() {
-        container = new JPanel();
+        container = new Panel();
         container.setLocation(0, 0);
         container.setSize(50, 20);
     }
@@ -46,9 +46,9 @@ class FlowLayoutTest {
         layout = new FlowLayout();
         container.setLayout(layout);
 
-        Component child1 = new JLabel("1");
+        Component child1 = new Label("1");
         child1.setSize(10, 1);
-        Component child2 = new JLabel("2");
+        Component child2 = new Label("2");
         child2.setSize(10, 1);
 
         container.add(child1);
@@ -67,11 +67,11 @@ class FlowLayoutTest {
         layout = new FlowLayout();
         container.setLayout(layout);
 
-        Component child1 = new JLabel("1");
+        Component child1 = new Label("1");
         child1.setSize(20, 1);
-        Component child2 = new JLabel("2");
+        Component child2 = new Label("2");
         child2.setSize(20, 1);
-        Component child3 = new JLabel("3");
+        Component child3 = new Label("3");
         child3.setSize(20, 1);
 
         container.add(child1);

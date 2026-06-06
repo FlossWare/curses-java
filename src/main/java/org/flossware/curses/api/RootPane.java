@@ -1,6 +1,6 @@
 package org.flossware.curses.api;
 
-import static org.flossware.jcurses.api.Constants.*;
+import static org.flossware.curses.api.Constants.*;
 
 public class RootPane extends Container {
     private static final RootPane instance = new RootPane();

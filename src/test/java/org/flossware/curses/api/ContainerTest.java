@@ -17,10 +17,10 @@ class ContainerTest extends ComponentTestBase {
 
     @BeforeEach
     void setUp() {
-        container = new JPanel();
-        child1 = new JLabel("Child 1");
-        child2 = new JLabel("Child 2");
-        child3 = new JLabel("Child 3");
+        container = new Panel();
+        child1 = new Label("Child 1");
+        child2 = new Label("Child 2");
+        child3 = new Label("Child 3");
     }
 
     @Test
@@ -129,7 +129,7 @@ class ContainerTest extends ComponentTestBase {
     @Test
     @DisplayName("should draw border correctly")
     void testDrawBorder() {
-        JPanel panel = new JPanel();
+        Panel panel = new Panel();
         panel.setLocation(5, 5);
         panel.setSize(10, 5);
         panel.setBordered(true);
@@ -163,7 +163,7 @@ class ContainerTest extends ComponentTestBase {
     void testConcurrentAddChildren() throws InterruptedException {
         ThreadSafetyTestHelper.runConcurrent(10, () -> {
             for (int i = 0; i < 10; i++) {
-                container.add(new JLabel("Label " + i));
+                container.add(new Label("Label " + i));
             }
         });
 
@@ -176,13 +176,13 @@ class ContainerTest extends ComponentTestBase {
     void testConcurrentAddAndRemove() throws InterruptedException {
         // Pre-add some children
         for (int i = 0; i < 20; i++) {
-            container.add(new JLabel("Initial " + i));
+            container.add(new Label("Initial " + i));
         }
 
         ThreadSafetyTestHelper.runTwoOperationsConcurrently(5,
             () -> {
                 for (int i = 0; i < 10; i++) {
-                    container.add(new JLabel("New " + i));
+                    container.add(new Label("New " + i));
                 }
             },
             () -> {
@@ -204,7 +204,7 @@ class ContainerTest extends ComponentTestBase {
         root.add(container);
 
         ThreadSafetyTestHelper.runWithVirtualThreads(20, () -> {
-            Component child = new JLabel("VThread Label");
+            Component child = new Label("VThread Label");
             container.add(child);
             if (Math.random() > 0.5) {
                 container.remove(child);
@@ -302,7 +302,7 @@ class ContainerTest extends ComponentTestBase {
     @Test
     @DisplayName("should draw border at negative position")
     void testDrawBorderNegativePosition() {
-        JPanel panel = new JPanel();
+        Panel panel = new Panel();
         panel.setBordered(true);
         panel.setLocation(-5, -3);
         panel.setSize(20, 10);
@@ -314,7 +314,7 @@ class ContainerTest extends ComponentTestBase {
     @Test
     @DisplayName("should draw border at buffer edge")
     void testDrawBorderAtBufferEdge() {
-        JPanel panel = new JPanel();
+        Panel panel = new Panel();
         panel.setBordered(true);
         panel.setLocation(75, 20);  // Near buffer edge (80x24)
         panel.setSize(10, 5);
@@ -326,7 +326,7 @@ class ContainerTest extends ComponentTestBase {
     @Test
     @DisplayName("should draw border beyond buffer bounds")
     void testDrawBorderBeyondBounds() {
-        JPanel panel = new JPanel();
+        Panel panel = new Panel();
         panel.setBordered(true);
         panel.setLocation(100, 30);  // Beyond buffer (80x24)
         panel.setSize(10, 5);

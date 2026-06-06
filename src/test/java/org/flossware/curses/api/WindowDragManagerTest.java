@@ -13,12 +13,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("WindowDragManager Tests")
 class WindowDragManagerTest extends ComponentTestBase {
 
-    private JFrame frame;
+    private Frame frame;
     private WindowDragManager manager;
 
     @BeforeEach
     void setUp() {
-        frame = new JFrame("Test Frame");
+        frame = new Frame("Test Frame");
         frame.setLocation(10, 5);
         frame.setSize(40, 20);
         manager = WindowDragManager.getInstance();
@@ -242,7 +242,7 @@ class WindowDragManagerTest extends ComponentTestBase {
     @Test
     @DisplayName("should only allow one drag at a time")
     void testSingleDragOnly() {
-        JFrame frame2 = new JFrame("Frame 2");
+        Frame frame2 = new Frame("Frame 2");
         frame2.setLocation(60, 10);
         frame2.setSize(30, 15);
 
@@ -371,12 +371,12 @@ class WindowDragManagerTest extends ComponentTestBase {
     @Test
     @DisplayName("should enforce maximum size constraints")
     void testMaximumSizeConstraint() {
-        JFrame testFrame = new JFrame("Test");
+        Frame testFrame = new Frame("Test");
         testFrame.setLocation(10, 10);
         testFrame.setSize(20, 15);
 
         // Set max constraints using DraggableWindow interface
-        // Since JFrame doesn't have setMaxWidth/setMaxHeight, we'll test with a custom implementation
+        // Since Frame doesn't have setMaxWidth/setMaxHeight, we'll test with a custom implementation
         DraggableWindow customWindow = new DraggableWindow() {
             Component comp = testFrame;
             @Override
@@ -399,7 +399,7 @@ class WindowDragManagerTest extends ComponentTestBase {
     @DisplayName("should constrain window to parent bounds during resize")
     void testParentBoundsConstraintResize() {
         // Create parent container
-        Container parent = new JPanel();
+        Container parent = new Panel();
         parent.setLocation(0, 0);
         parent.setSize(80, 24);
 
@@ -426,8 +426,8 @@ class WindowDragManagerTest extends ComponentTestBase {
     @Test
     @DisplayName("should invalidate layout when resizing container")
     void testLayoutInvalidationOnResize() {
-        // Create a JPanel (which is a Container) that's draggable
-        JDialog dialog = new JDialog("Test");
+        // Create a Panel (which is a Container) that's draggable
+        Dialog dialog = new Dialog("Test");
         dialog.setLocation(20, 10);
         dialog.setSize(40, 20);
 
@@ -500,7 +500,7 @@ class WindowDragManagerTest extends ComponentTestBase {
     @DisplayName("should not handle events for non-DraggableWindow components")
     void testNonDraggableWindow() {
         // Create a component that doesn't implement DraggableWindow
-        Component normalComponent = new JLabel("Not Draggable");
+        Component normalComponent = new Label("Not Draggable");
         normalComponent.setLocation(10, 10);
         normalComponent.setSize(20, 5);
 
@@ -561,7 +561,7 @@ class WindowDragManagerTest extends ComponentTestBase {
     @DisplayName("should enforce maximum width constraint")
     void testMaxWidthConstraint() {
         // Create a frame with max width
-        JFrame constrainedFrame = new JFrame("Constrained") {
+        Frame constrainedFrame = new Frame("Constrained") {
             @Override
             public int getMaxWidth() {
                 return 50;
@@ -588,7 +588,7 @@ class WindowDragManagerTest extends ComponentTestBase {
     @DisplayName("should enforce maximum height constraint")
     void testMaxHeightConstraint() {
         // Create a frame with max height
-        JFrame constrainedFrame = new JFrame("Constrained") {
+        Frame constrainedFrame = new Frame("Constrained") {
             @Override
             public int getMaxHeight() {
                 return 30;
@@ -653,7 +653,7 @@ class WindowDragManagerTest extends ComponentTestBase {
         assertTrue(manager.isDragging());
 
         // Try to release on a different frame
-        JFrame otherFrame = new JFrame("Other");
+        Frame otherFrame = new Frame("Other");
         otherFrame.setLocation(100, 100);
         otherFrame.setSize(30, 15);
 
@@ -699,7 +699,7 @@ class WindowDragManagerTest extends ComponentTestBase {
         // this test verifies the branch exists but may not be reachable in practice
         // The instanceof check at line 244 will be false for non-Container windows
 
-        // This is actually testing that JFrame (which IS a Container) invalidates layout
+        // This is actually testing that Frame (which IS a Container) invalidates layout
         // The else branch (non-Container) is defensive programming
         assertTrue(frame instanceof Container);
     }

@@ -8,7 +8,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
-    <exec.mainClass>org.flossware.jcurses.Main</exec.mainClass>
+    <exec.mainClass>org.flossware.curses.Main</exec.mainClass>
     <junit.version>6.1.0</junit.version>
     <mockito.version>5.14.2</mockito.version>
     <assertj.version>3.27.3</assertj.version>
