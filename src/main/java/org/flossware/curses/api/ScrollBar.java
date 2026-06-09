@@ -25,21 +25,69 @@ public class ScrollBar extends Component {
     }
 
     public int getValue() {
-        return value;
+        renderLock.lock();
+        try {
+            return value;
+        } finally {
+            renderLock.unlock();
+        }
+    }
+
+    public int getMinimum() {
+        renderLock.lock();
+        try {
+            return minimum;
+        } finally {
+            renderLock.unlock();
+        }
     }
 
     public void setMinimum(int minimum) {
-        this.minimum = minimum;
+        renderLock.lock();
+        try {
+            this.minimum = minimum;
+        } finally {
+            renderLock.unlock();
+        }
         repaint();
+    }
+
+    public int getMaximum() {
+        renderLock.lock();
+        try {
+            return maximum;
+        } finally {
+            renderLock.unlock();
+        }
     }
 
     public void setMaximum(int maximum) {
-        this.maximum = maximum;
+        renderLock.lock();
+        try {
+            this.maximum = Math.max(0, maximum);
+            this.value = Math.min(this.value, this.maximum);
+        } finally {
+            renderLock.unlock();
+        }
         repaint();
     }
 
+    public int getVisibleAmount() {
+        renderLock.lock();
+        try {
+            return visibleAmount;
+        } finally {
+            renderLock.unlock();
+        }
+    }
+
     public void setVisibleAmount(int visibleAmount) {
-        this.visibleAmount = visibleAmount;
+        renderLock.lock();
+        try {
+            this.visibleAmount = visibleAmount;
+        } finally {
+            renderLock.unlock();
+        }
         repaint();
     }
 
@@ -53,6 +101,17 @@ public class ScrollBar extends Component {
     }
 
     private void paintHorizontal(char[][] buffer) {
+        int value, minimum, maximum, visibleAmount;
+        renderLock.lock();
+        try {
+            value = this.value;
+            minimum = this.minimum;
+            maximum = this.maximum;
+            visibleAmount = this.visibleAmount;
+        } finally {
+            renderLock.unlock();
+        }
+
         int range = maximum - minimum;
         if (range <= 0 || width <= 2) return;
 
@@ -66,6 +125,17 @@ public class ScrollBar extends Component {
     }
 
     private void paintVertical(char[][] buffer) {
+        int value, minimum, maximum, visibleAmount;
+        renderLock.lock();
+        try {
+            value = this.value;
+            minimum = this.minimum;
+            maximum = this.maximum;
+            visibleAmount = this.visibleAmount;
+        } finally {
+            renderLock.unlock();
+        }
+
         int range = maximum - minimum;
         if (range <= 0 || height <= 2) return;
 

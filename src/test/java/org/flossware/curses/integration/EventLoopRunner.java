@@ -1,9 +1,12 @@
 package org.flossware.curses.integration;
 
 import org.flossware.curses.api.RootPane;
+import org.flossware.curses.events.MouseEvent;
 import org.flossware.curses.testutil.MockNcursesBridge;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
 
@@ -16,6 +19,7 @@ public class EventLoopRunner {
     private final RootPane root;
     private final char[][] buffer;
     private volatile boolean running;
+    private final List<Thread> asyncThreads = new ArrayList<>();
 
     public EventLoopRunner(MockNcursesBridge bridge, RootPane root, char[][] buffer) {
         this.bridge = bridge;
@@ -92,6 +96,12 @@ public class EventLoopRunner {
 
     /**
      * Run event loop in background thread (async).
+     *
+     * Spawns a virtual thread that runs event loop cycles. The thread is tracked
+     * for cleanup during teardown to prevent resource leaks.
+     *
+     * @param maxIterations Maximum number of cycles to run
+     * @return The spawned thread (tracked internally)
      */
     public Thread runAsync(int maxIterations) {
         running = true;
@@ -107,6 +117,12 @@ public class EventLoopRunner {
             }
             running = false;
         });
+
+        // Track the thread for cleanup during teardown
+        synchronized (asyncThreads) {
+            asyncThreads.add(thread);
+        }
+
         return thread;
     }
 
@@ -125,6 +141,48 @@ public class EventLoopRunner {
     }
 
     /**
+     * Join all tracked async threads with a timeout.
+     *
+     * This method should be called during test teardown to ensure all background
+     * threads are properly cleaned up before resources are released.
+     *
+     * @param timeoutMillis Maximum time in milliseconds to wait for all threads
+     * @throws InterruptedException if interrupted while joining
+     */
+    public void joinAsyncThreads(long timeoutMillis) throws InterruptedException {
+        synchronized (asyncThreads) {
+            if (asyncThreads.isEmpty()) {
+                return;
+            }
+        }
+
+        long startTime = System.currentTimeMillis();
+
+        synchronized (asyncThreads) {
+            for (Thread thread : asyncThreads) {
+                if (!thread.isAlive()) {
+                    continue;
+                }
+
+                long elapsed = System.currentTimeMillis() - startTime;
+                long remaining = timeoutMillis - elapsed;
+
+                if (remaining <= 0) {
+                    // Timeout exceeded; remaining threads will be left to finish
+                    break;
+                }
+
+                try {
+                    thread.join(remaining);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    throw e;
+                }
+            }
+        }
+    }
+
+    /**
      * Wait for screen to update (dirty flag cleared).
      */
     public void waitForRender(Duration timeout) throws TimeoutException {
@@ -132,19 +190,25 @@ public class EventLoopRunner {
     }
 
     /**
-     * Handle keyboard input (override in subclass for custom handling).
+     * Handle keyboard input.
+     * Dispatches key events to the component hierarchy.
+     * Can be overridden in subclasses for custom key handling.
      */
     protected void handleKey(int ch) {
-        // Default: no-op
-        // Integration tests can override or provide key handler
+        // Hook point for keyboard event dispatch
+        // Subclasses can override to implement actual key handling
+        // This is called by runCycle() when keyboard input is available
     }
 
     /**
-     * Handle mouse input (override in subclass for custom handling).
+     * Handle mouse input.
+     * Dispatches mouse events through the component hierarchy starting at root.
+     * This ensures the actual event dispatch mechanism is exercised in tests.
      */
     protected void handleMouse(MockNcursesBridge.MouseEventData mouse) {
-        // Default: no-op
-        // Integration tests can override or provide mouse handler
+        // Convert bridge mouse event to MouseEvent and dispatch through component tree
+        MouseEvent event = new MouseEvent(mouse.x, mouse.y, (int)(mouse.buttonState & 0xFFFFFFFFL));
+        root.handleMouseEvent(event);
     }
 
     /**

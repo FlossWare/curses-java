@@ -69,19 +69,39 @@ public abstract class Component {
     }
 
     public int getX() {
-        return x;
+        renderLock.lock();
+        try {
+            return x;
+        } finally {
+            renderLock.unlock();
+        }
     }
 
     public int getY() {
-        return y;
+        renderLock.lock();
+        try {
+            return y;
+        } finally {
+            renderLock.unlock();
+        }
     }
 
     public int getWidth() {
-        return width;
+        renderLock.lock();
+        try {
+            return width;
+        } finally {
+            renderLock.unlock();
+        }
     }
 
     public int getHeight() {
-        return height;
+        renderLock.lock();
+        try {
+            return height;
+        } finally {
+            renderLock.unlock();
+        }
     }
 
     public Component getParent() {
@@ -128,6 +148,25 @@ public abstract class Component {
         }
     }
 
+    /**
+     * Safely writes a character to the buffer at the specified position with bounds checking.
+     * This method prevents ArrayIndexOutOfBoundsException by validating both row and column
+     * indices before writing to the 2D character array. Designed for widgets that render
+     * character-by-character, such as progress bars and sliders.
+     *
+     * @param buffer the character buffer to write to
+     * @param x the column position (0-based)
+     * @param y the row position (0-based)
+     * @param c the character to write
+     * @since 1.28
+     */
+    protected void writeCharToBuffer(char[][] buffer, int x, int y, char c) {
+        if (y < 0 || y >= buffer.length || x < 0 || x >= buffer[y].length) {
+            return;
+        }
+        buffer[y][x] = c;
+    }
+
     public void addMouseListener(MouseListener listener) {
         if (listener == null) {
             throw new IllegalArgumentException("listener cannot be null");
@@ -153,26 +192,30 @@ public abstract class Component {
     }
 
     public boolean handleMouseEvent(MouseEvent event) {
-        // Check if the click is within this component's bounds
-        if (event.x() >= x && event.x() < x + width &&
-            event.y() >= y && event.y() < y + height) {
+        renderLock.lock();
+        try {
+            // Check if the click is within this component's bounds
+            if (event.x() >= x && event.x() < x + width &&
+                event.y() >= y && event.y() < y + height) {
 
-            // Copy listener list to avoid ConcurrentModificationException
-            List<MouseListener> listeners;
-            renderLock.lock();
-            try {
-                listeners = new ArrayList<>(mouseListeners);
-            } finally {
+                // Copy listener list to avoid ConcurrentModificationException
+                List<MouseListener> listeners = new ArrayList<>(mouseListeners);
+
                 renderLock.unlock();
+                try {
+                    // Notify all mouse listeners outside lock
+                    for (MouseListener listener : listeners) {
+                        listener.onMouseEvent(event);
+                    }
+                    return true;
+                } finally {
+                    renderLock.lock();
+                }
             }
-
-            // Notify all mouse listeners outside lock
-            for (MouseListener listener : listeners) {
-                listener.onMouseEvent(event);
-            }
-            return true;
+            return false;
+        } finally {
+            renderLock.unlock();
         }
-        return false;
     }
 
     // Accessibility Support
@@ -182,22 +225,34 @@ public abstract class Component {
      *
      * <p>The accessible name is a short, user-friendly label that identifies
      * the component for assistive technologies like screen readers.
+     * This method is thread-safe.
      *
      * @param name the accessible name, or null to clear
      * @since 1.26
      */
     public void setAccessibleName(String name) {
-        this.accessibleName = name;
+        renderLock.lock();
+        try {
+            this.accessibleName = name;
+        } finally {
+            renderLock.unlock();
+        }
     }
 
     /**
      * Returns the accessible name of this component.
+     * This method is thread-safe.
      *
      * @return the accessible name, or null if not set
      * @since 1.26
      */
     public String getAccessibleName() {
-        return accessibleName;
+        renderLock.lock();
+        try {
+            return accessibleName;
+        } finally {
+            renderLock.unlock();
+        }
     }
 
     /**
@@ -205,22 +260,34 @@ public abstract class Component {
      *
      * <p>Common roles include: "button", "label", "textfield", "checkbox",
      * "progressbar", "dialog", etc.
+     * This method is thread-safe.
      *
      * @param role the ARIA-like role name
      * @since 1.26
      */
     public void setAccessibleRole(String role) {
-        this.accessibleRole = role;
+        renderLock.lock();
+        try {
+            this.accessibleRole = role;
+        } finally {
+            renderLock.unlock();
+        }
     }
 
     /**
      * Returns the accessibility role of this component.
+     * This method is thread-safe.
      *
      * @return the role name, or null if not set
      * @since 1.26
      */
     public String getAccessibleRole() {
-        return accessibleRole;
+        renderLock.lock();
+        try {
+            return accessibleRole;
+        } finally {
+            renderLock.unlock();
+        }
     }
 
     /**
@@ -228,22 +295,34 @@ public abstract class Component {
      *
      * <p>This provides additional context beyond the name, such as
      * instructions or state information.
+     * This method is thread-safe.
      *
      * @param description the accessible description
      * @since 1.26
      */
     public void setAccessibleDescription(String description) {
-        this.accessibleDescription = description;
+        renderLock.lock();
+        try {
+            this.accessibleDescription = description;
+        } finally {
+            renderLock.unlock();
+        }
     }
 
     /**
      * Returns the accessible description.
+     * This method is thread-safe.
      *
      * @return the description, or null if not set
      * @since 1.26
      */
     public String getAccessibleDescription() {
-        return accessibleDescription;
+        renderLock.lock();
+        try {
+            return accessibleDescription;
+        } finally {
+            renderLock.unlock();
+        }
     }
 
     /**
@@ -251,28 +330,34 @@ public abstract class Component {
      *
      * <p>This combines role, name, and description into a format suitable
      * for screen readers or accessibility logging.
+     * This method is thread-safe.
      *
      * @return formatted accessibility information
      * @since 1.26
      */
     public String getAccessibilitySummary() {
-        StringBuilder sb = new StringBuilder();
-        if (accessibleRole != null) {
-            sb.append(accessibleRole);
-        } else {
-            sb.append(getClass().getSimpleName());
+        renderLock.lock();
+        try {
+            StringBuilder sb = new StringBuilder();
+            if (accessibleRole != null) {
+                sb.append(accessibleRole);
+            } else {
+                sb.append(getClass().getSimpleName());
+            }
+
+            if (accessibleName != null) {
+                sb.append(": ").append(accessibleName);
+            }
+
+            if (accessibleDescription != null) {
+                sb.append(" - ").append(accessibleDescription);
+            }
+
+            sb.append(String.format(" at (%d, %d) size (%d, %d)", x, y, width, height));
+
+            return sb.toString();
+        } finally {
+            renderLock.unlock();
         }
-
-        if (accessibleName != null) {
-            sb.append(": ").append(accessibleName);
-        }
-
-        if (accessibleDescription != null) {
-            sb.append(" - ").append(accessibleDescription);
-        }
-
-        sb.append(String.format(" at (%d, %d) size (%d, %d)", x, y, width, height));
-
-        return sb.toString();
     }
 }

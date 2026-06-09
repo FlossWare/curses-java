@@ -12,12 +12,12 @@ public class BorderLayout implements LayoutManager {
 
     private final Map<Component, String> constraints = new HashMap<>();
 
-    public void addLayoutComponent(Component comp, String constraint) {
+    public synchronized void addLayoutComponent(Component comp, String constraint) {
         constraints.put(comp, constraint);
     }
 
     @Override
-    public void layoutContainer(Container parent) {
+    public synchronized void layoutContainer(Container parent) {
         Component north = null, south = null, east = null, west = null, center = null;
 
         for (Component child : parent.getChildren()) {

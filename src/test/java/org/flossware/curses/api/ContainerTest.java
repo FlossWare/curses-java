@@ -6,6 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Container Tests")
@@ -333,6 +335,101 @@ class ContainerTest extends ComponentTestBase {
 
         // Should not crash even when completely out of bounds
         assertDoesNotThrow(() -> panel.paint(buffer));
+    }
+
+    @Test
+    @DisplayName("should detect external mutations via getChildren()")
+    void testExternalMutationInvalidatesCache() {
+        container.add(child1);
+        container.add(child2);
+        assertEquals(2, container.getChildren().size());
+
+        // Get snapshot to populate cache
+        List<Component> snapshot1 = container.getChildrenSnapshot();
+        assertEquals(2, snapshot1.size());
+
+        // External mutation via getChildren() - not using add()
+        // This simulates Dialog.show() calling RootPane.getInstance().getChildren().addLast(this)
+        container.getChildren().add(child3);
+        assertEquals(3, container.getChildren().size());
+
+        // Next snapshot should detect the mutation and be invalidated
+        List<Component> snapshot2 = container.getChildrenSnapshot();
+        assertEquals(3, snapshot2.size());
+        assertTrue(snapshot2.contains(child3), "New child should be in snapshot after external mutation");
+    }
+
+    @Test
+    @DisplayName("should detect clear() on children list")
+    void testExternalClearInvalidatesCache() {
+        container.add(child1);
+        container.add(child2);
+        container.add(child3);
+        assertEquals(3, container.getChildren().size());
+
+        // Get snapshot to populate cache
+        List<Component> snapshot1 = container.getChildrenSnapshot();
+        assertEquals(3, snapshot1.size());
+
+        // External mutation: clear via getChildren()
+        container.getChildren().clear();
+        assertEquals(0, container.getChildren().size());
+
+        // Next snapshot should detect the mutation (size 3→0, even though empty)
+        List<Component> snapshot2 = container.getChildrenSnapshot();
+        assertEquals(0, snapshot2.size());
+        assertTrue(snapshot2.isEmpty(), "Snapshot should be empty after clear");
+    }
+
+    @Test
+    @DisplayName("should detect removeFirst() on children list")
+    void testExternalRemoveFirstInvalidatesCache() {
+        container.add(child1);
+        container.add(child2);
+        container.add(child3);
+        assertEquals(3, container.getChildren().size());
+
+        // Get snapshot to populate cache
+        List<Component> snapshot1 = container.getChildrenSnapshot();
+        assertEquals(3, snapshot1.size());
+        assertTrue(snapshot1.contains(child1));
+
+        // External mutation: removeFirst via getChildren()
+        // Size changes 3→2 but this tests modCount detection
+        container.getChildren().removeFirst();
+        assertEquals(2, container.getChildren().size());
+
+        // Next snapshot should detect the mutation via modCount
+        List<Component> snapshot2 = container.getChildrenSnapshot();
+        assertEquals(2, snapshot2.size());
+        assertFalse(snapshot2.contains(child1), "First child should be removed from snapshot");
+        assertTrue(snapshot2.contains(child2), "Second child should remain");
+    }
+
+    @Test
+    @DisplayName("should detect concurrent mutation bypassing size check")
+    void testSameSizeMutationInvalidatesCache() {
+        container.add(child1);
+        container.add(child2);
+        assertEquals(2, container.getChildren().size());
+
+        // Get snapshot to populate cache
+        List<Component> snapshot1 = container.getChildrenSnapshot();
+        assertEquals(2, snapshot1.size());
+        assertSame(child1, snapshot1.get(0));
+        assertSame(child2, snapshot1.get(1));
+
+        // External mutation: remove and add different child (same size 2→2)
+        // Old cache check (size-only) would NOT detect this
+        container.getChildren().remove(child1);
+        container.getChildren().add(child3);
+        assertEquals(2, container.getChildren().size());
+
+        // Next snapshot should detect the mutation via modCount
+        List<Component> snapshot2 = container.getChildrenSnapshot();
+        assertEquals(2, snapshot2.size());
+        assertFalse(snapshot2.contains(child1), "Old child should not be in snapshot");
+        assertTrue(snapshot2.contains(child3), "New child should be in snapshot");
     }
 
     @Test

@@ -5,6 +5,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("BorderLayout Tests")
@@ -101,5 +107,97 @@ class BorderLayoutTest {
         assertEquals("East", BorderLayout.EAST);
         assertEquals("West", BorderLayout.WEST);
         assertEquals("Center", BorderLayout.CENTER);
+    }
+
+    @Test
+    @DisplayName("should handle concurrent addLayoutComponent and layoutContainer without ConcurrentModificationException")
+    void testThreadSafetyConcurrentAddAndLayout() throws InterruptedException {
+        int numThreads = 10;
+        int numOperations = 100;
+        ExecutorService executor = Executors.newFixedThreadPool(numThreads);
+        CountDownLatch latch = new CountDownLatch(numThreads);
+        AtomicBoolean exceptionOccurred = new AtomicBoolean(false);
+
+        container.setSize(100, 50);
+
+        // Create multiple threads: some adding components, others laying out
+        for (int t = 0; t < numThreads; t++) {
+            final int threadId = t;
+            executor.submit(() -> {
+                try {
+                    for (int i = 0; i < numOperations; i++) {
+                        if (threadId % 2 == 0) {
+                            // Add threads: add layout components with different constraints
+                            Component comp = new Label("Component-" + threadId + "-" + i);
+                            String[] constraints = {BorderLayout.NORTH, BorderLayout.SOUTH, BorderLayout.EAST, BorderLayout.WEST, BorderLayout.CENTER};
+                            layout.addLayoutComponent(comp, constraints[i % constraints.length]);
+                        } else {
+                            // Layout threads: call layoutContainer
+                            container.doLayout();
+                        }
+                    }
+                } catch (Exception e) {
+                    exceptionOccurred.set(true);
+                    e.printStackTrace();
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        // Wait for all threads to complete
+        boolean completed = latch.await(10, TimeUnit.SECONDS);
+        executor.shutdown();
+
+        assertTrue(completed, "Threads did not complete in time");
+        assertFalse(exceptionOccurred.get(), "ConcurrentModificationException or other exception occurred during concurrent access");
+    }
+
+    @Test
+    @DisplayName("should handle rapid concurrent reads and writes without corruption")
+    void testThreadSafetyRapidConcurrency() throws InterruptedException {
+        int numThreads = 20;
+        int numOperations = 500;
+        ExecutorService executor = Executors.newFixedThreadPool(numThreads);
+        CountDownLatch latch = new CountDownLatch(numThreads);
+        AtomicBoolean exceptionOccurred = new AtomicBoolean(false);
+
+        container.setSize(100, 50);
+
+        // Add initial components
+        for (int i = 0; i < 5; i++) {
+            Component comp = new Label("Initial-" + i);
+            layout.addLayoutComponent(comp, BorderLayout.CENTER);
+            container.add(comp);
+        }
+
+        // High-contention scenario: many threads reading and writing simultaneously
+        for (int t = 0; t < numThreads; t++) {
+            executor.submit(() -> {
+                try {
+                    for (int i = 0; i < numOperations; i++) {
+                        if (Math.random() < 0.6) {
+                            // 60% reads
+                            container.doLayout();
+                        } else {
+                            // 40% writes
+                            Component comp = new Label("Concurrent-" + System.nanoTime());
+                            layout.addLayoutComponent(comp, BorderLayout.CENTER);
+                        }
+                    }
+                } catch (Exception e) {
+                    exceptionOccurred.set(true);
+                    e.printStackTrace();
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        boolean completed = latch.await(10, TimeUnit.SECONDS);
+        executor.shutdown();
+
+        assertTrue(completed, "Threads did not complete in time");
+        assertFalse(exceptionOccurred.get(), "Exception occurred during rapid concurrent access");
     }
 }

@@ -54,9 +54,19 @@ public abstract class IntegrationTestBase extends ComponentTestBase {
 
     @AfterEach
     void integrationTearDown() {
-        // Stop event loop
+        // Stop event loop and join async threads
         if (eventLoop != null) {
             eventLoop.stop();
+
+            // Join any async threads spawned by runAsync() with a 5-second timeout
+            // This prevents background threads from accessing cleaned-up resources
+            try {
+                eventLoop.joinAsyncThreads(5000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                // Log but continue cleanup
+                System.err.println("Interrupted while joining async threads: " + e.getMessage());
+            }
         }
 
         // Stop mock bridge
@@ -114,6 +124,53 @@ public abstract class IntegrationTestBase extends ComponentTestBase {
         for (char ch : text.toCharArray()) {
             injectKeyPress(ch);
         }
+    }
+
+    // ===== Component Interaction Helpers =====
+
+    /**
+     * Click a button using mouse event injection.
+     * This exercises the actual event dispatch path rather than calling doClick() directly.
+     * The mouse click is injected into MockNcursesBridge and processed through the event loop,
+     * ensuring the button's mouse event handlers are invoked.
+     *
+     * @param button The button to click
+     */
+    protected void clickButton(Button button) {
+        int centerX = button.getX() + button.getWidth() / 2;
+        int centerY = button.getY();
+        injectMouseClick(centerX, centerY);
+        runEventLoopCycle();
+    }
+
+    /**
+     * Activate a button using SPACE key press.
+     * This simulates keyboard-based activation (when the button is focused).
+     * Applications must implement their own focus management and key handler
+     * to route SPACE/ENTER to the focused button's doClick() method.
+     *
+     * @param button The button to activate
+     */
+    protected void activateButtonWithSpace(Button button) {
+        injectKeyPress(KEY_SPACE);
+        // Note: actual key handling must be implemented in the application's event processor
+        // This just injects the key; the app is responsible for routing it to the focused button
+        runEventLoopCycle();
+    }
+
+    /**
+     * Activate a button using ENTER key press.
+     * This simulates keyboard-based activation (when the button is focused).
+     * Applications must implement their own focus management and key handler
+     * to route SPACE/ENTER to the focused button's doClick() method.
+     *
+     * @param button The button to activate
+     */
+    protected void activateButtonWithEnter(Button button) {
+        injectKeyPress(KEY_ENTER);
+        // Note: actual key handling must be implemented in the application's event processor
+        // This just injects the key; the app is responsible for routing it to the focused button
+        runEventLoopCycle();
     }
 
     // ===== Rendering Helpers =====

@@ -14,8 +14,13 @@ public class Main {
         // Initialize ncurses (currently just stubs)
         try {
             NcursesBridge.init();
-        } catch (Exception e) {
+        } catch (UnsatisfiedLinkError | IllegalStateException e) {
+            // Expected in headless/CI environments without a TTY
             System.out.println("Note: ncurses not available, running in demo mode");
+        } catch (RuntimeException e) {
+            // Unexpected error - log and continue
+            System.out.println("Warning: Error during ncurses initialization (continuing in demo mode):");
+            e.printStackTrace();
         }
 
         try {
@@ -23,8 +28,12 @@ public class Main {
         } finally {
             try {
                 NcursesBridge.stop();
-            } catch (Exception e) {
-                // Ignore
+            } catch (UnsatisfiedLinkError | IllegalStateException e) {
+                // Expected - ncurses was never initialized or cleanup error
+            } catch (RuntimeException e) {
+                // Unexpected cleanup error
+                System.err.println("Warning: Error during ncurses cleanup:");
+                e.printStackTrace();
             }
         }
     }

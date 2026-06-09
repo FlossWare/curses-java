@@ -33,10 +33,9 @@ class ButtonInteractionIT extends IntegrationTestBase {
         // Verify button rendered
         BufferAssertions.assertBufferContains(buffer, 5, 5, "[");
 
-        // Simulate button click via programmatic action
-        button.doClick();
-        root.markDirty();
-        runEventLoopCycle();
+        // Simulate button click via mouse event injection through event loop
+        // This exercises the actual event dispatch mechanism
+        clickButton(button);
 
         // Verify action triggered
         assertTrue(clicked.get(), "Button action should have been triggered");
@@ -61,9 +60,8 @@ class ButtonInteractionIT extends IntegrationTestBase {
         runEventLoopCycle();
         BufferAssertions.assertBufferContains(buffer, 5, 5, "Not clicked");
 
-        // Click button
-        button.doClick();
-        runEventLoopCycle();
+        // Click button via mouse event injection through event loop
+        clickButton(button);
 
         // Verify label updated
         BufferAssertions.assertBufferContains(buffer, 5, 5, "Button was clicked!");
@@ -82,9 +80,8 @@ class ButtonInteractionIT extends IntegrationTestBase {
         setupFrame(button);
         runEventLoopCycle();
 
-        // Try to click disabled button
-        button.doClick();
-        runEventLoopCycle();
+        // Try to click disabled button via mouse event injection
+        clickButton(button);
 
         // Verify action not triggered
         assertEquals(0, clickCount.get(), "Disabled button should not trigger action");
@@ -106,17 +103,15 @@ class ButtonInteractionIT extends IntegrationTestBase {
         setupFrame(btn1, btn2);
         runEventLoopCycle();
 
-        // Click first button twice
-        btn1.doClick();
-        btn1.doClick();
-        runEventLoopCycles(2);
+        // Click first button twice via mouse events
+        clickButton(btn1);
+        clickButton(btn1);
 
         assertEquals(2, count1.get(), "Button 1 should be clicked twice");
         assertEquals(0, count2.get(), "Button 2 should not be clicked");
 
         // Click second button once
-        btn2.doClick();
-        runEventLoopCycle();
+        clickButton(btn2);
 
         assertEquals(2, count1.get(), "Button 1 count should not change");
         assertEquals(1, count2.get(), "Button 2 should be clicked once");
@@ -139,16 +134,14 @@ class ButtonInteractionIT extends IntegrationTestBase {
         setupFrame(button);
         runEventLoopCycle();
 
-        // Click button
-        button.doClick();
-        runEventLoopCycle();
+        // Click button via mouse event
+        clickButton(button);
 
         // Verify label updated
         assertEquals("Clicked 1 times", button.getLabel());
 
         // Click again
-        button.doClick();
-        runEventLoopCycle();
+        clickButton(button);
 
         assertEquals("Clicked 2 times", button.getLabel());
     }
@@ -185,8 +178,7 @@ class ButtonInteractionIT extends IntegrationTestBase {
         runEventLoopCycle();
 
         // Test 1: Submit without agreeing
-        submitButton.doClick();
-        runEventLoopCycle();
+        clickButton(submitButton);
         BufferAssertions.assertBufferContains(buffer, 5, 11, "Please agree to terms");
 
         // Test 2: Agree but no name
@@ -194,8 +186,7 @@ class ButtonInteractionIT extends IntegrationTestBase {
         root.markDirty();
         runEventLoopCycle();
 
-        submitButton.doClick();
-        runEventLoopCycle();
+        clickButton(submitButton);
         BufferAssertions.assertBufferContains(buffer, 5, 11, "Please enter a name");
 
         // Test 3: Complete form
@@ -203,8 +194,7 @@ class ButtonInteractionIT extends IntegrationTestBase {
         root.markDirty();
         runEventLoopCycle();
 
-        submitButton.doClick();
-        runEventLoopCycle();
+        clickButton(submitButton);
         BufferAssertions.assertBufferContains(buffer, 5, 11, "Form submitted: John Doe");
     }
 
@@ -230,10 +220,9 @@ class ButtonInteractionIT extends IntegrationTestBase {
         // Initial state - 0%
         assertEquals(0.0, progressBar.getPercent(), 0.01);
 
-        // Click 5 times
+        // Click 5 times via mouse events
         for (int i = 0; i < 5; i++) {
-            incrementButton.doClick();
-            runEventLoopCycle();
+            clickButton(incrementButton);
         }
 
         // Verify progress at 50%
@@ -241,8 +230,7 @@ class ButtonInteractionIT extends IntegrationTestBase {
 
         // Click 5 more times
         for (int i = 0; i < 5; i++) {
-            incrementButton.doClick();
-            runEventLoopCycle();
+            clickButton(incrementButton);
         }
 
         // Verify capped at 100%
@@ -271,10 +259,9 @@ class ButtonInteractionIT extends IntegrationTestBase {
         // Initial state - empty list
         assertEquals(0, list.getItems().size());
 
-        // Add 3 items
+        // Add 3 items via mouse clicks
         for (int i = 0; i < 3; i++) {
-            addButton.doClick();
-            runEventLoopCycle();
+            clickButton(addButton);
         }
 
         // Verify 3 items added

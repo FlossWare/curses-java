@@ -115,21 +115,23 @@ public class IndeterminateProgress extends Component {
     public void paint(char[][] buffer) {
         if (width <= 0) return;
 
+        int startY = getY();
+        int startX = getX();
+
         if (!active) {
             // When inactive, show empty bar
             for (int i = 0; i < width; i++) {
-                buffer[getY()][getX() + i] = emptyChar;
+                // Use safe buffer access to prevent ArrayIndexOutOfBoundsException (Issue #64)
+                writeCharToBuffer(buffer, startX + i, startY, emptyChar);
             }
             return;
         }
 
         // Draw the animated progress bar
         for (int i = 0; i < width; i++) {
-            if (i >= position && i < position + blockSize) {
-                buffer[getY()][getX() + i] = fillChar;
-            } else {
-                buffer[getY()][getX() + i] = emptyChar;
-            }
+            char c = (i >= position && i < position + blockSize) ? fillChar : emptyChar;
+            // Use safe buffer access to prevent ArrayIndexOutOfBoundsException (Issue #64)
+            writeCharToBuffer(buffer, startX + i, startY, c);
         }
     }
 }

@@ -1,5 +1,7 @@
 package org.flossware.curses.api;
 
+import java.util.List;
+
 /**
  * Provides a scrollable view of a lightweight component.
  */
@@ -56,29 +58,21 @@ public class ScrollPane extends Container {
 
     // Content size (max bounds of all children)
     public int getContentWidth() {
-        renderLock.lock();
-        try {
-            int maxWidth = 0;
-            for (Component child : children) {
-                maxWidth = Math.max(maxWidth, child.getX() + child.getWidth());
-            }
-            return maxWidth;
-        } finally {
-            renderLock.unlock();
+        List<Component> snapshot = getChildrenSnapshot();
+        int maxWidth = 0;
+        for (Component child : snapshot) {
+            maxWidth = Math.max(maxWidth, child.getX() + child.getWidth());
         }
+        return maxWidth;
     }
 
     public int getContentHeight() {
-        renderLock.lock();
-        try {
-            int maxHeight = 0;
-            for (Component child : children) {
-                maxHeight = Math.max(maxHeight, child.getY() + child.getHeight());
-            }
-            return maxHeight;
-        } finally {
-            renderLock.unlock();
+        List<Component> snapshot = getChildrenSnapshot();
+        int maxHeight = 0;
+        for (Component child : snapshot) {
+            maxHeight = Math.max(maxHeight, child.getY() + child.getHeight());
         }
+        return maxHeight;
     }
 
     // Scrollbar integration
@@ -124,35 +118,31 @@ public class ScrollPane extends Container {
 
     @Override
     public void paint(char[][] buffer) {
-        renderLock.lock();
-        try {
-            // Create a virtual buffer for children, then clip to viewport
-            // This is a simplified implementation
-            for (Component child : children) {
-                // Translate child coordinates by scroll offset
-                int childX = child.getX() - offsetX;
-                int childY = child.getY() - offsetY;
+        // Use snapshot to safely iterate children while performing temporary mutations.
+        // This preserves the Container's caching optimization (Issue #74).
+        List<Component> snapshot = getChildrenSnapshot();
+        for (Component child : snapshot) {
+            // Translate child coordinates by scroll offset
+            int childX = child.getX() - offsetX;
+            int childY = child.getY() - offsetY;
 
-                // Check if child is visible in viewport
-                if (childX + child.getWidth() >= 0 && childX < width &&
-                    childY + child.getHeight() >= 0 && childY < height) {
+            // Check if child is visible in viewport
+            if (childX + child.getWidth() >= 0 && childX < width &&
+                childY + child.getHeight() >= 0 && childY < height) {
 
-                    // Save original position
-                    int origX = child.getX();
-                    int origY = child.getY();
+                // Save original position
+                int origX = child.getX();
+                int origY = child.getY();
 
-                    // Temporarily set translated position
-                    child.setLocation(x + childX, y + childY);
+                // Temporarily set translated position
+                child.setLocation(x + childX, y + childY);
 
-                    // Paint child (it will be clipped by buffer bounds)
-                    child.paint(buffer);
+                // Paint child (it will be clipped by buffer bounds)
+                child.paint(buffer);
 
-                    // Restore original position
-                    child.setLocation(origX, origY);
-                }
+                // Restore original position
+                child.setLocation(origX, origY);
             }
-        } finally {
-            renderLock.unlock();
         }
     }
 }

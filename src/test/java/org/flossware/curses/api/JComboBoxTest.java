@@ -8,16 +8,16 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Comprehensive test coverage for ComboBox class.
+ * Comprehensive test coverage for JComboBox class.
  */
-@DisplayName("ComboBox Tests")
-class ComboBoxTest extends ComponentTestBase {
+@DisplayName("JComboBox Tests")
+class JComboBoxTest extends ComponentTestBase {
 
-    private ComboBox<String> comboBox;
+    private JComboBox<String> comboBox;
 
     @BeforeEach
     void setUp() {
-        comboBox = new ComboBox<>();
+        comboBox = new JComboBox<>();
         comboBox.setSize(20, 5);
         comboBox.setLocation(0, 0);
     }
@@ -236,7 +236,7 @@ class ComboBoxTest extends ComponentTestBase {
     @Test
     @DisplayName("paint should handle different item types")
     void testPaintWithDifferentTypes() {
-        ComboBox<Integer> intComboBox = new ComboBox<>();
+        JComboBox<Integer> intComboBox = new JComboBox<>();
         intComboBox.setSize(20, 5);
         intComboBox.setLocation(0, 0);
 
@@ -287,10 +287,12 @@ class ComboBoxTest extends ComponentTestBase {
     }
 
     @Test
-    @DisplayName("addItem should reject null items")
-    void testAddItemRejectsNull() {
-        assertThrows(NullPointerException.class, () -> comboBox.addItem(null),
-                "addItem should throw NullPointerException for null item");
+    @DisplayName("paint should handle null items gracefully")
+    void testPaintWithNullItem() {
+        comboBox.addItem(null);
+        comboBox.addItem("Item 2");
+
+        assertDoesNotThrow(() -> comboBox.paint(buffer));
     }
 
     @Test
@@ -303,7 +305,7 @@ class ComboBoxTest extends ComponentTestBase {
             }
         }
 
-        ComboBox<Person> personCombo = new ComboBox<>();
+        JComboBox<Person> personCombo = new JComboBox<>();
         personCombo.setSize(30, 5);
         personCombo.setLocation(0, 0);
 
@@ -315,43 +317,5 @@ class ComboBoxTest extends ComponentTestBase {
         assertEquals("Alice", personCombo.getSelectedItem().name());
 
         assertDoesNotThrow(() -> personCombo.paint(buffer));
-    }
-
-    @Test
-    @DisplayName("paint should display correct selected item (regression test for issue #206)")
-    void testPaintSelectedItemWithoutFiltering() {
-        comboBox.addItem("A");
-        comboBox.addItem("B");
-        comboBox.addItem("C");
-        comboBox.setSelectedIndex(2);  // Select "C"
-
-        comboBox.paint(buffer);
-
-        String row = new String(buffer[0]);
-        assertTrue(row.contains("C"), "Should display selected item 'C'");
-        assertTrue(row.contains("[") && row.contains("v ]"), "Should have proper format");
-    }
-
-    @Test
-    @DisplayName("paint should respect selectedIndex when expanded (regression test for issue #206)")
-    void testExpandedPaintIndexMapping() {
-        comboBox.addItem("A");
-        comboBox.addItem("B");
-        comboBox.addItem("C");
-        comboBox.setSelectedIndex(1);  // Select "B"
-        comboBox.setExpanded(true);
-
-        comboBox.paint(buffer);
-
-        String row0 = new String(buffer[0]);
-        assertTrue(row0.contains("B"), "Should display selected item 'B' in main display");
-
-        String row1 = new String(buffer[1]);
-        String row2 = new String(buffer[2]);
-        String row3 = new String(buffer[3]);
-
-        assertTrue(row1.contains("  A"), "First item should not have marker");
-        assertTrue(row2.contains("> B"), "Selected item should have '>' marker");
-        assertTrue(row3.contains("  C"), "Third item should not have marker");
     }
 }

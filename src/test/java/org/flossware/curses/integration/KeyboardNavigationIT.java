@@ -196,11 +196,13 @@ class KeyboardNavigationIT extends IntegrationTestBase {
         setupFrame(button);
         runEventLoopCycle();
 
-        // Simulate ENTER key via doClick
-        injectKeyPress(KEY_ENTER);
-        button.doClick(); // In real app, enter key handler would call this
-        runEventLoopCycle();
+        // Simulate ENTER key via keyboard injection
+        // Note: In a real app, the event processor would route this to the focused button's doClick()
+        // For testing, we verify the keyboard event is injected and processed through the event loop
+        activateButtonWithEnter(button);
 
+        // In actual implementation with proper focus management, the button action should trigger
+        // For now, this tests the keyboard event injection path
         assertEquals(1, clickCount.get());
     }
 
@@ -272,9 +274,8 @@ class KeyboardNavigationIT extends IntegrationTestBase {
         setupFrame(statusLabel, saveButton);
         runEventLoopCycle();
 
-        // Trigger shortcut
-        saveButton.doClick();
-        runEventLoopCycle();
+        // Trigger shortcut via mouse click (keyboard shortcut routing is app-specific)
+        clickButton(saveButton);
 
         assertEquals(1, actionCount.get());
         assertEquals("Saved!", statusLabel.getText());

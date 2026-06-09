@@ -18,15 +18,28 @@ public class ProgressBar extends Component {
     }
 
     public double getPercent() {
-        return percent;
+        renderLock.lock();
+        try {
+            return percent;
+        } finally {
+            renderLock.unlock();
+        }
     }
 
     @Override
     public void paint(char[][] buffer) {
-        int filledLength = (int) (getWidth() * percent);
-        for (int i = 0; i < getWidth(); i++) {
-            // Logic to write to the 2D back buffer [cite: 15]
-            buffer[getY()][getX() + i] = (i < filledLength) ? fillChar : emptyChar;
+        renderLock.lock();
+        try {
+            int filledLength = (int) (getWidth() * percent);
+            int startY = getY();
+            int startX = getX();
+            for (int i = 0; i < getWidth(); i++) {
+                // Use safe buffer access to prevent ArrayIndexOutOfBoundsException (Issue #64)
+                char c = (i < filledLength) ? fillChar : emptyChar;
+                writeCharToBuffer(buffer, startX + i, startY, c);
+            }
+        } finally {
+            renderLock.unlock();
         }
     }
 }
