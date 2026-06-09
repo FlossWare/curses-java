@@ -40,11 +40,21 @@ public class ScrollPane extends Container {
     }
 
     public int getOffsetX() {
-        return offsetX;
+        renderLock.lock();
+        try {
+            return offsetX;
+        } finally {
+            renderLock.unlock();
+        }
     }
 
     public int getOffsetY() {
-        return offsetY;
+        renderLock.lock();
+        try {
+            return offsetY;
+        } finally {
+            renderLock.unlock();
+        }
     }
 
     // Viewport size
@@ -77,21 +87,41 @@ public class ScrollPane extends Container {
 
     // Scrollbar integration
     public void setHorizontalScrollBar(ScrollBar scrollBar) {
-        this.horizontalScrollBar = scrollBar;
-        updateScrollBars();
+        renderLock.lock();
+        try {
+            this.horizontalScrollBar = scrollBar;
+            updateScrollBars();
+        } finally {
+            renderLock.unlock();
+        }
     }
 
     public void setVerticalScrollBar(ScrollBar scrollBar) {
-        this.verticalScrollBar = scrollBar;
-        updateScrollBars();
+        renderLock.lock();
+        try {
+            this.verticalScrollBar = scrollBar;
+            updateScrollBars();
+        } finally {
+            renderLock.unlock();
+        }
     }
 
     public ScrollBar getHorizontalScrollBar() {
-        return horizontalScrollBar;
+        renderLock.lock();
+        try {
+            return horizontalScrollBar;
+        } finally {
+            renderLock.unlock();
+        }
     }
 
     public ScrollBar getVerticalScrollBar() {
-        return verticalScrollBar;
+        renderLock.lock();
+        try {
+            return verticalScrollBar;
+        } finally {
+            renderLock.unlock();
+        }
     }
 
     private void updateScrollBars() {

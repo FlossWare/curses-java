@@ -31,6 +31,7 @@ public class ScrollBar extends Component {
         } finally {
             renderLock.unlock();
         }
+<<<<<<< Updated upstream
     }
 
     public int getMinimum() {
@@ -40,6 +41,8 @@ public class ScrollBar extends Component {
         } finally {
             renderLock.unlock();
         }
+=======
+>>>>>>> Stashed changes
     }
 
     public void setMinimum(int minimum) {

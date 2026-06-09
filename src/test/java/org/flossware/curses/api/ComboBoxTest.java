@@ -290,7 +290,25 @@ class ComboBoxTest extends ComponentTestBase {
     @DisplayName("addItem should reject null items")
     void testAddItemRejectsNull() {
         assertThrows(NullPointerException.class, () -> comboBox.addItem(null),
+<<<<<<< Updated upstream
                 "addItem should throw NullPointerException for null item");
+=======
+                "addItem should throw NullPointerException for null items");
+    }
+
+    @Test
+    @DisplayName("paint should correctly display selected item (issue #206)")
+    void testPaintSelectedItemIndexMappingIssue206() {
+        comboBox.addItem("A");
+        comboBox.addItem("B");
+        comboBox.addItem("C");
+        comboBox.setSelectedIndex(2); // Select "C"
+
+        comboBox.paint(buffer);
+
+        String row = new String(buffer[0]);
+        assertTrue(row.contains("[ C v ]"), "Should display 'C' at selectedIndex 2, not empty");
+>>>>>>> Stashed changes
     }
 
     @Test

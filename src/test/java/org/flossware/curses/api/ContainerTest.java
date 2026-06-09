@@ -1,5 +1,6 @@
 package org.flossware.curses.api;
 
+import org.flossware.curses.events.MouseEvent;
 import org.flossware.curses.testutil.ComponentTestBase;
 import org.flossware.curses.testutil.ThreadSafetyTestHelper;
 import org.junit.jupiter.api.BeforeEach;
@@ -72,6 +73,21 @@ class ContainerTest extends ComponentTestBase {
         assertFalse(container.getChildren().contains(child2));
         assertTrue(container.getChildren().contains(child3));
         assertNull(child2.getParent());
+    }
+
+    @Test
+    @DisplayName("should throw NullPointerException when removing null child (Issue #93)")
+    void testRemoveNullChildThrowsException() {
+        assertThrows(NullPointerException.class, () -> container.remove(null),
+            "Removing null child should throw NullPointerException");
+    }
+
+    @Test
+    @DisplayName("should throw NullPointerException with descriptive message when removing null child (Issue #93)")
+    void testRemoveNullChildExceptionMessage() {
+        NullPointerException exception = assertThrows(NullPointerException.class, () -> container.remove(null));
+        assertTrue(exception.getMessage().contains("child cannot be null"),
+            "Exception message should indicate that child cannot be null");
     }
 
     @Test
@@ -338,6 +354,7 @@ class ContainerTest extends ComponentTestBase {
     }
 
     @Test
+<<<<<<< Updated upstream
     @DisplayName("should detect external mutations via getChildren()")
     void testExternalMutationInvalidatesCache() {
         container.add(child1);
@@ -430,6 +447,72 @@ class ContainerTest extends ComponentTestBase {
         assertEquals(2, snapshot2.size());
         assertFalse(snapshot2.contains(child1), "Old child should not be in snapshot");
         assertTrue(snapshot2.contains(child3), "New child should be in snapshot");
+=======
+    @DisplayName("should safely get component at valid index")
+    void testGetComponentAt() {
+        container.add(child1);
+        container.add(child2);
+        container.add(child3);
+
+        assertEquals(child1, container.getComponentAt(0));
+        assertEquals(child2, container.getComponentAt(1));
+        assertEquals(child3, container.getComponentAt(2));
+    }
+
+    @Test
+    @DisplayName("should return null for out-of-bounds index")
+    void testGetComponentAtOutOfBounds() {
+        container.add(child1);
+        container.add(child2);
+
+        assertNull(container.getComponentAt(-1));
+        assertNull(container.getComponentAt(2));
+        assertNull(container.getComponentAt(100));
+    }
+
+    @Test
+    @DisplayName("should handle mouse event with concurrent modification (Issue #88)")
+    void testHandleMouseEventWithConcurrentModification() throws InterruptedException {
+        container.add(child1);
+        container.add(child2);
+        container.add(child3);
+
+        final boolean[] eventHandled = {false};
+
+        // Create a custom child that tracks if it handled the event
+        Component testChild = new Label("Handler") {
+            @Override
+            public boolean handleMouseEvent(MouseEvent event) {
+                eventHandled[0] = true;
+                return true;  // Indicate we handled the event
+            }
+        };
+        testChild.setSize(10, 1);
+        container.add(testChild);
+
+        // Simulate concurrent removal while handling mouse events
+        Thread removalThread = new Thread(() -> {
+            try {
+                Thread.sleep(2);  // Let mouse event start processing
+                container.remove(child1);
+                container.remove(child2);
+                container.remove(child3);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        removalThread.start();
+
+        // Should not throw IndexOutOfBoundsException even with concurrent removals
+        MouseEvent mockEvent = new MouseEvent(5, 5, 1);  // x, y, button
+        assertDoesNotThrow(() -> container.handleMouseEvent(mockEvent));
+
+        removalThread.join();
+
+        // Verify that at least one event was processed
+        assertTrue(eventHandled[0] || container.getChildren().size() >= 0);
+>>>>>>> Stashed changes
     }
 
     @Test

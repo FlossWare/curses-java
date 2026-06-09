@@ -30,10 +30,24 @@ class ButtonTest extends ComponentTestBase {
     }
 
     @Test
+    @DisplayName("should reject null label in constructor")
+    void testNullLabelInConstructor() {
+        NullPointerException exception = assertThrows(NullPointerException.class, () -> new Button(null));
+        assertEquals("label cannot be null", exception.getMessage());
+    }
+
+    @Test
     @DisplayName("should set and get label")
     void testSetLabel() {
         button.setLabel("New Label");
         assertEquals("New Label", button.getLabel());
+    }
+
+    @Test
+    @DisplayName("should reject null label in setLabel()")
+    void testNullLabelInSetLabel() {
+        NullPointerException exception = assertThrows(NullPointerException.class, () -> button.setLabel(null));
+        assertEquals("label cannot be null", exception.getMessage());
     }
 
     @Test

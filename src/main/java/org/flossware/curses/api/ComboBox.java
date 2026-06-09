@@ -15,7 +15,11 @@ public class ComboBox<T> extends Component {
     }
 
     public void addItem(T item) {
+<<<<<<< Updated upstream
         Objects.requireNonNull(item, "ComboBox items cannot be null");
+=======
+        Objects.requireNonNull(item, "Item cannot be null");
+>>>>>>> Stashed changes
         renderLock.lock();
         try {
             items.add(item);
@@ -88,6 +92,7 @@ public class ComboBox<T> extends Component {
         // Take snapshot of items and selectedIndex under lock to avoid
         // ConcurrentModificationException and ArrayIndexOutOfBoundsException
         // when addItem()/removeItem() modify the list on another thread.
+        // Note: items never contains nulls because addItem() enforces non-null via Objects.requireNonNull()
         List<T> snapshot;
         int selIdx;
         boolean isExpanded;

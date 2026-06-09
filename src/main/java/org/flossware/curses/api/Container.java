@@ -20,6 +20,7 @@ public class Container extends Component {
     // Snapshot cache to reduce GC pressure (Issue #71)
     private List<Component> cachedSnapshot;
     private int lastSnapshotSize = -1;
+<<<<<<< Updated upstream
     private long modificationCount = 0;
     private long cachedSnapshotModCount = -1;
 
@@ -27,6 +28,13 @@ public class Container extends Component {
         // Wrap children list with mutation tracking to detect external modifications (Issue #207)
         this.children = new MutationTrackingList(new ArrayList<>(), () -> modificationCount++);
     }
+=======
+    // Modification counter to detect any changes (size or mutation).
+    // Incremented on any structural change to children via add/remove.
+    // Used instead of size check to catch same-size mutations (Issue #207).
+    private int modCount = 0;
+    private int cachedModCount = -1;
+>>>>>>> Stashed changes
 
     public SequencedCollection<Component> getChildren() {
         return children;
@@ -100,6 +108,7 @@ public class Container extends Component {
      *
      * Returns true if children list has been modified since last snapshot was cached.
      */
+<<<<<<< Updated upstream
     private boolean detectExternalMutation() {
         return modificationCount != cachedSnapshotModCount;
     }
@@ -127,11 +136,18 @@ public class Container extends Component {
         } finally {
             renderLock.unlock();
         }
+=======
+    private void invalidateSnapshot() {
+        lastSnapshotSize = -1;
+        cachedSnapshot = null;
+        modCount++;  // Track mutation to catch same-size changes (Issue #207)
+>>>>>>> Stashed changes
     }
 
     @Override
     public void paint(char[][] buffer) {
         // Use cached snapshot to avoid ArrayList allocation on every frame (Issue #71)
+<<<<<<< Updated upstream
         // Detects both size changes and external mutations via modification counter (Issue #207)
         // This optimization reduces GC pressure at high frame rates when children list is stable.
         List<Component> snapshot;
@@ -142,6 +158,18 @@ public class Container extends Component {
                 cachedSnapshot = new ArrayList<>(children);
                 cachedSnapshotModCount = modificationCount;
                 lastSnapshotSize = children.size();
+=======
+        // Check modification counter to detect any changes, not just size changes (Issue #207).
+        // This catches mutations via external access (e.g., getChildren().add()) that bypass
+        // invalidateSnapshot(). The modCount approach is more reliable than size checks.
+        List<Component> snapshot;
+        renderLock.lock();
+        try {
+            if (cachedSnapshot == null || cachedModCount != modCount) {
+                // Children list changed (in size or content), create new snapshot
+                cachedSnapshot = new ArrayList<>(children);
+                cachedModCount = modCount;
+>>>>>>> Stashed changes
             }
             snapshot = cachedSnapshot;
         } finally {
@@ -157,14 +185,40 @@ public class Container extends Component {
         }
     }
 
+    /**
+     * Safely retrieves a component at the specified index.
+     * This method provides thread-safe access to the children list with bounds checking.
+     * Issue #88: Ensures safe array access without IndexOutOfBoundsException.
+     *
+     * @param index the index of the component to retrieve
+     * @return the component at the specified index, or null if index is out of bounds
+     */
+    public Component getComponentAt(int index) {
+        renderLock.lock();
+        try {
+            if (index >= 0 && index < children.size()) {
+                return children.get(index);
+            }
+            return null;
+        } finally {
+            renderLock.unlock();
+        }
+    }
+
     @Override
     public boolean handleMouseEvent(MouseEvent event) {
         // First try to dispatch to children (in reverse order for z-ordering)
         renderLock.lock();
         try {
-            for (int i = children.size() - 1; i >= 0; i--) {
-                if (children.get(i).handleMouseEvent(event)) {
-                    return true;  // Event was handled by a child
+            int size = children.size();
+            for (int i = size - 1; i >= 0; i--) {
+                // Issue #88: Re-check bounds on each iteration to handle concurrent modifications
+                // Although renderLock protects during iteration, we re-check for safety
+                if (i >= 0 && i < children.size()) {
+                    Component child = children.get(i);
+                    if (child != null && child.handleMouseEvent(event)) {
+                        return true;  // Event was handled by a child
+                    }
                 }
             }
         } finally {

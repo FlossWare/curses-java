@@ -1,5 +1,7 @@
 package org.flossware.curses.api;
 
+import java.util.Objects;
+
 /**
  * A terminal UI button component that responds to keyboard and mouse events.
  *
@@ -27,9 +29,10 @@ public class Button extends Component {
      * Creates a new button with the specified label.
      *
      * @param label the button text to display
+     * @throws NullPointerException if label is null
      */
     public Button(String label) {
-        this.label = label;
+        this.label = Objects.requireNonNull(label, "label cannot be null");
     }
 
     /**
@@ -38,8 +41,10 @@ public class Button extends Component {
      * <p>This method is thread-safe and triggers a repaint.
      *
      * @param label the new button text
+     * @throws NullPointerException if label is null
      */
     public void setLabel(String label) {
+        Objects.requireNonNull(label, "label cannot be null");
         renderLock.lock();
         try {
             this.label = label;

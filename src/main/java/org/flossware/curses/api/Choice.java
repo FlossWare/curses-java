@@ -46,7 +46,12 @@ public class Choice extends Component {
     }
 
     public int getSelectedIndex() {
-        return selectedIndex;
+        renderLock.lock();
+        try {
+            return selectedIndex;
+        } finally {
+            renderLock.unlock();
+        }
     }
 
     public String getSelectedItem() {
@@ -59,7 +64,12 @@ public class Choice extends Component {
     }
 
     public int getItemCount() {
-        return items.size();
+        renderLock.lock();
+        try {
+            return items.size();
+        } finally {
+            renderLock.unlock();
+        }
     }
 
     @Override

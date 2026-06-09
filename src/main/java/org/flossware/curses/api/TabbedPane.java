@@ -14,6 +14,11 @@ public class TabbedPane extends Container {
     private final SequencedMap<String, Container> tabs = new LinkedHashMap<>();
     private String activeTabLabel;
 
+    // Snapshot cache to reduce GC pressure (Issue #77)
+    private List<String> cachedTabList;
+    private int modCount = 0;
+    private int cachedModCount = -1;
+
     public void addTab(String label, Container contents) {
         renderLock.lock();
         try {

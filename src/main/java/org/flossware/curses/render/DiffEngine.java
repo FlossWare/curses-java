@@ -109,13 +109,36 @@ public class DiffEngine {
     public void render() {
         bufferLock.lock(); // Compatible with Virtual Threads
         try {
+            // Defensive bounds validation before access
+            if (backBuffer == null || backBuffer.length == 0) {
+                return;
+            }
+
             int minY = hasDirtyRegion ? dirtyMinY : 0;
             int maxY = hasDirtyRegion ? dirtyMaxY : backBuffer.length;
             int minX = hasDirtyRegion ? dirtyMinX : 0;
             int maxX = hasDirtyRegion ? dirtyMaxX : backBuffer[0].length;
 
-            for (int y = minY; y < maxY && y < backBuffer.length; y++) {
-                for (int x = minX; x < maxX && x < backBuffer[y].length; x++) {
+            // Ensure bounds are within valid array limits
+            minY = Math.max(0, Math.min(minY, backBuffer.length));
+            maxY = Math.max(minY, Math.min(maxY, backBuffer.length));
+
+            for (int y = minY; y < maxY; y++) {
+                // Defensive check: ensure row exists and has valid length
+                if (y >= backBuffer.length || backBuffer[y] == null) {
+                    continue;
+                }
+
+                // Ensure x bounds are within the current row's length
+                int rowMinX = Math.max(0, Math.min(minX, backBuffer[y].length));
+                int rowMaxX = Math.max(rowMinX, Math.min(maxX, backBuffer[y].length));
+
+                for (int x = rowMinX; x < rowMaxX; x++) {
+                    // Defensive bounds check before array access
+                    if (x < 0 || x >= backBuffer[y].length || x >= currentScreen[y].length) {
+                        continue;
+                    }
+
                     // Only send ANSI codes if the character has changed
                     if (backBuffer[y][x] != currentScreen[y][x]) {
                         sendChar(x, y, backBuffer[y][x]);

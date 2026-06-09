@@ -64,6 +64,10 @@ public class BorderLayout implements LayoutManager {
             remainingWidth -= east.getWidth();
         }
 
+        // Ensure remainingWidth and remainingHeight are non-negative
+        remainingWidth = Math.max(0, remainingWidth);
+        remainingHeight = Math.max(0, remainingHeight);
+
         if (center != null) {
             center.setLocation(currentX, currentY);
             center.setSize(remainingWidth, remainingHeight);
