@@ -175,8 +175,8 @@ class JFrameTest extends ComponentTestBase {
         frame.setSize(30, 15);
         frame.setVisible(true);
 
-        org.flossware.jcurses.events.MouseEvent mouseEvent =
-            new org.flossware.jcurses.events.MouseEvent(20, 12, 1);
+        org.flossware.curses.events.MouseEvent mouseEvent =
+            new org.flossware.curses.events.MouseEvent(20, 12, 1);
 
         assertDoesNotThrow(() -> frame.handleMouseEvent(mouseEvent));
     }
@@ -185,15 +185,15 @@ class JFrameTest extends ComponentTestBase {
     @DisplayName("should consume mouse event when drag starts")
     void testDragConsumeMouseEvent() {
         // Cancel any existing drag from previous tests
-        org.flossware.jcurses.api.WindowDragManager.getInstance().cancelDrag();
+        org.flossware.curses.api.WindowDragManager.getInstance().cancelDrag();
 
         frame.setLocation(10, 10);
         frame.setSize(30, 15);
         frame.setVisible(true);
 
         // Click on title bar to start drag (BUTTON1_PRESSED = 0x2)
-        org.flossware.jcurses.events.MouseEvent titleBarClick =
-            new org.flossware.jcurses.events.MouseEvent(20, 10, 0x2);
+        org.flossware.curses.events.MouseEvent titleBarClick =
+            new org.flossware.curses.events.MouseEvent(20, 10, 0x2);
 
         boolean consumed = frame.handleMouseEvent(titleBarClick);
         assertTrue(consumed, "Title bar click should be consumed by drag manager");
@@ -303,8 +303,8 @@ class JFrameTest extends ComponentTestBase {
         frame.add(child);
 
         // Click on child (inside frame but not on border)
-        org.flossware.jcurses.events.MouseEvent event =
-            new org.flossware.jcurses.events.MouseEvent(20, 20, 0x4);
+        org.flossware.curses.events.MouseEvent event =
+            new org.flossware.curses.events.MouseEvent(20, 20, 0x4);
 
         frame.handleMouseEvent(event);
 

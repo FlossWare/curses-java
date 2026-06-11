@@ -182,7 +182,7 @@ class JTableTest extends ComponentTestBase {
         table.addRow("Bob", "25");
 
         table.sortByColumn(0);
-        assertEquals(JTable.SORT_ASCENDING, table.getSortDirection());
+        assertEquals(Table.SORT_ASCENDING, table.getSortDirection());
         assertEquals(0, table.getSortColumn());
     }
 
@@ -197,7 +197,7 @@ class JTableTest extends ComponentTestBase {
         table.sortByColumn(0); // First click: ascending
         table.sortByColumn(0); // Second click: descending
 
-        assertEquals(JTable.SORT_DESCENDING, table.getSortDirection());
+        assertEquals(Table.SORT_DESCENDING, table.getSortDirection());
         assertEquals(0, table.getSortColumn());
     }
 
@@ -213,7 +213,7 @@ class JTableTest extends ComponentTestBase {
         table.sortByColumn(0); // Descending
         table.sortByColumn(0); // Reset
 
-        assertEquals(JTable.SORT_NONE, table.getSortDirection());
+        assertEquals(Table.SORT_NONE, table.getSortDirection());
         assertEquals(-1, table.getSortColumn());
     }
 
@@ -229,7 +229,7 @@ class JTableTest extends ComponentTestBase {
         table.sortByColumn(0); // None
         table.sortByColumn(0); // Back to Ascending
 
-        assertEquals(JTable.SORT_ASCENDING, table.getSortDirection());
+        assertEquals(Table.SORT_ASCENDING, table.getSortDirection());
         assertEquals(0, table.getSortColumn());
     }
 
@@ -244,7 +244,7 @@ class JTableTest extends ComponentTestBase {
         table.handleMouseEvent(clickEvent);
 
         assertEquals(0, table.getSortColumn());
-        assertEquals(JTable.SORT_ASCENDING, table.getSortDirection());
+        assertEquals(Table.SORT_ASCENDING, table.getSortDirection());
     }
 
     @Test
@@ -450,7 +450,7 @@ class JTableTest extends ComponentTestBase {
         table.sortByColumn(0);
         table.sortByColumn(0);
 
-        assertEquals(JTable.SORT_DESCENDING, table.getSortDirection());
+        assertEquals(Table.SORT_DESCENDING, table.getSortDirection());
 
         table.paint(buffer);
 

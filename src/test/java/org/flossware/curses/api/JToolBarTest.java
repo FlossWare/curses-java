@@ -32,7 +32,7 @@ class JToolBarTest extends ComponentTestBase {
     @Test
     @DisplayName("Constructor with HORIZONTAL orientation")
     void testConstructorHorizontal() {
-        ToolBar horizontal = new ToolBar(JToolBar.HORIZONTAL);
+        ToolBar horizontal = new ToolBar(ToolBar.HORIZONTAL);
         assertNotNull(horizontal);
         assertDoesNotThrow(() -> horizontal.paint(buffer));
     }
@@ -40,7 +40,7 @@ class JToolBarTest extends ComponentTestBase {
     @Test
     @DisplayName("Constructor with VERTICAL orientation")
     void testConstructorVertical() {
-        ToolBar vertical = new ToolBar(JToolBar.VERTICAL);
+        ToolBar vertical = new ToolBar(ToolBar.VERTICAL);
         assertNotNull(vertical);
         assertDoesNotThrow(() -> vertical.paint(buffer));
     }
@@ -48,17 +48,17 @@ class JToolBarTest extends ComponentTestBase {
     @Test
     @DisplayName("setOrientation should change orientation")
     void testSetOrientation() {
-        toolBar.setOrientation(JToolBar.VERTICAL);
+        toolBar.setOrientation(ToolBar.VERTICAL);
         assertDoesNotThrow(() -> toolBar.paint(buffer));
 
-        toolBar.setOrientation(JToolBar.HORIZONTAL);
+        toolBar.setOrientation(ToolBar.HORIZONTAL);
         assertDoesNotThrow(() -> toolBar.paint(buffer));
     }
 
     @Test
     @DisplayName("doLayout should arrange children horizontally")
     void testDoLayoutHorizontal() {
-        toolBar.setOrientation(JToolBar.HORIZONTAL);
+        toolBar.setOrientation(ToolBar.HORIZONTAL);
 
         Button btn1 = new Button("Button 1");
         btn1.setSize(10, 1);
@@ -87,7 +87,7 @@ class JToolBarTest extends ComponentTestBase {
     @Test
     @DisplayName("doLayout should arrange children vertically")
     void testDoLayoutVertical() {
-        toolBar.setOrientation(JToolBar.VERTICAL);
+        toolBar.setOrientation(ToolBar.VERTICAL);
 
         Button btn1 = new Button("Button 1");
         btn1.setSize(10, 1);
@@ -126,10 +126,10 @@ class JToolBarTest extends ComponentTestBase {
         btn.setSize(10, 1);
         toolBar.add(btn);
 
-        toolBar.setOrientation(JToolBar.VERTICAL);
+        toolBar.setOrientation(ToolBar.VERTICAL);
         assertDoesNotThrow(() -> toolBar.paint(buffer));
 
-        toolBar.setOrientation(JToolBar.HORIZONTAL);
+        toolBar.setOrientation(ToolBar.HORIZONTAL);
         assertDoesNotThrow(() -> toolBar.paint(buffer));
     }
 
@@ -156,14 +156,14 @@ class JToolBarTest extends ComponentTestBase {
     @Test
     @DisplayName("Constants should have expected values")
     void testConstants() {
-        assertEquals(0, JToolBar.HORIZONTAL);
-        assertEquals(1, JToolBar.VERTICAL);
+        assertEquals(0, ToolBar.HORIZONTAL);
+        assertEquals(1, ToolBar.VERTICAL);
     }
 
     @Test
     @DisplayName("should handle mixed component types")
     void testMixedComponentTypes() {
-        toolBar.setOrientation(JToolBar.HORIZONTAL);
+        toolBar.setOrientation(ToolBar.HORIZONTAL);
 
         Button button = new Button("Save");
         button.setSize(10, 1);
@@ -214,7 +214,7 @@ class JToolBarTest extends ComponentTestBase {
     @Test
     @DisplayName("doLayout should handle zero-sized children")
     void testDoLayoutZeroSizedChildren() {
-        toolBar.setOrientation(JToolBar.HORIZONTAL);
+        toolBar.setOrientation(ToolBar.HORIZONTAL);
 
         Label label1 = new Label("A");
         label1.setSize(0, 0);
@@ -240,12 +240,12 @@ class JToolBarTest extends ComponentTestBase {
         toolBar.add(btn2);
 
         // Start horizontal
-        toolBar.setOrientation(JToolBar.HORIZONTAL);
+        toolBar.setOrientation(ToolBar.HORIZONTAL);
         int horizontalBtn2X = btn2.getX();
         int horizontalBtn2Y = btn2.getY();
 
         // Switch to vertical
-        toolBar.setOrientation(JToolBar.VERTICAL);
+        toolBar.setOrientation(ToolBar.VERTICAL);
         int verticalBtn2X = btn2.getX();
         int verticalBtn2Y = btn2.getY();
 

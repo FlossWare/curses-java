@@ -15,7 +15,7 @@ class JScrollBarTest extends ComponentTestBase {
     @Test
     @DisplayName("Constructor should create horizontal scrollbar")
     void testConstructorHorizontal() {
-        ScrollBar scrollBar = new ScrollBar(JScrollBar.HORIZONTAL);
+        ScrollBar scrollBar = new ScrollBar(ScrollBar.HORIZONTAL);
         assertNotNull(scrollBar);
         assertEquals(0, scrollBar.getValue());
     }
@@ -23,7 +23,7 @@ class JScrollBarTest extends ComponentTestBase {
     @Test
     @DisplayName("Constructor should create vertical scrollbar")
     void testConstructorVertical() {
-        ScrollBar scrollBar = new ScrollBar(JScrollBar.VERTICAL);
+        ScrollBar scrollBar = new ScrollBar(ScrollBar.VERTICAL);
         assertNotNull(scrollBar);
         assertEquals(0, scrollBar.getValue());
     }
@@ -31,7 +31,7 @@ class JScrollBarTest extends ComponentTestBase {
     @Test
     @DisplayName("setValue should set value within range")
     void testSetValue() {
-        ScrollBar scrollBar = new ScrollBar(JScrollBar.VERTICAL);
+        ScrollBar scrollBar = new ScrollBar(ScrollBar.VERTICAL);
         scrollBar.setSize(1, 20);
         scrollBar.setLocation(0, 0);
 
@@ -42,7 +42,7 @@ class JScrollBarTest extends ComponentTestBase {
     @Test
     @DisplayName("setValue should clamp to minimum")
     void testSetValueClampMinimum() {
-        ScrollBar scrollBar = new ScrollBar(JScrollBar.VERTICAL);
+        ScrollBar scrollBar = new ScrollBar(ScrollBar.VERTICAL);
         scrollBar.setSize(1, 20);
         scrollBar.setLocation(0, 0);
         scrollBar.setMinimum(10);
@@ -55,7 +55,7 @@ class JScrollBarTest extends ComponentTestBase {
     @Test
     @DisplayName("setValue should clamp to maximum minus visible amount")
     void testSetValueClampMaximum() {
-        ScrollBar scrollBar = new ScrollBar(JScrollBar.VERTICAL);
+        ScrollBar scrollBar = new ScrollBar(ScrollBar.VERTICAL);
         scrollBar.setSize(1, 20);
         scrollBar.setLocation(0, 0);
         scrollBar.setMinimum(0);
@@ -69,7 +69,7 @@ class JScrollBarTest extends ComponentTestBase {
     @Test
     @DisplayName("setMinimum should update minimum")
     void testSetMinimum() {
-        ScrollBar scrollBar = new ScrollBar(JScrollBar.VERTICAL);
+        ScrollBar scrollBar = new ScrollBar(ScrollBar.VERTICAL);
         scrollBar.setSize(1, 20);
         scrollBar.setLocation(0, 0);
 
@@ -80,7 +80,7 @@ class JScrollBarTest extends ComponentTestBase {
     @Test
     @DisplayName("setMaximum should update maximum")
     void testSetMaximum() {
-        ScrollBar scrollBar = new ScrollBar(JScrollBar.VERTICAL);
+        ScrollBar scrollBar = new ScrollBar(ScrollBar.VERTICAL);
         scrollBar.setSize(1, 20);
         scrollBar.setLocation(0, 0);
 
@@ -91,7 +91,7 @@ class JScrollBarTest extends ComponentTestBase {
     @Test
     @DisplayName("setVisibleAmount should update visible amount")
     void testSetVisibleAmount() {
-        ScrollBar scrollBar = new ScrollBar(JScrollBar.VERTICAL);
+        ScrollBar scrollBar = new ScrollBar(ScrollBar.VERTICAL);
         scrollBar.setSize(1, 20);
         scrollBar.setLocation(0, 0);
 
@@ -102,7 +102,7 @@ class JScrollBarTest extends ComponentTestBase {
     @Test
     @DisplayName("paint should render horizontal scrollbar")
     void testPaintHorizontal() {
-        ScrollBar scrollBar = new ScrollBar(JScrollBar.HORIZONTAL);
+        ScrollBar scrollBar = new ScrollBar(ScrollBar.HORIZONTAL);
         scrollBar.setSize(20, 1);
         scrollBar.setLocation(0, 0);
         scrollBar.setValue(50);
@@ -117,7 +117,7 @@ class JScrollBarTest extends ComponentTestBase {
     @Test
     @DisplayName("paint should render vertical scrollbar")
     void testPaintVertical() {
-        ScrollBar scrollBar = new ScrollBar(JScrollBar.VERTICAL);
+        ScrollBar scrollBar = new ScrollBar(ScrollBar.VERTICAL);
         scrollBar.setSize(1, 20);
         scrollBar.setLocation(0, 0);
         scrollBar.setValue(50);
@@ -139,7 +139,7 @@ class JScrollBarTest extends ComponentTestBase {
     @Test
     @DisplayName("paint horizontal should handle zero range")
     void testPaintHorizontalZeroRange() {
-        ScrollBar scrollBar = new ScrollBar(JScrollBar.HORIZONTAL);
+        ScrollBar scrollBar = new ScrollBar(ScrollBar.HORIZONTAL);
         scrollBar.setSize(20, 1);
         scrollBar.setLocation(0, 0);
         scrollBar.setMinimum(50);
@@ -151,7 +151,7 @@ class JScrollBarTest extends ComponentTestBase {
     @Test
     @DisplayName("paint vertical should handle zero range")
     void testPaintVerticalZeroRange() {
-        ScrollBar scrollBar = new ScrollBar(JScrollBar.VERTICAL);
+        ScrollBar scrollBar = new ScrollBar(ScrollBar.VERTICAL);
         scrollBar.setSize(1, 20);
         scrollBar.setLocation(0, 0);
         scrollBar.setMinimum(50);
@@ -163,7 +163,7 @@ class JScrollBarTest extends ComponentTestBase {
     @Test
     @DisplayName("paint horizontal should handle small width")
     void testPaintHorizontalSmallWidth() {
-        ScrollBar scrollBar = new ScrollBar(JScrollBar.HORIZONTAL);
+        ScrollBar scrollBar = new ScrollBar(ScrollBar.HORIZONTAL);
         scrollBar.setSize(1, 1);
         scrollBar.setLocation(0, 0);
 
@@ -173,7 +173,7 @@ class JScrollBarTest extends ComponentTestBase {
     @Test
     @DisplayName("paint vertical should handle small height")
     void testPaintVerticalSmallHeight() {
-        ScrollBar scrollBar = new ScrollBar(JScrollBar.VERTICAL);
+        ScrollBar scrollBar = new ScrollBar(ScrollBar.VERTICAL);
         scrollBar.setSize(1, 1);
         scrollBar.setLocation(0, 0);
 
@@ -183,7 +183,7 @@ class JScrollBarTest extends ComponentTestBase {
     @Test
     @DisplayName("thumb position should change with value")
     void testThumbPositionChanges() {
-        ScrollBar scrollBar = new ScrollBar(JScrollBar.HORIZONTAL);
+        ScrollBar scrollBar = new ScrollBar(ScrollBar.HORIZONTAL);
         scrollBar.setSize(20, 1);
         scrollBar.setLocation(0, 0);
         scrollBar.setMinimum(0);
@@ -211,7 +211,7 @@ class JScrollBarTest extends ComponentTestBase {
     @Test
     @DisplayName("vertical scrollbar thumb should move with value")
     void testVerticalThumbPositionChanges() {
-        ScrollBar scrollBar = new ScrollBar(JScrollBar.VERTICAL);
+        ScrollBar scrollBar = new ScrollBar(ScrollBar.VERTICAL);
         scrollBar.setSize(1, 20);
         scrollBar.setLocation(0, 0);
         scrollBar.setMinimum(0);
@@ -249,7 +249,7 @@ class JScrollBarTest extends ComponentTestBase {
     @Test
     @DisplayName("should handle value at boundaries")
     void testValueAtBoundaries() {
-        ScrollBar scrollBar = new ScrollBar(JScrollBar.VERTICAL);
+        ScrollBar scrollBar = new ScrollBar(ScrollBar.VERTICAL);
         scrollBar.setSize(1, 20);
         scrollBar.setLocation(0, 0);
         scrollBar.setMinimum(0);
@@ -270,7 +270,7 @@ class JScrollBarTest extends ComponentTestBase {
     @Test
     @DisplayName("should be thread-safe")
     void testThreadSafety() throws InterruptedException {
-        ScrollBar scrollBar = new ScrollBar(JScrollBar.VERTICAL);
+        ScrollBar scrollBar = new ScrollBar(ScrollBar.VERTICAL);
         scrollBar.setSize(1, 20);
         scrollBar.setLocation(0, 0);
 
@@ -299,14 +299,14 @@ class JScrollBarTest extends ComponentTestBase {
     @Test
     @DisplayName("Constants should have expected values")
     void testConstants() {
-        assertEquals(0, JScrollBar.HORIZONTAL);
-        assertEquals(1, JScrollBar.VERTICAL);
+        assertEquals(0, ScrollBar.HORIZONTAL);
+        assertEquals(1, ScrollBar.VERTICAL);
     }
 
     @Test
     @DisplayName("should handle negative range gracefully")
     void testNegativeRange() {
-        ScrollBar scrollBar = new ScrollBar(JScrollBar.VERTICAL);
+        ScrollBar scrollBar = new ScrollBar(ScrollBar.VERTICAL);
         scrollBar.setSize(1, 20);
         scrollBar.setLocation(0, 0);
         scrollBar.setMinimum(100);
@@ -318,7 +318,7 @@ class JScrollBarTest extends ComponentTestBase {
     @Test
     @DisplayName("should handle large visible amount")
     void testLargeVisibleAmount() {
-        ScrollBar scrollBar = new ScrollBar(JScrollBar.VERTICAL);
+        ScrollBar scrollBar = new ScrollBar(ScrollBar.VERTICAL);
         scrollBar.setSize(1, 20);
         scrollBar.setLocation(0, 0);
         scrollBar.setMinimum(0);

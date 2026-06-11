@@ -15,7 +15,7 @@ class JSplitPaneTest extends ComponentTestBase {
     void setUp() {
         Component left = new Label("Left");
         Component right = new Label("Right");
-        widget = new SplitPane(JSplitPane.HORIZONTAL_SPLIT, left, right);
+        widget = new SplitPane(SplitPane.HORIZONTAL_SPLIT, left, right);
         widget.setSize(40, 10);
         widget.setLocation(0, 0);
     }

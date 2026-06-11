@@ -105,7 +105,7 @@ class JScrollPaneScrollingTest extends ComponentTestBase {
     @Test
     @DisplayName("should set and get horizontal scrollbar")
     void testHorizontalScrollBar() {
-        ScrollBar scrollBar = new ScrollBar(JScrollBar.HORIZONTAL);
+        ScrollBar scrollBar = new ScrollBar(ScrollBar.HORIZONTAL);
         scrollPane.setHorizontalScrollBar(scrollBar);
 
         assertEquals(scrollBar, scrollPane.getHorizontalScrollBar());
@@ -114,7 +114,7 @@ class JScrollPaneScrollingTest extends ComponentTestBase {
     @Test
     @DisplayName("should set and get vertical scrollbar")
     void testVerticalScrollBar() {
-        ScrollBar scrollBar = new ScrollBar(JScrollBar.VERTICAL);
+        ScrollBar scrollBar = new ScrollBar(ScrollBar.VERTICAL);
         scrollPane.setVerticalScrollBar(scrollBar);
 
         assertEquals(scrollBar, scrollPane.getVerticalScrollBar());

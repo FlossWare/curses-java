@@ -24,11 +24,11 @@ class JFileDialogTest extends ComponentTestBase {
 
     @BeforeEach
     void setUp() {
-        loadDialog = new FileDialog("Select File", JFileDialog.LOAD);
+        loadDialog = new FileDialog("Select File", FileDialog.LOAD);
         loadDialog.setSize(40, 20);
         loadDialog.setLocation(0, 0);
 
-        saveDialog = new FileDialog("Save File", JFileDialog.SAVE);
+        saveDialog = new FileDialog("Save File", FileDialog.SAVE);
         saveDialog.setSize(40, 20);
         saveDialog.setLocation(0, 0);
     }

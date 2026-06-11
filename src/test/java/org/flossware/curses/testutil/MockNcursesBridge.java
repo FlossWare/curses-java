@@ -11,9 +11,9 @@ import java.util.concurrent.TimeUnit;
 public class MockNcursesBridge {
     private static final ThreadLocal<MockNcursesBridge> INSTANCE = ThreadLocal.withInitial(MockNcursesBridge::new);
 
-    private final char[][] screen;
-    private final int width;
-    private final int height;
+    private char[][] screen;
+    private int width;
+    private int height;
     private final BlockingQueue<Integer> keyQueue;
     private final BlockingQueue<MouseEventData> mouseQueue;
     private boolean initialized;
@@ -113,6 +113,49 @@ public class MockNcursesBridge {
      */
     public int getTerminalWidth() {
         return width;
+    }
+
+    /**
+     * Set terminal size and resize internal buffer.
+     * This method allows simulating terminal resize events in tests.
+     * The internal screen buffer is resized to match the new dimensions.
+     * Content from the old buffer is preserved where possible (top-left corner).
+     * New areas are filled with spaces.
+     *
+     * @param newWidth the new terminal width (must be > 0)
+     * @param newHeight the new terminal height (must be > 0)
+     * @throws IllegalArgumentException if width or height is <= 0
+     */
+    public void setTerminalSize(int newWidth, int newHeight) {
+        if (newWidth <= 0 || newHeight <= 0) {
+            throw new IllegalArgumentException("Terminal dimensions must be positive: width=" + newWidth + ", height=" + newHeight);
+        }
+
+        if (this.width == newWidth && this.height == newHeight) {
+            return; // No change needed
+        }
+
+        // Create new buffer with new dimensions
+        char[][] newScreen = new char[newHeight][newWidth];
+
+        // Initialize new buffer with spaces
+        for (int i = 0; i < newHeight; i++) {
+            for (int j = 0; j < newWidth; j++) {
+                newScreen[i][j] = ' ';
+            }
+        }
+
+        // Copy existing content (preserve top-left corner)
+        int copyHeight = Math.min(this.height, newHeight);
+        int copyWidth = Math.min(this.width, newWidth);
+        for (int i = 0; i < copyHeight; i++) {
+            System.arraycopy(screen[i], 0, newScreen[i], 0, copyWidth);
+        }
+
+        // Update dimensions and screen buffer
+        this.width = newWidth;
+        this.height = newHeight;
+        this.screen = newScreen;
     }
 
     /**

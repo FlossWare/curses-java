@@ -15,9 +15,9 @@ class JSplitPaneTest extends ComponentTestBase {
     @Test
     @DisplayName("Constructor with orientation should create split pane")
     void testConstructorWithOrientation() {
-        SplitPane splitPane = new SplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        SplitPane splitPane = new SplitPane(SplitPane.HORIZONTAL_SPLIT);
         assertNotNull(splitPane);
-        assertEquals(JSplitPane.HORIZONTAL_SPLIT, splitPane.getOrientation());
+        assertEquals(SplitPane.HORIZONTAL_SPLIT, splitPane.getOrientation());
         assertEquals(0.5, splitPane.getDividerLocation());
     }
 
@@ -27,7 +27,7 @@ class JSplitPaneTest extends ComponentTestBase {
         Panel left = new Panel();
         Panel right = new Panel();
 
-        SplitPane splitPane = new SplitPane(JSplitPane.HORIZONTAL_SPLIT, left, right);
+        SplitPane splitPane = new SplitPane(SplitPane.HORIZONTAL_SPLIT, left, right);
 
         assertSame(left, splitPane.getLeftComponent());
         assertSame(right, splitPane.getRightComponent());
@@ -36,7 +36,7 @@ class JSplitPaneTest extends ComponentTestBase {
     @Test
     @DisplayName("setLeftComponent should set left component")
     void testSetLeftComponent() {
-        SplitPane splitPane = new SplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        SplitPane splitPane = new SplitPane(SplitPane.HORIZONTAL_SPLIT);
         splitPane.setSize(60, 20);
         splitPane.setLocation(0, 0);
 
@@ -50,7 +50,7 @@ class JSplitPaneTest extends ComponentTestBase {
     @Test
     @DisplayName("setLeftComponent should replace existing component")
     void testSetLeftComponentReplace() {
-        SplitPane splitPane = new SplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        SplitPane splitPane = new SplitPane(SplitPane.HORIZONTAL_SPLIT);
         splitPane.setSize(60, 20);
         splitPane.setLocation(0, 0);
 
@@ -66,7 +66,7 @@ class JSplitPaneTest extends ComponentTestBase {
     @Test
     @DisplayName("setLeftComponent with null should clear component")
     void testSetLeftComponentNull() {
-        SplitPane splitPane = new SplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        SplitPane splitPane = new SplitPane(SplitPane.HORIZONTAL_SPLIT);
         splitPane.setSize(60, 20);
         splitPane.setLocation(0, 0);
 
@@ -81,7 +81,7 @@ class JSplitPaneTest extends ComponentTestBase {
     @Test
     @DisplayName("setRightComponent should set right component")
     void testSetRightComponent() {
-        SplitPane splitPane = new SplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        SplitPane splitPane = new SplitPane(SplitPane.HORIZONTAL_SPLIT);
         splitPane.setSize(60, 20);
         splitPane.setLocation(0, 0);
 
@@ -95,7 +95,7 @@ class JSplitPaneTest extends ComponentTestBase {
     @Test
     @DisplayName("setRightComponent should replace existing component")
     void testSetRightComponentReplace() {
-        SplitPane splitPane = new SplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        SplitPane splitPane = new SplitPane(SplitPane.HORIZONTAL_SPLIT);
         splitPane.setSize(60, 20);
         splitPane.setLocation(0, 0);
 
@@ -111,7 +111,7 @@ class JSplitPaneTest extends ComponentTestBase {
     @Test
     @DisplayName("setRightComponent with null should clear component")
     void testSetRightComponentNull() {
-        SplitPane splitPane = new SplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        SplitPane splitPane = new SplitPane(SplitPane.HORIZONTAL_SPLIT);
         splitPane.setSize(60, 20);
         splitPane.setLocation(0, 0);
 
@@ -126,7 +126,7 @@ class JSplitPaneTest extends ComponentTestBase {
     @Test
     @DisplayName("setDividerLocation should set divider position")
     void testSetDividerLocation() {
-        SplitPane splitPane = new SplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        SplitPane splitPane = new SplitPane(SplitPane.HORIZONTAL_SPLIT);
         splitPane.setSize(60, 20);
         splitPane.setLocation(0, 0);
 
@@ -140,7 +140,7 @@ class JSplitPaneTest extends ComponentTestBase {
     @Test
     @DisplayName("setDividerLocation should clamp to valid range")
     void testSetDividerLocationClamp() {
-        SplitPane splitPane = new SplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        SplitPane splitPane = new SplitPane(SplitPane.HORIZONTAL_SPLIT);
         splitPane.setSize(60, 20);
         splitPane.setLocation(0, 0);
 
@@ -154,7 +154,7 @@ class JSplitPaneTest extends ComponentTestBase {
     @Test
     @DisplayName("doLayout should position components horizontally")
     void testDoLayoutHorizontal() {
-        SplitPane splitPane = new SplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        SplitPane splitPane = new SplitPane(SplitPane.HORIZONTAL_SPLIT);
         splitPane.setSize(60, 20);
         splitPane.setLocation(10, 5);
 
@@ -182,7 +182,7 @@ class JSplitPaneTest extends ComponentTestBase {
     @Test
     @DisplayName("doLayout should position components vertically")
     void testDoLayoutVertical() {
-        SplitPane splitPane = new SplitPane(JSplitPane.VERTICAL_SPLIT);
+        SplitPane splitPane = new SplitPane(SplitPane.VERTICAL_SPLIT);
         splitPane.setSize(40, 30);
         splitPane.setLocation(5, 10);
 
@@ -210,7 +210,7 @@ class JSplitPaneTest extends ComponentTestBase {
     @Test
     @DisplayName("paint should render horizontal divider")
     void testPaintHorizontalDivider() {
-        SplitPane splitPane = new SplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        SplitPane splitPane = new SplitPane(SplitPane.HORIZONTAL_SPLIT);
         splitPane.setSize(60, 20);
         splitPane.setLocation(0, 0);
         splitPane.setDividerLocation(0.5);
@@ -231,7 +231,7 @@ class JSplitPaneTest extends ComponentTestBase {
     @Test
     @DisplayName("paint should render vertical divider")
     void testPaintVerticalDivider() {
-        SplitPane splitPane = new SplitPane(JSplitPane.VERTICAL_SPLIT);
+        SplitPane splitPane = new SplitPane(SplitPane.VERTICAL_SPLIT);
         splitPane.setSize(40, 30);
         splitPane.setLocation(0, 0);
         splitPane.setDividerLocation(0.5);
@@ -252,14 +252,14 @@ class JSplitPaneTest extends ComponentTestBase {
     @Test
     @DisplayName("Constants should have expected values")
     void testConstants() {
-        assertEquals(0, JSplitPane.HORIZONTAL_SPLIT);
-        assertEquals(1, JSplitPane.VERTICAL_SPLIT);
+        assertEquals(0, SplitPane.HORIZONTAL_SPLIT);
+        assertEquals(1, SplitPane.VERTICAL_SPLIT);
     }
 
     @Test
     @DisplayName("should be thread-safe")
     void testThreadSafety() throws InterruptedException {
-        SplitPane splitPane = new SplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        SplitPane splitPane = new SplitPane(SplitPane.HORIZONTAL_SPLIT);
         splitPane.setSize(60, 20);
         splitPane.setLocation(0, 0);
 
@@ -287,7 +287,7 @@ class JSplitPaneTest extends ComponentTestBase {
     @Test
     @DisplayName("divider location should affect layout")
     void testDividerLocationAffectsLayout() {
-        SplitPane splitPane = new SplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        SplitPane splitPane = new SplitPane(SplitPane.HORIZONTAL_SPLIT);
         splitPane.setSize(100, 20);
         splitPane.setLocation(0, 0);
 
@@ -310,7 +310,7 @@ class JSplitPaneTest extends ComponentTestBase {
     @Test
     @DisplayName("should handle null components in doLayout")
     void testDoLayoutWithNullComponents() {
-        SplitPane splitPane = new SplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        SplitPane splitPane = new SplitPane(SplitPane.HORIZONTAL_SPLIT);
         splitPane.setSize(60, 20);
         splitPane.setLocation(0, 0);
 

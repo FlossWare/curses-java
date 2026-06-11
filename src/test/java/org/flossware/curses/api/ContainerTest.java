@@ -354,7 +354,6 @@ class ContainerTest extends ComponentTestBase {
     }
 
     @Test
-<<<<<<< Updated upstream
     @DisplayName("should detect external mutations via getChildren()")
     void testExternalMutationInvalidatesCache() {
         container.add(child1);
@@ -447,7 +446,9 @@ class ContainerTest extends ComponentTestBase {
         assertEquals(2, snapshot2.size());
         assertFalse(snapshot2.contains(child1), "Old child should not be in snapshot");
         assertTrue(snapshot2.contains(child3), "New child should be in snapshot");
-=======
+    }
+
+    @Test
     @DisplayName("should safely get component at valid index")
     void testGetComponentAt() {
         container.add(child1);
@@ -512,7 +513,6 @@ class ContainerTest extends ComponentTestBase {
 
         // Verify that at least one event was processed
         assertTrue(eventHandled[0] || container.getChildren().size() >= 0);
->>>>>>> Stashed changes
     }
 
     @Test

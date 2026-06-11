@@ -294,8 +294,8 @@ class JDialogTest extends ComponentTestBase {
         widget.setLocation(10, 10);
         widget.setSize(20, 10);
 
-        org.flossware.jcurses.events.MouseEvent mouseEvent =
-            new org.flossware.jcurses.events.MouseEvent(15, 12, 1);
+        org.flossware.curses.events.MouseEvent mouseEvent =
+            new org.flossware.curses.events.MouseEvent(15, 12, 1);
 
         // Should attempt to handle mouse event (result depends on WindowDragManager state)
         assertDoesNotThrow(() -> widget.handleMouseEvent(mouseEvent));
@@ -305,14 +305,14 @@ class JDialogTest extends ComponentTestBase {
     @DisplayName("should consume mouse event when drag starts")
     void testDragConsumeMouseEvent() {
         // Cancel any existing drag from previous tests
-        org.flossware.jcurses.api.WindowDragManager.getInstance().cancelDrag();
+        org.flossware.curses.api.WindowDragManager.getInstance().cancelDrag();
 
         widget.setLocation(10, 10);
         widget.setSize(20, 10);
 
         // Click on title bar to start drag (BUTTON1_PRESSED = 0x2)
-        org.flossware.jcurses.events.MouseEvent titleBarClick =
-            new org.flossware.jcurses.events.MouseEvent(15, 10, 0x2);
+        org.flossware.curses.events.MouseEvent titleBarClick =
+            new org.flossware.curses.events.MouseEvent(15, 10, 0x2);
 
         boolean consumed = widget.handleMouseEvent(titleBarClick);
         assertTrue(consumed, "Title bar click should be consumed by drag manager");
@@ -379,8 +379,8 @@ class JDialogTest extends ComponentTestBase {
         widget.add(child);
 
         // Click on child (inside dialog but not on border)
-        org.flossware.jcurses.events.MouseEvent event =
-            new org.flossware.jcurses.events.MouseEvent(10, 10, 0x4);
+        org.flossware.curses.events.MouseEvent event =
+            new org.flossware.curses.events.MouseEvent(10, 10, 0x4);
 
         widget.handleMouseEvent(event);
 

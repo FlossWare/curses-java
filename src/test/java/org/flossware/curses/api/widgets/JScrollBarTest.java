@@ -13,7 +13,7 @@ class JScrollBarTest extends ComponentTestBase {
 
     @BeforeEach
     void setUp() {
-        widget = new ScrollBar(JScrollBar.VERTICAL);
+        widget = new ScrollBar(ScrollBar.VERTICAL);
         widget.setSize(2, 20);
         widget.setLocation(0, 0);
     }

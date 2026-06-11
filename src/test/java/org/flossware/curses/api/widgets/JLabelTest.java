@@ -55,7 +55,7 @@ class JLabelTest extends ComponentTestBase {
     @DisplayName("should render left-aligned text")
     void testLeftAlignedRendering() {
         label.setLocation(5, 10);
-        label.setAlignment(JLabel.ALIGN_LEFT);
+        label.setAlignment(Label.ALIGN_LEFT);
 
         label.paint(buffer);
 
@@ -68,7 +68,7 @@ class JLabelTest extends ComponentTestBase {
         label.setLocation(0, 0);
         label.setSize(20, 1);
         label.setText("Test");
-        label.setAlignment(JLabel.ALIGN_CENTER);
+        label.setAlignment(Label.ALIGN_CENTER);
 
         label.paint(buffer);
 
@@ -82,7 +82,7 @@ class JLabelTest extends ComponentTestBase {
         label.setLocation(0, 0);
         label.setSize(20, 1);
         label.setText("Test");
-        label.setAlignment(JLabel.ALIGN_RIGHT);
+        label.setAlignment(Label.ALIGN_RIGHT);
 
         label.paint(buffer);
 

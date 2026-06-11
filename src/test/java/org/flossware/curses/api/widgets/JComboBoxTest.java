@@ -9,11 +9,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("JComboBox Tests")
 class JComboBoxTest extends ComponentTestBase {
-    private JComboBox<String> widget;
+    private ComboBox<String> widget;
 
     @BeforeEach
     void setUp() {
-        widget = new JComboBox<>();
+        widget = new ComboBox<>();
         widget.setSize(20, 5);
         widget.setLocation(0, 0);
     }

@@ -48,7 +48,7 @@ class JSeparatorTest extends ComponentTestBase {
     @Test
     @DisplayName("should create with vertical orientation")
     void testVerticalOrientation() {
-        Separator separator = new Separator(JSeparator.VERTICAL);
+        Separator separator = new Separator(Separator.VERTICAL);
         separator.setSize(1, 10);
         separator.setLocation(0, 0);
 
@@ -84,7 +84,7 @@ class JSeparatorTest extends ComponentTestBase {
         root.add(widget);
         clearDirtyFlag();
 
-        widget.setOrientation(JSeparator.VERTICAL);
+        widget.setOrientation(Separator.VERTICAL);
 
         assertDirtyFlagSet();
     }
@@ -92,7 +92,7 @@ class JSeparatorTest extends ComponentTestBase {
     @Test
     @DisplayName("should render horizontal line across width")
     void testHorizontalRendering() {
-        widget.setOrientation(JSeparator.HORIZONTAL);
+        widget.setOrientation(Separator.HORIZONTAL);
         widget.setLocation(5, 3);
         widget.setSize(10, 1);
 
@@ -107,7 +107,7 @@ class JSeparatorTest extends ComponentTestBase {
     @Test
     @DisplayName("should render vertical line across height")
     void testVerticalRendering() {
-        widget.setOrientation(JSeparator.VERTICAL);
+        widget.setOrientation(Separator.VERTICAL);
         widget.setLocation(5, 3);
         widget.setSize(1, 10);
 
@@ -122,7 +122,7 @@ class JSeparatorTest extends ComponentTestBase {
     @Test
     @DisplayName("should have correct constant values")
     void testConstants() {
-        assertEquals(0, JSeparator.HORIZONTAL);
-        assertEquals(1, JSeparator.VERTICAL);
+        assertEquals(0, Separator.HORIZONTAL);
+        assertEquals(1, Separator.VERTICAL);
     }
 }

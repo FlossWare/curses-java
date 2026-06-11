@@ -15,11 +15,7 @@ public class ComboBox<T> extends Component {
     }
 
     public void addItem(T item) {
-<<<<<<< Updated upstream
         Objects.requireNonNull(item, "ComboBox items cannot be null");
-=======
-        Objects.requireNonNull(item, "Item cannot be null");
->>>>>>> Stashed changes
         renderLock.lock();
         try {
             items.add(item);

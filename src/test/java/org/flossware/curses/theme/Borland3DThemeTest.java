@@ -1,0 +1,277 @@
+package org.flossware.curses.theme;
+
+import org.flossware.curses.api.Color;
+import org.flossware.curses.api.ColorPair;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+/**
+ * Unit tests for Borland3DTheme.
+ */
+@DisplayName("Borland3DTheme Tests")
+class Borland3DThemeTest {
+
+    private Borland3DTheme theme;
+
+    @BeforeEach
+    void setUp() {
+        theme = new Borland3DTheme();
+    }
+
+    @Test
+    @DisplayName("should have correct name")
+    void shouldHaveCorrectName() {
+        assertThat(theme.getName()).isEqualTo("Borland 3D");
+    }
+
+    @Test
+    @DisplayName("should support 3D effects")
+    void shouldSupport3DEffects() {
+        assertThat(theme.supports3D()).isTrue();
+    }
+
+    @Test
+    @DisplayName("should have yellow on blue background")
+    void shouldHaveYellowOnBlueBackground() {
+        ColorPair background = theme.getBackground();
+        assertThat(background.foreground()).isEqualTo(Color.YELLOW);
+        assertThat(background.background()).isEqualTo(Color.BLUE);
+    }
+
+    @Test
+    @DisplayName("should have cyan on blue for buttons")
+    void shouldHaveCyanOnBlueForButtons() {
+        ColorPair button = theme.getButton();
+        assertThat(button.foreground()).isEqualTo(Color.CYAN);
+        assertThat(button.background()).isEqualTo(Color.BLUE);
+    }
+
+    @Test
+    @DisplayName("should have black on cyan for focused buttons")
+    void shouldHaveBlackOnCyanForFocusedButtons() {
+        ColorPair buttonFocused = theme.getButtonFocused();
+        assertThat(buttonFocused.foreground()).isEqualTo(Color.BLACK);
+        assertThat(buttonFocused.background()).isEqualTo(Color.CYAN);
+    }
+
+    @Test
+    @DisplayName("should have white on blue for text input")
+    void shouldHaveWhiteOnBlueForTextInput() {
+        ColorPair textInput = theme.getTextInput();
+        assertThat(textInput.foreground()).isEqualTo(Color.WHITE);
+        assertThat(textInput.background()).isEqualTo(Color.BLUE);
+    }
+
+    @Test
+    @DisplayName("should have white on blue for borders")
+    void shouldHaveWhiteOnBlueForBorders() {
+        ColorPair border = theme.getBorder();
+        assertThat(border.foreground()).isEqualTo(Color.WHITE);
+        assertThat(border.background()).isEqualTo(Color.BLUE);
+    }
+
+    @Test
+    @DisplayName("should have black on cyan for selection")
+    void shouldHaveBlackOnCyanForSelection() {
+        ColorPair selection = theme.getSelection();
+        assertThat(selection.foreground()).isEqualTo(Color.BLACK);
+        assertThat(selection.background()).isEqualTo(Color.CYAN);
+    }
+
+    @Test
+    @DisplayName("should have black on blue for disabled components")
+    void shouldHaveBlackOnBlueForDisabled() {
+        ColorPair disabled = theme.getDisabled();
+        assertThat(disabled.foreground()).isEqualTo(Color.BLACK);
+        assertThat(disabled.background()).isEqualTo(Color.BLUE);
+    }
+
+    @Test
+    @DisplayName("should use single-line Unicode box drawing characters by default")
+    void shouldUseDoubleLineUnicodeBoxDrawing() {
+        String borderChars = theme.getBorderChars();
+        assertThat(borderChars).isEqualTo("┌─┐│└─┘│");
+        assertThat(borderChars).hasSize(8);
+    }
+
+    @Test
+    @DisplayName("should have black on black shadow for 3D depth effect (simulates gray with A_BOLD)")
+    void shouldHaveBlackOnBlueShadow() {
+        ColorPair shadow = theme.getShadowColor();
+        assertThat(shadow.foreground()).isEqualTo(Color.BLACK);
+        assertThat(shadow.background()).isEqualTo(Color.BLACK);
+    }
+
+    @Test
+    @DisplayName("should have white on cyan highlight for 3D raised effect")
+    void shouldHaveWhiteOnCyanHighlight() {
+        ColorPair highlight = theme.getHighlightColor();
+        assertThat(highlight.foreground()).isEqualTo(Color.WHITE);
+        assertThat(highlight.background()).isEqualTo(Color.CYAN);
+    }
+
+    @Test
+    @DisplayName("should have all required color pairs defined")
+    void shouldHaveAllRequiredColorPairsDefined() {
+        assertThat(theme.getBackground()).isNotNull();
+        assertThat(theme.getButton()).isNotNull();
+        assertThat(theme.getButtonFocused()).isNotNull();
+        assertThat(theme.getTextInput()).isNotNull();
+        assertThat(theme.getBorder()).isNotNull();
+        assertThat(theme.getSelection()).isNotNull();
+        assertThat(theme.getDisabled()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("should have 3D-specific color pairs defined")
+    void shouldHave3DSpecificColorPairsDefined() {
+        assertThat(theme.getShadowColor()).isNotNull();
+        assertThat(theme.getHighlightColor()).isNotNull();
+        assertThat(theme.getLowlightColor()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("should use blue background consistently across components")
+    void shouldUseBlueBackgroundConsistently() {
+        assertThat(theme.getBackground().background()).isEqualTo(Color.BLUE);
+        assertThat(theme.getButton().background()).isEqualTo(Color.BLUE);
+        assertThat(theme.getTextInput().background()).isEqualTo(Color.BLUE);
+        assertThat(theme.getBorder().background()).isEqualTo(Color.BLUE);
+        assertThat(theme.getDisabled().background()).isEqualTo(Color.BLUE);
+        // Note: focused, selected, and highlight intentionally use cyan backgrounds for contrast
+    }
+
+    @Test
+    @DisplayName("should use cyan for highlights and focus")
+    void shouldUseCyanForHighlights() {
+        // Focused and selected items should use cyan for visibility
+        assertThat(theme.getButtonFocused().background()).isEqualTo(Color.CYAN);
+        assertThat(theme.getSelection().background()).isEqualTo(Color.CYAN);
+    }
+
+    @Test
+    @DisplayName("should match classic Borland IDE color scheme")
+    void shouldMatchClassicBorlandColors() {
+        // Verify the iconic Borland IDE color scheme
+        // Background: blue
+        // Text: yellow
+        // Borders: white
+        // Highlights: cyan
+        assertThat(theme.getBackground().background()).isEqualTo(Color.BLUE);
+        assertThat(theme.getBackground().foreground()).isEqualTo(Color.YELLOW);
+        assertThat(theme.getBorder().foreground()).isEqualTo(Color.WHITE);
+        assertThat(theme.getButtonFocused().background()).isEqualTo(Color.CYAN);
+    }
+
+    @Test
+    @DisplayName("should have contrasting shadow and highlight for 3D depth")
+    void shouldHaveContrastingShadowAndHighlight() {
+        // Shadow should be darker (black) and highlight should be brighter (white)
+        // for proper 3D depth perception
+        ColorPair shadow = theme.getShadowColor();
+        ColorPair highlight = theme.getHighlightColor();
+
+        assertThat(shadow.foreground()).isEqualTo(Color.BLACK);
+        assertThat(highlight.foreground()).isEqualTo(Color.WHITE);
+
+        // Shadow uses black background for A_BOLD gray simulation, highlight uses cyan
+        assertThat(shadow.background()).isEqualTo(Color.BLACK);
+        assertThat(highlight.background()).isEqualTo(Color.CYAN);
+    }
+
+    @Test
+    @DisplayName("should use single-line borders distinct from base Borland theme")
+    void shouldUseDoubleLineBordersDistinctFromBaseTheme() {
+        BorlandTheme baseTheme = new BorlandTheme();
+
+        // Borland3DTheme should use different border characters than BorlandTheme
+        assertThat(theme.getBorderChars()).isNotEqualTo(baseTheme.getBorderChars());
+
+        // Base theme uses rounded corners
+        assertThat(baseTheme.getBorderChars()).isEqualTo("╭─╮│╰─╯│");
+
+        // 3D theme uses single-line (standard for most dialogs)
+        assertThat(theme.getBorderChars()).isEqualTo("┌─┐│└─┘│");
+    }
+
+    @Test
+    @DisplayName("should inherit core Borland color scheme from base theme")
+    void shouldInheritCoreBorlandColorScheme() {
+        BorlandTheme baseTheme = new BorlandTheme();
+
+        // All standard color pairs should match the base Borland theme
+        assertThat(theme.getBackground()).isEqualTo(baseTheme.getBackground());
+        assertThat(theme.getButton()).isEqualTo(baseTheme.getButton());
+        assertThat(theme.getButtonFocused()).isEqualTo(baseTheme.getButtonFocused());
+        assertThat(theme.getTextInput()).isEqualTo(baseTheme.getTextInput());
+        assertThat(theme.getBorder()).isEqualTo(baseTheme.getBorder());
+        assertThat(theme.getSelection()).isEqualTo(baseTheme.getSelection());
+        assertThat(theme.getDisabled()).isEqualTo(baseTheme.getDisabled());
+    }
+
+    @Test
+    @DisplayName("border characters should contain proper Unicode single-line box drawing characters")
+    void borderCharactersShouldContainProperUnicodeDoubleLineBoxDrawing() {
+        String borderChars = theme.getBorderChars();
+
+        // Verify each character in the 8-character border string
+        assertThat(borderChars.charAt(0)).isEqualTo('┌'); // ┌ - top-left corner
+        assertThat(borderChars.charAt(1)).isEqualTo('─'); // ─ - horizontal
+        assertThat(borderChars.charAt(2)).isEqualTo('┐'); // ┐ - top-right corner
+        assertThat(borderChars.charAt(3)).isEqualTo('│'); // │ - vertical
+        assertThat(borderChars.charAt(4)).isEqualTo('└'); // └ - bottom-left corner
+        assertThat(borderChars.charAt(5)).isEqualTo('─'); // ─ - horizontal
+        assertThat(borderChars.charAt(6)).isEqualTo('┘'); // ┘ - bottom-right corner
+        assertThat(borderChars.charAt(7)).isEqualTo('│'); // │ - vertical
+    }
+
+    @Test
+    @DisplayName("should maintain Borland identity while adding 3D enhancement")
+    void shouldMaintainBorlandIdentityWithEnhancement() {
+        // The theme name should indicate it's a Borland variant
+        assertThat(theme.getName()).contains("Borland");
+        assertThat(theme.getName()).contains("3D");
+
+        // Should maintain the core Borland blue/yellow/cyan palette
+        assertThat(theme.getBackground().background()).isEqualTo(Color.BLUE);
+        assertThat(theme.getBackground().foreground()).isEqualTo(Color.YELLOW);
+
+        // Should add 3D support
+        assertThat(theme.supports3D()).isTrue();
+
+        // Should provide 3D-specific methods
+        assertThat(theme.getShadowColor()).isNotNull();
+        assertThat(theme.getHighlightColor()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("shadow and highlight should be suitable for creating depth perception")
+    void shadowAndHighlightShouldBeSuitableForDepthPerception() {
+        ColorPair shadow = theme.getShadowColor();
+        ColorPair highlight = theme.getHighlightColor();
+        ColorPair background = theme.getBackground();
+
+        // For proper 3D effect:
+        // - Shadow should be darker than background
+        // - Highlight should be lighter than background
+        // - Shadow uses black background for A_BOLD gray simulation, highlight uses cyan
+
+        // Shadow uses black (darker)
+        assertThat(shadow.foreground()).isEqualTo(Color.BLACK);
+
+        // Highlight uses white (lighter)
+        assertThat(highlight.foreground()).isEqualTo(Color.WHITE);
+
+        // Background uses yellow (middle brightness)
+        assertThat(background.foreground()).isEqualTo(Color.YELLOW);
+
+        // Shadow uses BLACK background (simulating gray via A_BOLD for authentic Borland 3D effect)
+        // Background uses BLUE, highlight uses CYAN for 3D contrast
+        assertThat(shadow.background()).isEqualTo(Color.BLACK);
+        assertThat(highlight.background()).isEqualTo(Color.CYAN);
+        assertThat(background.background()).isEqualTo(Color.BLUE);
+    }
+}

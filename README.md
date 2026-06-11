@@ -11,14 +11,14 @@ A modern Java terminal UI library that brings AWT-like components to the termina
 
 - 🎮 **Fully Interactive** - Real keyboard & mouse navigation and widget interaction
 - 🖱️ **Window Manipulation** - Drag to move windows, resize by dragging edges and corners
-- 🎨 **Color Support** - 8 standard colors with predefined color pairs and 3 built-in themes
+- 🎨 **Color Support** - 8 standard colors with predefined color pairs and 10 built-in themes
 - 📝 **Advanced Text Editing** - Selection, cut/copy/paste, undo/redo, word navigation in text fields
 - 📜 **Scrollable Views** - JScrollPane with viewport clipping and scrollbar integration
 - ☕ **Modern Java 21** - Virtual Threads, Foreign Function API, Record Patterns, Sealed Interfaces
 - 🎯 **29 Widgets** - Complete AWT-compatible component set
 - 🔒 **Thread-Safe** - ReentrantLock protection for all components
 - ⚡ **Fast Rendering** - Differential updates, dirty rectangles, layout caching
-- 🎭 **Themes** - Default, Dark, and Light themes with pluggable architecture
+- 🎭 **Themes** - 10 built-in themes (modern, retro computing, and classic IDE styles) with pluggable architecture
 - 🧩 **Module System** - Java 9+ JPMS support (opt-in via `module-info.java.template`)
 - 📦 **Zero Dependencies** - Only ncurses (native) and test libraries
 - ✅ **Comprehensive Tests** - 799 tests (766 unit + 33 integration) with 99% coverage
@@ -239,6 +239,56 @@ frame.add(panel);
 RootPane.getInstance().add(frame);
 ```
 
+## 🎨 Themes
+
+The library includes **10 built-in themes** providing modern, retro, and classic IDE color schemes:
+
+| Theme Name | Description | Example Use Case |
+|------------|-------------|------------------|
+| **Default** | Standard terminal colors | General purpose |
+| **Dark** | Dark mode with muted colors | Low-light environments |
+| **Light** | Bright background theme | High-contrast viewing |
+| **Modern** | Contemporary color palette | Modern applications |
+| **Borland** | Classic Borland IDE blue | Turbo Pascal/C++ nostalgia |
+| **DOS** | MS-DOS style colors | Retro computing aesthetic |
+| **DBase3** | dBASE III Plus colors | Classic database development |
+| **DBase4** | dBASE IV colors | Vintage business applications |
+| **TI994A** | Texas Instruments TI-99/4A | 1980s home computer style |
+| **TRS80** | Tandy TRS-80 green screen | Retro monochrome look |
+
+### Switching Themes
+
+Use the `ThemeManager` singleton to change themes at runtime:
+
+```java
+import org.flossware.curses.theme.ThemeManager;
+
+// Use a pre-defined theme via convenience methods
+ThemeManager.getInstance().useDarkTheme();
+ThemeManager.getInstance().useBorlandTheme();
+ThemeManager.getInstance().useTI994ATheme();
+
+// Or set a custom theme
+ThemeManager.getInstance().setTheme(new CustomTheme());
+```
+
+### Available Theme Methods
+
+```java
+ThemeManager.getInstance().useDefaultTheme();  // Standard terminal
+ThemeManager.getInstance().useDarkTheme();     // Dark mode
+ThemeManager.getInstance().useLightTheme();    // Light mode
+ThemeManager.getInstance().useModernTheme();   // Contemporary
+ThemeManager.getInstance().useBorlandTheme();  // Borland IDE
+ThemeManager.getInstance().useDOSTheme();      // MS-DOS
+ThemeManager.getInstance().useDBase3Theme();   // dBASE III
+ThemeManager.getInstance().useDBase4Theme();   // dBASE IV
+ThemeManager.getInstance().useTI994ATheme();   // TI-99/4A
+ThemeManager.getInstance().useTRS80Theme();    // TRS-80
+```
+
+For detailed theme documentation, color palettes, and creating custom themes, see **[THEMES.md](THEMES.md)**.
+
 ## 🔧 Building from Source
 
 ```bash
@@ -295,7 +345,7 @@ curses-java/
 - ✅ Interactive keyboard navigation (TAB, arrows, SPACE, ENTER)
 - ✅ Mouse event handling with click detection and component dispatch
 - ✅ Window drag-to-move and resize operations (title bar, edges, corners)
-- ✅ Color support with 8 standard colors and predefined color pairs
+- ✅ Color support with 8 standard colors, predefined color pairs, and 10 built-in themes
 - ✅ Advanced text editing (selection, cut/copy/paste, undo/redo, word navigation)
 - ✅ Scrolling in JScrollPane with viewport clipping and scrollbar integration
 - ✅ ncurses integration via Foreign Function API
@@ -303,7 +353,7 @@ curses-java/
 - ✅ Thread-safe rendering with differential updates
 - ✅ Performance optimizations (dirty rectangles, layout caching)
 - ✅ Module system support (opt-in with module-info.java.template)
-- ✅ Theme system (Default, Dark, Light themes with pluggable architecture)
+- ✅ Theme system (10 built-in themes with pluggable architecture - see [THEMES.md](THEMES.md))
 - ✅ ASCII rendering (cross-platform compatible)
 - ✅ **Comprehensive test suite** (799 tests: 766 unit + 33 integration)
 - ✅ **Automated integration tests** (headless UI testing without terminal)
@@ -365,7 +415,8 @@ Make sure the terminal window has focus and you're running directly (not through
 ## 📖 Documentation
 
 - **[README.md](README.md)** (this file) - Overview and quick start
-- **[INTEGRATION_TESTING.md](INTEGRATION_TESTING.md)** - Integration testing guide (NEW!)
+- **[THEMES.md](THEMES.md)** - Theme system guide and color palettes
+- **[INTEGRATION_TESTING.md](INTEGRATION_TESTING.md)** - Integration testing guide
 - **[INTERACTIVE_DEMO.md](INTERACTIVE_DEMO.md)** - Detailed interactive demo guide
 - **[EXAMPLES_AND_SCREENSHOTS.md](EXAMPLES_AND_SCREENSHOTS.md)** - Example applications
 - **[TESTING.md](TESTING.md)** - Unit testing guide
@@ -435,7 +486,7 @@ See **[INTEGRATION_TESTING.md](INTEGRATION_TESTING.md)** for detailed integratio
 - ✅ Color system tests (Color, ColorPair)
 - ✅ Advanced text editing tests
 - ✅ Scrolling tests (JScrollPane)
-- ✅ Theme system tests (Default, Dark, Light themes)
+- ✅ Theme system tests (all 10 themes validated)
 - ✅ Thread-safety validation with Virtual Threads
 - ✅ Event system (sealed interfaces & records)
 - ✅ Layout managers (BorderLayout, FlowLayout, JGridLayout)

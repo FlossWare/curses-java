@@ -290,10 +290,7 @@ class ComboBoxTest extends ComponentTestBase {
     @DisplayName("addItem should reject null items")
     void testAddItemRejectsNull() {
         assertThrows(NullPointerException.class, () -> comboBox.addItem(null),
-<<<<<<< Updated upstream
                 "addItem should throw NullPointerException for null item");
-=======
-                "addItem should throw NullPointerException for null items");
     }
 
     @Test
@@ -308,7 +305,6 @@ class ComboBoxTest extends ComponentTestBase {
 
         String row = new String(buffer[0]);
         assertTrue(row.contains("[ C v ]"), "Should display 'C' at selectedIndex 2, not empty");
->>>>>>> Stashed changes
     }
 
     @Test

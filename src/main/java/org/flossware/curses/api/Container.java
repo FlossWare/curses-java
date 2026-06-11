@@ -20,7 +20,6 @@ public class Container extends Component {
     // Snapshot cache to reduce GC pressure (Issue #71)
     private List<Component> cachedSnapshot;
     private int lastSnapshotSize = -1;
-<<<<<<< Updated upstream
     private long modificationCount = 0;
     private long cachedSnapshotModCount = -1;
 
@@ -28,13 +27,6 @@ public class Container extends Component {
         // Wrap children list with mutation tracking to detect external modifications (Issue #207)
         this.children = new MutationTrackingList(new ArrayList<>(), () -> modificationCount++);
     }
-=======
-    // Modification counter to detect any changes (size or mutation).
-    // Incremented on any structural change to children via add/remove.
-    // Used instead of size check to catch same-size mutations (Issue #207).
-    private int modCount = 0;
-    private int cachedModCount = -1;
->>>>>>> Stashed changes
 
     public SequencedCollection<Component> getChildren() {
         return children;
@@ -55,6 +47,9 @@ public class Container extends Component {
     }
 
     public void remove(Component child) {
+        if (child == null) {
+            throw new NullPointerException("child cannot be null");
+        }
         renderLock.lock();
         try {
             children.remove(child);
@@ -108,7 +103,6 @@ public class Container extends Component {
      *
      * Returns true if children list has been modified since last snapshot was cached.
      */
-<<<<<<< Updated upstream
     private boolean detectExternalMutation() {
         return modificationCount != cachedSnapshotModCount;
     }
@@ -136,18 +130,23 @@ public class Container extends Component {
         } finally {
             renderLock.unlock();
         }
-=======
-    private void invalidateSnapshot() {
-        lastSnapshotSize = -1;
-        cachedSnapshot = null;
-        modCount++;  // Track mutation to catch same-size changes (Issue #207)
->>>>>>> Stashed changes
     }
 
     @Override
     public void paint(char[][] buffer) {
+        // Rendering order (critical for proper 3D appearance):
+        // 1. paintShadow() FIRST (if 3D enabled) - creates depth effect behind component
+        // 2. drawBorder() SECOND - frames the component with 3D coloring
+        // 3. paint children THIRD - renders content inside the frame
+
+        // Step 1: Paint shadow first (if 3D rendering is enabled)
+        paintShadow(buffer, null);
+
+        // Step 2: Draw border second (with 3D coloring if supported)
+        drawBorder(buffer, null);
+
+        // Step 3: Paint children third
         // Use cached snapshot to avoid ArrayList allocation on every frame (Issue #71)
-<<<<<<< Updated upstream
         // Detects both size changes and external mutations via modification counter (Issue #207)
         // This optimization reduces GC pressure at high frame rates when children list is stable.
         List<Component> snapshot;
@@ -158,18 +157,6 @@ public class Container extends Component {
                 cachedSnapshot = new ArrayList<>(children);
                 cachedSnapshotModCount = modificationCount;
                 lastSnapshotSize = children.size();
-=======
-        // Check modification counter to detect any changes, not just size changes (Issue #207).
-        // This catches mutations via external access (e.g., getChildren().add()) that bypass
-        // invalidateSnapshot(). The modCount approach is more reliable than size checks.
-        List<Component> snapshot;
-        renderLock.lock();
-        try {
-            if (cachedSnapshot == null || cachedModCount != modCount) {
-                // Children list changed (in size or content), create new snapshot
-                cachedSnapshot = new ArrayList<>(children);
-                cachedModCount = modCount;
->>>>>>> Stashed changes
             }
             snapshot = cachedSnapshot;
         } finally {
@@ -229,39 +216,168 @@ public class Container extends Component {
         return super.handleMouseEvent(event);
     }
 
+    /**
+     * Draws border with basic character rendering only (no color support).
+     * Delegates to the overloaded version with null color buffer.
+     *
+     * @param buffer character buffer to render into
+     */
     protected void drawBorder(char[][] buffer) {
+        drawBorder(buffer, null);
+    }
+
+    /**
+     * Draws border with full 3D rendering support including asymmetric coloring.
+     *
+     * <p>This method implements the complete 3D border rendering pipeline:
+     * <ul>
+     *   <li>Checks if theme supports 3D via {@link org.flossware.curses.theme.Theme#supports3D()}</li>
+     *   <li>Retrieves component's {@link RenderingStyle} (RAISED, SUNKEN, or FLAT)</li>
+     *   <li>Applies asymmetric coloring based on style:
+     *     <ul>
+     *       <li>RAISED: top-left edges use highlight color (bright), bottom-right use lowlight (dark)</li>
+     *       <li>SUNKEN: inverted - top-left use lowlight, bottom-right use highlight</li>
+     *       <li>FLAT: uniform border color on all edges</li>
+     *     </ul>
+     *   </li>
+     * </ul>
+     *
+     * @param buffer character buffer to render into
+     * @param colorBuffer color pair buffer for per-character coloring (may be null for character-only rendering)
+     */
+    protected void drawBorder(char[][] buffer, int[][] colorBuffer) {
         if (width <= 0 || height <= 0) return;
 
-        // Use pure ASCII for better compatibility
-        for (int i = 0; i < width; i++) {
+        // Get border characters from theme (fallback to component's getBorderChars if theme unavailable)
+        String borderChars = getBorderChars();
+
+        // Check if theme supports 3D rendering
+        org.flossware.curses.theme.Theme theme = null;
+        boolean supports3D = false;
+        org.flossware.curses.theme.Theme3D theme3D = null;
+        RenderingStyle style = getRenderingStyle();
+
+        try {
+            theme = org.flossware.curses.theme.ThemeManager.getInstance().getCurrentTheme();
+            supports3D = theme.supports3D();
+            if (supports3D) {
+                theme3D = (org.flossware.curses.theme.Theme3D) theme;
+            }
+        } catch (Exception e) {
+            // Theme access failed, fall back to basic rendering
+        }
+
+        // Determine colors based on rendering style and 3D support
+        ColorPair topLeftColor;
+        ColorPair bottomRightColor;
+
+        if (supports3D && theme3D != null && style != RenderingStyle.FLAT) {
+            // 3D rendering with asymmetric coloring
+            if (style == RenderingStyle.RAISED) {
+                // RAISED: top-left bright, bottom-right dark
+                topLeftColor = theme3D.getHighlightColor();
+                bottomRightColor = theme3D.getLowlightColor();
+            } else if (style == RenderingStyle.SUNKEN) {
+                // SUNKEN: invert colors (top-left dark, bottom-right bright)
+                topLeftColor = theme3D.getLowlightColor();
+                bottomRightColor = theme3D.getHighlightColor();
+            } else {
+                // CUSTOM or other: use default border color
+                topLeftColor = theme.getBorder();
+                bottomRightColor = theme.getBorder();
+            }
+        } else {
+            // FLAT style or non-3D theme: uniform coloring
+            ColorPair borderColor = theme != null ? theme.getBorder() : ColorPair.DEFAULT;
+            topLeftColor = borderColor;
+            bottomRightColor = borderColor;
+        }
+
+        // Extract border characters (8-character format: top-left, top, top-right, left, right, bottom-left, bottom, bottom-right)
+        char topLeft = borderChars.charAt(0);
+        char topEdge = borderChars.charAt(1);
+        char topRight = borderChars.charAt(2);
+        char leftEdge = borderChars.charAt(3);
+        char rightEdge = borderChars.charAt(4);
+        char bottomLeft = borderChars.charAt(5);
+        char bottomEdge = borderChars.charAt(6);
+        char bottomRight = borderChars.charAt(7);
+
+        // Convert ColorPairs to color pair numbers for the color buffer
+        int topLeftColorNum = topLeftColor.pairNumber();
+        int bottomRightColorNum = bottomRightColor.pairNumber();
+
+        // Draw top edge (highlight color for RAISED, lowlight for SUNKEN, border color for FLAT)
+        for (int i = 1; i < width - 1; i++) {
             if (y >= 0 && y < buffer.length && x + i >= 0 && x + i < buffer[0].length) {
-                buffer[y][x + i] = '-';
+                buffer[y][x + i] = topEdge;
+                if (colorBuffer != null) {
+                    colorBuffer[y][x + i] = topLeftColorNum;
+                }
             }
+        }
+
+        // Draw bottom edge (lowlight color for RAISED, highlight for SUNKEN, border color for FLAT)
+        for (int i = 1; i < width - 1; i++) {
             if (y + height - 1 >= 0 && y + height - 1 < buffer.length && x + i >= 0 && x + i < buffer[0].length) {
-                buffer[y + height - 1][x + i] = '-';
+                buffer[y + height - 1][x + i] = bottomEdge;
+                if (colorBuffer != null) {
+                    colorBuffer[y + height - 1][x + i] = bottomRightColorNum;
+                }
             }
         }
 
-        for (int i = 0; i < height; i++) {
+        // Draw left edge (highlight color for RAISED, lowlight for SUNKEN, border color for FLAT)
+        for (int i = 1; i < height - 1; i++) {
             if (y + i >= 0 && y + i < buffer.length && x >= 0 && x < buffer[0].length) {
-                buffer[y + i][x] = '|';
-            }
-            if (y + i >= 0 && y + i < buffer.length && x + width - 1 >= 0 && x + width - 1 < buffer[0].length) {
-                buffer[y + i][x + width - 1] = '|';
+                buffer[y + i][x] = leftEdge;
+                if (colorBuffer != null) {
+                    colorBuffer[y + i][x] = topLeftColorNum;
+                }
             }
         }
 
+        // Draw right edge (lowlight color for RAISED, highlight for SUNKEN, border color for FLAT)
+        for (int i = 1; i < height - 1; i++) {
+            if (y + i >= 0 && y + i < buffer.length && x + width - 1 >= 0 && x + width - 1 < buffer[0].length) {
+                buffer[y + i][x + width - 1] = rightEdge;
+                if (colorBuffer != null) {
+                    colorBuffer[y + i][x + width - 1] = bottomRightColorNum;
+                }
+            }
+        }
+
+        // Draw corners with appropriate colors based on rendering style
+        // Top-left corner (highlight color for RAISED, lowlight for SUNKEN)
         if (y >= 0 && y < buffer.length && x >= 0 && x < buffer[0].length) {
-            buffer[y][x] = '+';
+            buffer[y][x] = topLeft;
+            if (colorBuffer != null) {
+                colorBuffer[y][x] = topLeftColorNum;
+            }
         }
+
+        // Top-right corner (transition: primarily top edge for RAISED)
         if (y >= 0 && y < buffer.length && x + width - 1 >= 0 && x + width - 1 < buffer[0].length) {
-            buffer[y][x + width - 1] = '+';
+            buffer[y][x + width - 1] = topRight;
+            if (colorBuffer != null) {
+                colorBuffer[y][x + width - 1] = topLeftColorNum;  // Top edge dominates
+            }
         }
+
+        // Bottom-left corner (transition: primarily left edge for RAISED)
         if (y + height - 1 >= 0 && y + height - 1 < buffer.length && x >= 0 && x < buffer[0].length) {
-            buffer[y + height - 1][x] = '+';
+            buffer[y + height - 1][x] = bottomLeft;
+            if (colorBuffer != null) {
+                colorBuffer[y + height - 1][x] = topLeftColorNum;  // Left edge dominates
+            }
         }
+
+        // Bottom-right corner (lowlight color for RAISED, highlight for SUNKEN)
         if (y + height - 1 >= 0 && y + height - 1 < buffer.length && x + width - 1 >= 0 && x + width - 1 < buffer[0].length) {
-            buffer[y + height - 1][x + width - 1] = '+';
+            buffer[y + height - 1][x + width - 1] = bottomRight;
+            if (colorBuffer != null) {
+                colorBuffer[y + height - 1][x + width - 1] = bottomRightColorNum;
+            }
         }
     }
 
