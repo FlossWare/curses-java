@@ -38,7 +38,8 @@ class UIRenderingWithThemesIT extends IntegrationTestBase {
             Arguments.of(new TRS80Theme(), "TRS-80"),
             Arguments.of(new DOSTheme(), "DOS"),
             Arguments.of(new DBase3Theme(), "dBASE III"),
-            Arguments.of(new DBase4Theme(), "dBASE IV")
+            Arguments.of(new DBase4Theme(), "dBASE IV"),
+            Arguments.of(new DBase4_3DTheme(), "dBASE IV 3D")
         );
     }
 
@@ -52,7 +53,8 @@ class UIRenderingWithThemesIT extends IntegrationTestBase {
             Arguments.of(new TRS80Theme(), "TRS-80"),
             Arguments.of(new DOSTheme(), "DOS"),
             Arguments.of(new DBase3Theme(), "dBASE III"),
-            Arguments.of(new DBase4Theme(), "dBASE IV")
+            Arguments.of(new DBase4Theme(), "dBASE IV"),
+            Arguments.of(new DBase4_3DTheme(), "dBASE IV 3D")
         );
     }
 

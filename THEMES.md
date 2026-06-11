@@ -379,6 +379,79 @@ The shift from black to blue backgrounds was part of a broader trend in late-198
 - Projects celebrating late-1980s/early-1990s database evolution
 - Software requiring a professional blue-background aesthetic
 
+
+## 3D Themes
+
+### Borland 3D Theme
+
+**Historical Context:** Building on the iconic Borland IDE color scheme, this theme adds authentic 3D visual effects inspired by Borland's Turbo Vision framework (1990-1995). Turbo Vision brought windowed interfaces with raised buttons, sunken input fields, and drop shadows to DOS applications.
+
+**Color Scheme:**
+- Background: Yellow on blue (classic Borland desktop)
+- Menus: Cyan on blue (menu bar and buttons)
+- Focused: Black on cyan (inverted selection)
+- Input Fields: White on blue (sunken data entry)
+- Selection: Black on cyan (bright highlight)
+- Shadow: Black on black with A_BOLD (gray simulation)
+- Highlight: White on cyan (raised element top-left edges)
+- Lowlight: Black on cyan (recessed element bottom-right edges)
+
+**3D Features:**
+- Drop shadows (1 column right, 1 row down)
+- Raised buttons and menus
+- Sunken input fields
+- Single-line borders for dialogs
+- Asymmetric border coloring
+
+**Usage:**
+```java
+ThemeManager.useBorland3DTheme();
+
+Dialog dialog = new Dialog("Turbo Pascal 7.0");
+dialog.set3DEnabled(true);
+dialog.setRenderingStyle(RenderingStyle.RAISED);
+```
+
+**When to Use:** Developer tools, IDEs, authentic Turbo Vision recreation.
+
+---
+
+### dBASE IV 3D Theme
+
+**Historical Context:** dBASE IV (1988-1993) revolutionized database software with the Control Center, a graphical menu system featuring 3D-style UI elements similar to Borland's Turbo Vision framework. After Borland acquired Ashton-Tate in 1991, the interface gained even more pronounced 3D effects.
+
+**Color Scheme:**
+- Background: White on blue (Control Center desktop)
+- Menus: Yellow on blue (menu bar and buttons)
+- Focused: Blue on yellow (inverted selection)
+- Input Fields: Cyan on blue (sunken data entry)
+- Selection: Blue on white (browse mode highlights)
+- Shadow: Black on black with A_BOLD (gray simulation)
+- Highlight: White on cyan (raised element top-left edges)
+- Lowlight: Black on cyan (recessed element bottom-right edges)
+
+**3D Features:**
+- Drop shadows (2 columns right, 1 row down)
+- Raised buttons and menus
+- Sunken input fields
+- Double-line borders for modal dialogs
+- Asymmetric border coloring
+
+**Usage:**
+```java
+ThemeManager.useDBase4_3DTheme();
+
+Dialog dialog = new Dialog("Database Configuration");
+dialog.set3DEnabled(true);
+dialog.setRenderingStyle(RenderingStyle.RAISED);
+```
+
+**When to Use:** Professional database applications, business software, authentic dBASE IV recreation.
+
+**Visual Comparison:** More businesslike than Borland3DTheme (white vs yellow background), reflecting database application heritage vs developer tool aesthetic.
+
+---
+
 ---
 
 ## Usage Guide

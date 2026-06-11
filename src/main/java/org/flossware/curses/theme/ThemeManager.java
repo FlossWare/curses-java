@@ -209,6 +209,21 @@ public class ThemeManager {
     }
 
     /**
+     * Sets the current theme to dBASE IV 3D theme.
+     *
+     * <p>This theme recreates the sophisticated windowed interface of dBASE IV 
+     * (1988-1993) with authentic 3D visual effects including drop shadows, raised 
+     * buttons, and sunken input fields. The Control Center's white on blue color 
+     * scheme with yellow menus creates a professional database application aesthetic.</p>
+     *
+     * @see DBase4_3DTheme
+     * @see useDBase4Theme()
+     */
+    public static void useDBase4_3DTheme() {
+        getInstance().setTheme(new DBase4_3DTheme());
+    }
+
+    /**
      * Switches to the Modern theme.
      *
      * <p>Contemporary high-contrast theme optimized for modern terminal aesthetics

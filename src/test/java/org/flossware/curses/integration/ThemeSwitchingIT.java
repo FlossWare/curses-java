@@ -38,7 +38,8 @@ class ThemeSwitchingIT extends IntegrationTestBase {
         new ThemeSupplier("TRS-80", TRS80Theme::new),
         new ThemeSupplier("DOS", DOSTheme::new),
         new ThemeSupplier("dBASE III", DBase3Theme::new),
-        new ThemeSupplier("dBASE IV", DBase4Theme::new)
+        new ThemeSupplier("dBASE IV", DBase4Theme::new),
+        new ThemeSupplier("dBASE IV 3D", DBase4_3DTheme::new)
     );
 
     /**

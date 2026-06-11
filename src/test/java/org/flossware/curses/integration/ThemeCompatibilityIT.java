@@ -54,7 +54,8 @@ class ThemeCompatibilityIT extends IntegrationTestBase {
             new TRS80Theme(),
             new DOSTheme(),
             new DBase3Theme(),
-            new DBase4Theme()
+            new DBase4Theme(),
+            new DBase4_3DTheme()
         );
     }
 
