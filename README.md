@@ -47,6 +47,26 @@ run-interactive.bat
 - `MOUSE` - Click widgets, drag title bars to move windows, drag edges/corners to resize
 - `ESC` / `Q` - Quit
 
+
+## 📸 Screenshots
+
+Visual examples of all themes with ASCII art demonstrations:
+- **[Theme Screenshots Gallery](docs/screenshots/README.md)** - See all 12 themes in action
+- **Borland 3D vs. dBASE IV 3D** - Side-by-side comparison of 3D rendering
+- **Retro Themes** - Classic DOS, dBASE III, TI-99/4A, TRS-80
+- **Modern Themes** - Dark, Light, Contemporary interfaces
+
+Quick preview:
+
+```
+╔════ Borland 3D ═════╗╌╌      ╔═══ dBASE IV 3D ══╗╌╌
+║ YELLOW on BLUE      ║╌╌      ║ WHITE on BLUE    ║╌╌
+║ Developer aesthetic ║╌╌      ║ Business style   ║╌╌
+╚═════════════════════╝╌╌      ╚══════════════════╝╌╌
+ ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌         ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
+ L-shaped drop shadows          L-shaped shadows
+```
+
 ## 📋 Requirements
 
 - **Java 21+** with preview features enabled

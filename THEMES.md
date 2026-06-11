@@ -1,5 +1,8 @@
 # JCurses Theme Gallery
 
+> 📸 **[View Theme Screenshots](docs/screenshots/README.md)** - Visual examples with ASCII art demonstrations
+
+
 A comprehensive guide to the visual themes available in the JCurses library. Each theme recreates the distinctive aesthetic of classic computing systems and development environments, bringing authentic retro computing experiences to modern terminal applications.
 
 ## Table of Contents
