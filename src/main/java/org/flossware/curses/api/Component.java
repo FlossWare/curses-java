@@ -44,6 +44,9 @@ public abstract class Component {
     private RenderingStyle renderingStyle = RenderingStyle.FLAT;
     private boolean enabled3D = false;
 
+    // Preferred size for layout managers (issue #237)
+    protected Dimension preferredSize = new Dimension(10, 1);
+
     /**
      * Renders this component into the provided character buffer.
      *
@@ -109,6 +112,40 @@ public abstract class Component {
         renderLock.lock();
         try {
             return height;
+        } finally {
+            renderLock.unlock();
+        }
+    }
+
+    /**
+     * Returns the preferred size of this component for layout managers.
+     * The preferred size represents the component's ideal dimensions.
+     *
+     * @return the preferred size as a Dimension
+     * @since 1.1
+     */
+    public Dimension getPreferredSize() {
+        renderLock.lock();
+        try {
+            return preferredSize;
+        } finally {
+            renderLock.unlock();
+        }
+    }
+
+    /**
+     * Sets the preferred size of this component for layout managers.
+     * This does not change the actual size, only what the component
+     * requests from layout managers.
+     *
+     * @param width the preferred width
+     * @param height the preferred height
+     * @since 1.1
+     */
+    public void setPreferredSize(int width, int height) {
+        renderLock.lock();
+        try {
+            this.preferredSize = new Dimension(width, height);
         } finally {
             renderLock.unlock();
         }

@@ -46,6 +46,31 @@ public class Container extends Component {
         repaint();
     }
 
+    /**
+     * Adds a component to this container with optional layout constraints.
+     * The constraints object is passed to the layout manager if one is set.
+     *
+     * @param child the component to add
+     * @param constraints layout-specific constraints (e.g., BorderLayout.NORTH)
+     * @since 1.1
+     */
+    public void add(Component child, Object constraints) {
+        renderLock.lock();
+        try {
+            children.add(child);
+            child.setParent(this);
+            if (layoutManager != null) {
+                layoutManager.addLayoutComponent(child, constraints);
+            }
+            layoutValid = false;
+            cachedSnapshot = null;
+            modificationCount++;
+        } finally {
+            renderLock.unlock();
+        }
+        repaint();
+    }
+
     public void remove(Component child) {
         if (child == null) {
             throw new NullPointerException("child cannot be null");
@@ -94,6 +119,26 @@ public class Container extends Component {
 
     public void invalidateLayout() {
         layoutValid = false;
+    }
+
+    /**
+     * Causes this container to lay out its components and resize itself
+     * to fit the preferred sizes of its children.
+     * This method queries the layout manager for the preferred layout size
+     * and sets the container's size accordingly.
+     *
+     * @since 1.1
+     */
+    public void pack() {
+        renderLock.lock();
+        try {
+            if (layoutManager != null) {
+                Dimension preferred = layoutManager.preferredLayoutSize(this);
+                setSize(preferred.width(), preferred.height());
+            }
+        } finally {
+            renderLock.unlock();
+        }
     }
 
     /**

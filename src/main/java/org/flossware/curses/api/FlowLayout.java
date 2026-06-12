@@ -24,6 +24,47 @@ public class FlowLayout implements LayoutManager {
     }
 
     @Override
+    public void addLayoutComponent(Component comp, Object constraints) {
+        // FlowLayout doesn't use constraints
+    }
+
+    @Override
+    public void removeLayoutComponent(Component comp) {
+        // FlowLayout doesn't maintain component-specific state
+    }
+
+    @Override
+    public Dimension preferredLayoutSize(Container parent) {
+        int maxWidth = 0;
+        int totalHeight = 0;
+        int rowWidth = 0;
+        int rowHeight = 0;
+
+        for (Component child : parent.getChildren()) {
+            Dimension d = child.getPreferredSize();
+
+            // Check if we need to wrap to a new row
+            if (rowWidth > 0 && rowWidth + hgap + d.width() > parent.getWidth()) {
+                maxWidth = Math.max(maxWidth, rowWidth);
+                totalHeight += rowHeight + vgap;
+                rowWidth = 0;
+                rowHeight = 0;
+            }
+
+            rowWidth += d.width() + (rowWidth > 0 ? hgap : 0);
+            rowHeight = Math.max(rowHeight, d.height());
+        }
+
+        // Add the last row
+        if (rowWidth > 0) {
+            maxWidth = Math.max(maxWidth, rowWidth);
+            totalHeight += rowHeight;
+        }
+
+        return new Dimension(maxWidth, totalHeight);
+    }
+
+    @Override
     public void layoutContainer(Container parent) {
         int currentX = parent.getX();
         int currentY = parent.getY();
