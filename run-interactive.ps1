@@ -19,5 +19,11 @@ if (-not (Test-Path "target\classes")) {
     mvn clean compile
 }
 
+# Build classpath with Maven dependencies
+Write-Host "Building classpath..." -ForegroundColor Yellow
+$classpath = (mvn dependency:build-classpath -DincludeScope=runtime -q -Dmdep.outputFile=cp.txt)
+$dependencies = Get-Content cp.txt -Raw
+$fullClasspath = "target\classes;$dependencies"
+
 # Run with ncurses in terminal
-java --enable-preview --enable-native-access=ALL-UNNAMED -cp target\classes org.flossware.curses.InteractiveDemo
+java --enable-preview --enable-native-access=ALL-UNNAMED -cp $fullClasspath org.flossware.curses.InteractiveDemo

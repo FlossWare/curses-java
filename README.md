@@ -73,6 +73,32 @@ Quick preview:
 - **Maven 3.6+**
 - **ncurses library** (for interactive mode)
 
+> **⚠️ Important for Library Consumers:**  
+> This library uses Java 21 **preview features** and requires `--enable-preview` at both **compile time** and **runtime**.  
+> Your application must also be compiled and run with `--enable-preview`:
+> ```bash
+> javac --enable-preview --release 21 YourApp.java
+> java --enable-preview YourApp
+> ```
+> 
+> **Maven users** - Add to your `pom.xml`:
+> ```xml
+> <plugin>
+>   <groupId>org.apache.maven.plugins</groupId>
+>   <artifactId>maven-compiler-plugin</artifactId>
+>   <configuration>
+>     <compilerArgs>
+>       <arg>--enable-preview</arg>
+>     </compilerArgs>
+>   </configuration>
+> </plugin>
+> ```
+> 
+> **Preview features used:**
+> - **Foreign Function & Memory API** (FFI) - Direct ncurses binding without JNI  
+>   _(Note: FFI graduated to stable in Java 22, but this library targets Java 21)_
+> - **Pattern Matching enhancements** - Advanced switch expressions
+
 ### Install ncurses
 
 ```bash

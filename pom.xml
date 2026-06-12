@@ -340,12 +340,12 @@
         </dependencies>
         <configuration>
           <targetClasses>
-            <param>org.flossware.jcurses.api.*</param>
-            <param>org.flossware.jcurses.events.*</param>
-            <param>org.flossware.jcurses.theme.*</param>
+            <param>org.flossware.curses.api.*</param>
+            <param>org.flossware.curses.events.*</param>
+            <param>org.flossware.curses.theme.*</param>
           </targetClasses>
           <targetTests>
-            <param>org.flossware.jcurses.*</param>
+            <param>org.flossware.curses.*</param>
           </targetTests>
           <mutationThreshold>75</mutationThreshold>
           <coverageThreshold>80</coverageThreshold>
@@ -362,7 +362,7 @@
         <artifactId>dependency-check-maven</artifactId>
         <version>9.0.9</version>
         <configuration>
-          <failBuildOnCVSS>7</failBuildOnCVSS>
+          <failBuildOnCVSS>4</failBuildOnCVSS>
           <skipTestScope>true</skipTestScope>
         </configuration>
       </plugin>
@@ -374,7 +374,7 @@
         <configuration>
           <configLocation>google_checks.xml</configLocation>
           <consoleOutput>true</consoleOutput>
-          <failsOnError>false</failsOnError>
+          <failsOnError>true</failsOnError>
           <violationSeverity>warning</violationSeverity>
         </configuration>
       </plugin>
@@ -386,7 +386,7 @@
         <configuration>
           <effort>Max</effort>
           <threshold>Low</threshold>
-          <failOnError>false</failOnError>
+          <failOnError>true</failOnError>
           <xmlOutput>true</xmlOutput>
         </configuration>
       </plugin>
