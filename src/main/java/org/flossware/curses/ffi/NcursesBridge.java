@@ -245,14 +245,18 @@ public class NcursesBridge {
         }
     }
 
-    public static void init() throws Throwable {
+    public static void init() {
         if (!initialized) {
             throw new UnsupportedOperationException("ncurses library not available");
         }
-        stdscr = (MemorySegment) initscr.invokeExact();
-        checkResult((int) cbreak.invokeExact(), "cbreak");
-        checkResult((int) noecho.invokeExact(), "noecho");
-        checkResult((int) keypad.invokeExact(stdscr, (byte) 1), "keypad");
+        try {
+            stdscr = (MemorySegment) initscr.invokeExact();
+            checkResult((int) cbreak.invokeExact(), "cbreak");
+            checkResult((int) noecho.invokeExact(), "noecho");
+            checkResult((int) keypad.invokeExact(stdscr, (byte) 1), "keypad");
+        } catch (Throwable e) {
+            throw new RuntimeException("Failed to initialize ncurses", e);
+        }
     }
 
     public static void stop() throws Throwable {

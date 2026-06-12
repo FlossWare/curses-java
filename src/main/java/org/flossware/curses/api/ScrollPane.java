@@ -126,22 +126,24 @@ public class ScrollPane extends Container {
 
     private void updateScrollBars() {
         // Update scrollbar positions based on current offsets
-        // This would be called when scrolling or when content changes
+        // This is called when scrolling or when content changes
         if (horizontalScrollBar != null) {
-            // Calculate scrollbar value based on offsetX and content width
             int contentWidth = getContentWidth();
             int viewportWidth = getViewportWidth();
             if (contentWidth > viewportWidth) {
-                // Scrollbar value represents position
+                horizontalScrollBar.setMaximum(contentWidth);
+                horizontalScrollBar.setVisibleAmount(viewportWidth);
+                horizontalScrollBar.setValue(offsetX);
             }
         }
 
         if (verticalScrollBar != null) {
-            // Calculate scrollbar value based on offsetY and content height
             int contentHeight = getContentHeight();
             int viewportHeight = getViewportHeight();
             if (contentHeight > viewportHeight) {
-                // Scrollbar value represents position
+                verticalScrollBar.setMaximum(contentHeight);
+                verticalScrollBar.setVisibleAmount(viewportHeight);
+                verticalScrollBar.setValue(offsetY);
             }
         }
     }
