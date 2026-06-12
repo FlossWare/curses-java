@@ -2,7 +2,6 @@ package org.flossware.curses.api;
 
 import java.util.SequencedCollection;
 import java.util.ArrayList;
-import java.lang.Math;
 
 public class Choice extends Component {
     private final SequencedCollection<String> items = new ArrayList<>();
