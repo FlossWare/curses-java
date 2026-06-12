@@ -1,0 +1,26 @@
+{
+  "name": "Borland 3D",
+  "version": "1.0",
+  "description": "Classic Borland Turbo Vision aesthetic with 3D borders and drop shadows (1989-1995)",
+  "colors": {
+    "background": { "fg": "YELLOW", "bg": "BLUE" },
+    "button": { "fg": "CYAN", "bg": "BLUE" },
+    "button_focused": { "fg": "BLACK", "bg": "CYAN" },
+    "text_input": { "fg": "GREEN", "bg": "BLACK" },
+    "border": { "fg": "WHITE", "bg": "BLUE" },
+    "selection": { "fg": "BLACK", "bg": "CYAN" },
+    "disabled": { "fg": "BLUE", "bg": "BLUE" }
+  },
+  "borders": {
+    "single": "┌─┐│└─┘│",
+    "double": "╔═╗║╚═╝║",
+    "rounded": "╭─╮│╰─╯│"
+  },
+  "3d": {
+    "shadow_color": { "fg": "BLACK", "bg": "BLACK" },
+    "highlight_color": { "fg": "WHITE", "bg": "CYAN" },
+    "lowlight_color": { "fg": "BLACK", "bg": "CYAN" },
+    "shadow_offset": { "x": 2, "y": 1 },
+    "rendering_style": "RAISED"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "Dark",
+  "version": "1.0",
+  "description": "Modern dark mode with muted colors and Unicode borders",
+  "colors": {
+    "background": { "fg": "CYAN", "bg": "BLACK" },
+    "button": { "fg": "BLUE", "bg": "BLACK" },
+    "button_focused": { "fg": "BLACK", "bg": "CYAN" },
+    "text_input": { "fg": "WHITE", "bg": "BLACK" },
+    "border": { "fg": "CYAN", "bg": "BLACK" },
+    "selection": { "fg": "BLACK", "bg": "WHITE" },
+    "disabled": { "fg": "BLACK", "bg": "BLACK" }
+  },
+  "borders": {
+    "single": "┌─┐│└─┘│"
+  }
+}

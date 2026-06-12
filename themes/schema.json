@@ -1,0 +1,104 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Theme Specification",
+  "description": "Shared theme definition for curses-java and curses-themes",
+  "type": "object",
+  "required": ["name", "version", "colors", "borders"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Human-readable theme name"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+$",
+      "description": "Schema version (e.g., '1.0')"
+    },
+    "description": {
+      "type": "string",
+      "description": "Theme description and historical context"
+    },
+    "colors": {
+      "type": "object",
+      "required": ["background", "button", "button_focused", "text_input", "border", "selection", "disabled"],
+      "properties": {
+        "background": { "$ref": "#/definitions/colorPair" },
+        "button": { "$ref": "#/definitions/colorPair" },
+        "button_focused": { "$ref": "#/definitions/colorPair" },
+        "text_input": { "$ref": "#/definitions/colorPair" },
+        "border": { "$ref": "#/definitions/colorPair" },
+        "selection": { "$ref": "#/definitions/colorPair" },
+        "disabled": { "$ref": "#/definitions/colorPair" }
+      }
+    },
+    "borders": {
+      "type": "object",
+      "required": ["single"],
+      "properties": {
+        "single": {
+          "type": "string",
+          "pattern": "^.{8}$",
+          "description": "8 characters: TL T TR L R BL B BR"
+        },
+        "double": {
+          "type": "string",
+          "pattern": "^.{8}$",
+          "description": "8 characters for double-line borders"
+        },
+        "rounded": {
+          "type": "string",
+          "pattern": "^.{8}$",
+          "description": "8 characters for rounded corners"
+        }
+      }
+    },
+    "3d": {
+      "type": "object",
+      "description": "3D rendering settings (optional, for Theme3D)",
+      "required": ["shadow_color", "highlight_color", "lowlight_color", "shadow_offset"],
+      "properties": {
+        "shadow_color": { "$ref": "#/definitions/colorPair" },
+        "highlight_color": { "$ref": "#/definitions/colorPair" },
+        "lowlight_color": { "$ref": "#/definitions/colorPair" },
+        "shadow_offset": {
+          "type": "object",
+          "required": ["x", "y"],
+          "properties": {
+            "x": { "type": "integer", "minimum": 0 },
+            "y": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "rendering_style": {
+          "type": "string",
+          "enum": ["FLAT", "RAISED", "SUNKEN"],
+          "default": "RAISED"
+        }
+      }
+    }
+  },
+  "definitions": {
+    "colorPair": {
+      "type": "object",
+      "required": ["fg", "bg"],
+      "properties": {
+        "fg": { "$ref": "#/definitions/color" },
+        "bg": { "$ref": "#/definitions/color" }
+      }
+    },
+    "color": {
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": ["BLACK", "RED", "GREEN", "YELLOW", "BLUE", "MAGENTA", "CYAN", "WHITE"]
+        },
+        {
+          "type": "array",
+          "items": { "type": "integer", "minimum": 0, "maximum": 255 },
+          "minItems": 3,
+          "maxItems": 3,
+          "description": "RGB values [r, g, b]"
+        }
+      ]
+    }
+  }
+}

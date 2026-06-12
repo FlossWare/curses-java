@@ -1,0 +1,25 @@
+{
+  "name": "dBASE IV 3D",
+  "version": "1.0",
+  "description": "Authentic dBASE IV Control Center with 3D effects (1988-1993)",
+  "colors": {
+    "background": { "fg": "WHITE", "bg": "BLUE" },
+    "button": { "fg": "YELLOW", "bg": "BLUE" },
+    "button_focused": { "fg": "BLUE", "bg": "YELLOW" },
+    "text_input": { "fg": "CYAN", "bg": "BLUE" },
+    "border": { "fg": "WHITE", "bg": "BLUE" },
+    "selection": { "fg": "BLUE", "bg": "WHITE" },
+    "disabled": { "fg": "BLUE", "bg": "BLUE" }
+  },
+  "borders": {
+    "single": "┌─┐│└─┘│",
+    "double": "╔═╗║╚═╝║"
+  },
+  "3d": {
+    "shadow_color": { "fg": "BLACK", "bg": "BLACK" },
+    "highlight_color": { "fg": "WHITE", "bg": "CYAN" },
+    "lowlight_color": { "fg": "BLACK", "bg": "CYAN" },
+    "shadow_offset": { "x": 2, "y": 1 },
+    "rendering_style": "RAISED"
+  }
+}
