@@ -441,7 +441,6 @@ public class Container extends Component {
 
         @Override
         public boolean removeAll(Collection<?> c) {
-            int sizeBefore = delegate.size();
             boolean changed = delegate.removeAll(c);
             if (changed) {
                 onMutation.run();
@@ -451,7 +450,6 @@ public class Container extends Component {
 
         @Override
         public boolean retainAll(Collection<?> c) {
-            int sizeBefore = delegate.size();
             boolean changed = delegate.retainAll(c);
             if (changed) {
                 onMutation.run();
