@@ -10,15 +10,18 @@ public class Checkbox extends Component {
     }
 
     public void setChecked(boolean checked) {
+        CheckboxGroup g;
         renderLock.lock();
         try {
-            if (group != null) {
-                group.setSelected(this);
-            } else {
+            g = this.group;
+            if (g == null) {
                 this.checked = checked;
             }
         } finally {
             renderLock.unlock();
+        }
+        if (g != null) {
+            g.setSelected(this);
         }
         repaint();
     }
@@ -28,11 +31,21 @@ public class Checkbox extends Component {
     }
 
     void setGroup(CheckboxGroup group) {
-        this.group = group;
+        renderLock.lock();
+        try {
+            this.group = group;
+        } finally {
+            renderLock.unlock();
+        }
     }
 
     void setStateInternal(boolean checked) {
-        this.checked = checked;
+        renderLock.lock();
+        try {
+            this.checked = checked;
+        } finally {
+            renderLock.unlock();
+        }
         repaint();
     }
 

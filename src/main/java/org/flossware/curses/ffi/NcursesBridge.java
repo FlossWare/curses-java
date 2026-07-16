@@ -255,115 +255,175 @@ public class NcursesBridge {
             checkResult((int) noecho.invokeExact(), "noecho");
             checkResult((int) keypad.invokeExact(stdscr, (byte) 1), "keypad");
         } catch (Throwable e) {
-            throw new RuntimeException("Failed to initialize ncurses", e);
+            throw new NcursesException("Failed to initialize ncurses", e);
         }
     }
 
-    public static void stop() throws Throwable {
+    public static void stop() {
         if (initialized) {
-            checkResult((int) endwin.invokeExact(), "endwin");
+            try {
+                checkResult((int) endwin.invokeExact(), "endwin");
+            } catch (Throwable e) {
+                throw new NcursesException("Failed to stop ncurses", e);
+            }
         }
     }
 
-    public static void refresh() throws Throwable {
+    public static void refresh() {
         if (initialized) {
-            checkResult((int) refresh.invokeExact(), "refresh");
+            try {
+                checkResult((int) refresh.invokeExact(), "refresh");
+            } catch (Throwable e) {
+                throw new NcursesException("Failed to refresh screen", e);
+            }
         }
     }
 
-    public static int getChar() throws Throwable {
+    public static int getChar() {
         if (initialized) {
-            return (int) getch.invokeExact();
+            try {
+                return (int) getch.invokeExact();
+            } catch (Throwable e) {
+                throw new NcursesException("Failed to read character from ncurses", e);
+            }
         }
         return -1;
     }
 
-    public static void moveCursor(int y, int x, char ch) throws Throwable {
+    public static void moveCursor(int y, int x, char ch) {
         if (initialized) {
-            checkResult((int) mvaddch.invokeExact(y, x, (int) ch), "mvaddch");
+            try {
+                checkResult((int) mvaddch.invokeExact(y, x, (int) ch), "mvaddch");
+            } catch (Throwable e) {
+                throw new NcursesException("Failed to move cursor and add character", e);
+            }
         }
     }
 
-    public static void clear() throws Throwable {
+    public static void clear() {
         if (initialized) {
-            checkResult((int) clear.invokeExact(), "clear");
+            try {
+                checkResult((int) clear.invokeExact(), "clear");
+            } catch (Throwable e) {
+                throw new NcursesException("Failed to clear screen", e);
+            }
         }
     }
 
-    public static void setNonBlocking(boolean nonBlocking) throws Throwable {
+    public static void setNonBlocking(boolean nonBlocking) {
         if (initialized) {
-            checkResult((int) nodelay.invokeExact(stdscr, (byte) (nonBlocking ? 1 : 0)), "nodelay");
+            try {
+                checkResult((int) nodelay.invokeExact(stdscr, (byte) (nonBlocking ? 1 : 0)), "nodelay");
+            } catch (Throwable e) {
+                throw new NcursesException("Failed to set non-blocking mode", e);
+            }
         }
     }
 
-    public static long enableMouse(long mask) throws Throwable {
+    public static long enableMouse(long mask) {
         if (initialized) {
-            // Use ofAuto() instead of global() to allow GC to reclaim memory
-            MemorySegment oldMaskPtr = Arena.ofAuto().allocate(ValueLayout.JAVA_LONG);
-            long result = (long) mousemask.invokeExact(mask, oldMaskPtr);
-            return result;
+            try {
+                // Use ofAuto() instead of global() to allow GC to reclaim memory
+                MemorySegment oldMaskPtr = Arena.ofAuto().allocate(ValueLayout.JAVA_LONG);
+                long result = (long) mousemask.invokeExact(mask, oldMaskPtr);
+                return result;
+            } catch (Throwable e) {
+                throw new NcursesException("Failed to enable mouse support", e);
+            }
         }
         return 0;
     }
 
-    public static MouseEventData getMouseEvent() throws Throwable {
+    public static MouseEventData getMouseEvent() {
         if (initialized) {
-            // MEVENT structure: short id, int x, int y, int z, long bstate
-            // Use ofAuto() instead of global() to allow GC to reclaim memory
-            // Critical: this method is called on every mouse event, global arena would leak memory
-            MemorySegment mevent = Arena.ofAuto().allocate(32);  // Allocate enough space for MEVENT
-            int result = (int) getmouse.invokeExact(mevent);
-            if (result == 0) {  // OK
-                int x = mevent.get(ValueLayout.JAVA_INT, 4);
-                int y = mevent.get(ValueLayout.JAVA_INT, 8);
-                long bstate = mevent.get(ValueLayout.JAVA_LONG, 16);
-                return new MouseEventData(x, y, bstate);
+            try {
+                // MEVENT structure: short id, int x, int y, int z, long bstate
+                // Use ofAuto() instead of global() to allow GC to reclaim memory
+                // Critical: this method is called on every mouse event, global arena would leak memory
+                MemorySegment mevent = Arena.ofAuto().allocate(32);  // Allocate enough space for MEVENT
+                int result = (int) getmouse.invokeExact(mevent);
+                if (result == 0) {  // OK
+                    int x = mevent.get(ValueLayout.JAVA_INT, 4);
+                    int y = mevent.get(ValueLayout.JAVA_INT, 8);
+                    long bstate = mevent.get(ValueLayout.JAVA_LONG, 16);
+                    return new MouseEventData(x, y, bstate);
+                }
+            } catch (Throwable e) {
+                throw new NcursesException("Failed to get mouse event", e);
             }
         }
         return null;
     }
 
-    public static void startColor() throws Throwable {
+    public static void startColor() {
         if (initialized) {
-            checkResult((int) start_color.invokeExact(), "start_color");
+            try {
+                checkResult((int) start_color.invokeExact(), "start_color");
+            } catch (Throwable e) {
+                throw new NcursesException("Failed to start color support", e);
+            }
         }
     }
 
-    public static void initColorPair(short pair, short fg, short bg) throws Throwable {
+    public static void initColorPair(short pair, short fg, short bg) {
         if (initialized) {
-            checkResult((int) init_pair.invokeExact(pair, fg, bg), "init_pair");
+            try {
+                checkResult((int) init_pair.invokeExact(pair, fg, bg), "init_pair");
+            } catch (Throwable e) {
+                throw new NcursesException("Failed to initialize color pair", e);
+            }
         }
     }
 
-    public static int getColorPair(int pairNumber) throws Throwable {
+    public static int getColorPair(int pairNumber) {
         if (initialized) {
-            return (int) color_pair.invokeExact(pairNumber);
+            try {
+                return (int) color_pair.invokeExact(pairNumber);
+            } catch (Throwable e) {
+                throw new NcursesException("Failed to get color pair", e);
+            }
         }
         return 0;
     }
 
-    public static void enableAttribute(int attr) throws Throwable {
+    public static void enableAttribute(int attr) {
         if (initialized) {
-            checkResult((int) attron.invokeExact(attr), "attron");
+            try {
+                checkResult((int) attron.invokeExact(attr), "attron");
+            } catch (Throwable e) {
+                throw new NcursesException("Failed to enable text attribute", e);
+            }
         }
     }
 
-    public static void disableAttribute(int attr) throws Throwable {
+    public static void disableAttribute(int attr) {
         if (initialized) {
-            checkResult((int) attroff.invokeExact(attr), "attroff");
+            try {
+                checkResult((int) attroff.invokeExact(attr), "attroff");
+            } catch (Throwable e) {
+                throw new NcursesException("Failed to disable text attribute", e);
+            }
         }
     }
 
-    public static int getTerminalHeight() throws Throwable {
+    public static int getTerminalHeight() {
         if (initialized && stdscr != null) {
-            return (int) getmaxy.invokeExact(stdscr);
+            try {
+                return (int) getmaxy.invokeExact(stdscr);
+            } catch (Throwable e) {
+                throw new NcursesException("Failed to get terminal height", e);
+            }
         }
         return 24;  // Default fallback
     }
 
-    public static int getTerminalWidth() throws Throwable {
+    public static int getTerminalWidth() {
         if (initialized && stdscr != null) {
-            return (int) getmaxx.invokeExact(stdscr);
+            try {
+                return (int) getmaxx.invokeExact(stdscr);
+            } catch (Throwable e) {
+                throw new NcursesException("Failed to get terminal width", e);
+            }
         }
         return 80;  // Default fallback
     }
