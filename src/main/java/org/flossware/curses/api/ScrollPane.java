@@ -26,8 +26,22 @@ public class ScrollPane extends Container {
     public void scrollTo(int x, int y) {
         renderLock.lock();
         try {
+            // Clamp lower bound to 0
             offsetX = Math.max(0, x);
             offsetY = Math.max(0, y);
+
+            // Clamp upper bound to content dimensions to prevent scrolling
+            // past content, which would cause excessively negative translated
+            // positions for children (Issue #193)
+            int contentWidth = getContentWidth();
+            int contentHeight = getContentHeight();
+            if (contentWidth > 0) {
+                offsetX = Math.min(offsetX, contentWidth);
+            }
+            if (contentHeight > 0) {
+                offsetY = Math.min(offsetY, contentHeight);
+            }
+
             updateScrollBars();
         } finally {
             renderLock.unlock();
@@ -150,6 +164,14 @@ public class ScrollPane extends Container {
 
     @Override
     public void paint(char[][] buffer) {
+        // Guard: validate buffer before any access (Issue #193)
+        if (buffer == null || buffer.length == 0) {
+            return;
+        }
+
+        int bufferHeight = buffer.length;
+        int bufferWidth = buffer[0].length;
+
         // Use snapshot to safely iterate children while performing temporary mutations.
         // This preserves the Container's caching optimization (Issue #74).
         List<Component> snapshot = getChildrenSnapshot();
@@ -159,20 +181,38 @@ public class ScrollPane extends Container {
             int childY = child.getY() - offsetY;
 
             // Check if child is visible in viewport
-            if (childX + child.getWidth() >= 0 && childX < width &&
-                childY + child.getHeight() >= 0 && childY < height) {
+            if (childX + child.getWidth() < 0 || childX >= width ||
+                childY + child.getHeight() < 0 || childY >= height) {
+                continue;
+            }
 
-                // Save original position
-                int origX = child.getX();
-                int origY = child.getY();
+            // Compute absolute buffer position for the translated child
+            int absX = x + childX;
+            int absY = y + childY;
 
+            // Comprehensive bounds validation: ensure the translated child
+            // position overlaps with the buffer area (Issue #193).
+            // Skip children that are entirely outside the buffer to prevent
+            // ArrayIndexOutOfBoundsException when content buffer is smaller
+            // than the viewport or child extends past buffer edges.
+            if (absX + child.getWidth() < 0 || absX >= bufferWidth ||
+                absY + child.getHeight() < 0 || absY >= bufferHeight) {
+                continue;
+            }
+
+            // Save original position
+            int origX = child.getX();
+            int origY = child.getY();
+
+            try {
                 // Temporarily set translated position
-                child.setLocation(x + childX, y + childY);
+                child.setLocation(absX, absY);
 
-                // Paint child (it will be clipped by buffer bounds)
+                // Paint child - safe buffer writes are enforced by
+                // Component.writeCharToBuffer/writeStringToBuffer bounds checks
                 child.paint(buffer);
-
-                // Restore original position
+            } finally {
+                // Restore original position even if paint throws
                 child.setLocation(origX, origY);
             }
         }
