@@ -441,31 +441,55 @@ public abstract class Component {
         }
     }
 
+    /**
+     * Dispatches a mouse event to registered listeners if it falls within this
+     * component's bounds.
+     *
+     * <h3>Lock ordering convention</h3>
+     * <p>This method follows a two-phase locking protocol to prevent deadlocks:
+     * <ol>
+     *   <li><b>Phase 1 (locked):</b> Acquire {@link #renderLock}, perform the
+     *       bounds check, and snapshot the listener list. The lock is released
+     *       at the end of this phase via {@code try-finally}.</li>
+     *   <li><b>Phase 2 (unlocked):</b> Invoke listener callbacks with
+     *       <em>no lock held</em>. This ensures that listeners may safely
+     *       acquire other locks or call back into this component without
+     *       risking deadlock or lock-ordering violations.</li>
+     * </ol>
+     *
+     * <p><b>Rationale:</b> Listener callbacks are external code whose locking
+     * behavior is unknown. Holding {@code renderLock} while invoking them
+     * could deadlock if the callback attempts to acquire a lock that another
+     * thread holds while waiting for {@code renderLock}. By releasing the lock
+     * before entering Phase 2 we break the potential cycle.
+     *
+     * <p>The listener list is snapshotted (shallow-copied) under the lock so
+     * that concurrent {@link #addMouseListener}/{@link #removeMouseListener}
+     * calls do not cause {@link java.util.ConcurrentModificationException}.
+     *
+     * @param event the mouse event to dispatch
+     * @return {@code true} if the event was within bounds and dispatched to
+     *         listeners, {@code false} otherwise
+     */
     public boolean handleMouseEvent(MouseEvent event) {
+        // Phase 1: acquire lock, check bounds, snapshot listeners, release lock.
+        final List<MouseListener> listeners;
         renderLock.lock();
         try {
-            // Check if the click is within this component's bounds
-            if (event.x() >= x && event.x() < x + width &&
-                event.y() >= y && event.y() < y + height) {
-
-                // Copy listener list to avoid ConcurrentModificationException
-                List<MouseListener> listeners = new ArrayList<>(mouseListeners);
-
-                renderLock.unlock();
-                try {
-                    // Notify all mouse listeners outside lock
-                    for (MouseListener listener : listeners) {
-                        listener.onMouseEvent(event);
-                    }
-                    return true;
-                } finally {
-                    renderLock.lock();
-                }
+            if (event.x() < x || event.x() >= x + width ||
+                event.y() < y || event.y() >= y + height) {
+                return false;
             }
-            return false;
+            listeners = new ArrayList<>(mouseListeners);
         } finally {
             renderLock.unlock();
         }
+
+        // Phase 2: invoke listener callbacks with no lock held.
+        for (MouseListener listener : listeners) {
+            listener.onMouseEvent(event);
+        }
+        return true;
     }
 
     // Accessibility Support
