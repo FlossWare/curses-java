@@ -3,6 +3,7 @@ package org.flossware.curses.api;
 import org.flossware.curses.events.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -26,7 +27,7 @@ public abstract class Component {
     protected int x, y, width, height;
     protected final ReentrantLock renderLock = new ReentrantLock();
     protected Component parent;
-    protected final List<MouseListener> mouseListeners = new ArrayList<>();
+    private final List<MouseListener> mouseListeners = new CopyOnWriteArrayList<>();
     protected ColorPair colorPair = ColorPair.DEFAULT;
 
     // Border customization
@@ -250,8 +251,9 @@ public abstract class Component {
                 if (themeBorderChars != null) {
                     return themeBorderChars;
                 }
-            } catch (Exception e) {
-                // Theme access failed, fall through to default
+            } catch (NullPointerException | IllegalStateException e) {
+                // Theme access failed (e.g., no theme set, manager not initialized),
+                // fall through to default
             }
 
             // Hardcoded fallback
@@ -352,8 +354,8 @@ public abstract class Component {
         org.flossware.curses.theme.Theme theme;
         try {
             theme = org.flossware.curses.theme.ThemeManager.getInstance().getCurrentTheme();
-        } catch (Exception e) {
-            // Theme access failed, skip shadow rendering
+        } catch (NullPointerException | IllegalStateException e) {
+            // Theme access failed (e.g., no theme set), skip shadow rendering
             return;
         }
 
