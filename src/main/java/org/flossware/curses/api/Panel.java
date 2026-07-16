@@ -28,10 +28,9 @@ public class Panel extends Container {
     }
 
     @Override
-    public void paint(char[][] buffer) {
+    protected void drawBorder(char[][] buffer, int[][] colorBuffer) {
         if (bordered) {
-            drawBorder(buffer);
+            super.drawBorder(buffer, colorBuffer);
         }
-        super.paint(buffer);
     }
 }

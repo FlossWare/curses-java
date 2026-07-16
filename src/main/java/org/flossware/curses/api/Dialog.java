@@ -166,16 +166,14 @@ public class Dialog extends Container implements DraggableWindow {
 
     @Override
     public void paint(char[][] buffer) {
-        drawBorder(buffer);
+        super.paint(buffer);
 
-        // Draw title if present
+        // Draw title if present (after super.paint so border doesn't overwrite it)
         if (title != null && !title.isEmpty() && width > 2) {
             String titleDisplay = "[ " + title + " ]";
             int titleX = getX() + (width - titleDisplay.length()) / 2;
             writeStringToBuffer(buffer, titleDisplay, titleX, getY());
         }
-
-        super.paint(buffer);
     }
 
     // DraggableWindow interface implementation

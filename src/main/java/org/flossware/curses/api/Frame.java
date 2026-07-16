@@ -55,15 +55,13 @@ public class Frame extends Container implements DraggableWindow {
     public void paint(char[][] buffer) {
         if (!visible) return;
 
-        drawBorder(buffer);
+        super.paint(buffer);
 
         if (title != null && !title.isEmpty() && width > 2) {
             String titleDisplay = "[ " + title + " ]";
             int titleX = getX() + (width - titleDisplay.length()) / 2;
             writeStringToBuffer(buffer, titleDisplay, titleX, getY());
         }
-
-        super.paint(buffer);
     }
 
     // DraggableWindow interface implementation
