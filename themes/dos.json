@@ -1,0 +1,22 @@
+{
+  "name": "DOS",
+  "version": "1.0",
+  "description": "Classic MS-DOS text mode interface with yellow menus and cyan input fields (1981-1995)",
+  "metadata": {
+    "author": "FlossWare",
+    "era": "1981-1995",
+    "tags": ["retro", "dos", "ascii"]
+  },
+  "colors": {
+    "background": { "fg": "WHITE", "bg": "BLACK" },
+    "button": { "fg": "YELLOW", "bg": "BLACK" },
+    "button_focused": { "fg": "BLACK", "bg": "YELLOW" },
+    "text_input": { "fg": "CYAN", "bg": "BLACK" },
+    "border": { "fg": "WHITE", "bg": "BLACK" },
+    "selection": { "fg": "BLACK", "bg": "WHITE" },
+    "disabled": { "fg": "BLACK", "bg": "BLACK" }
+  },
+  "borders": {
+    "single": "+-+||+-+"
+  }
+}

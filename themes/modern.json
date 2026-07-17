@@ -1,0 +1,21 @@
+{
+  "name": "Modern",
+  "version": "1.0",
+  "description": "Contemporary high-contrast theme with yellow focus indicators, WCAG AAA compliant",
+  "metadata": {
+    "author": "FlossWare",
+    "tags": ["modern", "accessible", "unicode", "dark"]
+  },
+  "colors": {
+    "background": { "fg": "WHITE", "bg": "BLACK" },
+    "button": { "fg": "CYAN", "bg": "BLACK" },
+    "button_focused": { "fg": "YELLOW", "bg": "BLACK" },
+    "text_input": { "fg": "WHITE", "bg": "BLACK" },
+    "border": { "fg": "WHITE", "bg": "BLACK" },
+    "selection": { "fg": "BLACK", "bg": "YELLOW" },
+    "disabled": { "fg": "BLACK", "bg": "BLACK" }
+  },
+  "borders": {
+    "single": "┌─┐│└─┘│"
+  }
+}

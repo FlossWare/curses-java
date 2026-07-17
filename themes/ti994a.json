@@ -1,0 +1,22 @@
+{
+  "name": "TI-99/4A",
+  "version": "1.0",
+  "description": "Texas Instruments TI-99/4A home computer with distinctive cyan-on-blue color scheme (1981-1984)",
+  "metadata": {
+    "author": "FlossWare",
+    "era": "1981-1984",
+    "tags": ["retro", "ti", "home-computer", "ascii"]
+  },
+  "colors": {
+    "background": { "fg": "CYAN", "bg": "BLUE" },
+    "button": { "fg": "WHITE", "bg": "BLUE" },
+    "button_focused": { "fg": "BLUE", "bg": "CYAN" },
+    "text_input": { "fg": "CYAN", "bg": "BLUE" },
+    "border": { "fg": "CYAN", "bg": "BLUE" },
+    "selection": { "fg": "BLUE", "bg": "WHITE" },
+    "disabled": { "fg": "BLUE", "bg": "BLUE" }
+  },
+  "borders": {
+    "single": "+-+||+-+"
+  }
+}

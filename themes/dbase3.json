@@ -1,0 +1,22 @@
+{
+  "name": "dBASE III",
+  "version": "1.0",
+  "description": "Ashton-Tate dBASE III database management system with cyan menus and green input fields (1984-1985)",
+  "metadata": {
+    "author": "FlossWare",
+    "era": "1984-1985",
+    "tags": ["retro", "dbase", "database", "ascii"]
+  },
+  "colors": {
+    "background": { "fg": "WHITE", "bg": "BLACK" },
+    "button": { "fg": "CYAN", "bg": "BLACK" },
+    "button_focused": { "fg": "BLACK", "bg": "CYAN" },
+    "text_input": { "fg": "GREEN", "bg": "BLACK" },
+    "border": { "fg": "WHITE", "bg": "BLACK" },
+    "selection": { "fg": "BLACK", "bg": "CYAN" },
+    "disabled": { "fg": "BLACK", "bg": "BLACK" }
+  },
+  "borders": {
+    "single": "+-+||+-+"
+  }
+}

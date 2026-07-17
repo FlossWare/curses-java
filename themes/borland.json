@@ -1,0 +1,22 @@
+{
+  "name": "Borland",
+  "version": "1.0",
+  "description": "Iconic Borland IDE blue background with yellow text and rounded Unicode borders (1989-1995)",
+  "metadata": {
+    "author": "FlossWare",
+    "era": "1989-1995",
+    "tags": ["retro", "borland", "turbo-pascal"]
+  },
+  "colors": {
+    "background": { "fg": "YELLOW", "bg": "BLUE" },
+    "button": { "fg": "CYAN", "bg": "BLUE" },
+    "button_focused": { "fg": "BLACK", "bg": "CYAN" },
+    "text_input": { "fg": "WHITE", "bg": "BLUE" },
+    "border": { "fg": "WHITE", "bg": "BLUE" },
+    "selection": { "fg": "BLACK", "bg": "CYAN" },
+    "disabled": { "fg": "BLACK", "bg": "BLUE" }
+  },
+  "borders": {
+    "single": "╭─╮│╰─╯│"
+  }
+}

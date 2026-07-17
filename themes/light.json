@@ -1,0 +1,21 @@
+{
+  "name": "Light",
+  "version": "1.0",
+  "description": "High contrast light mode with dark text on white background and double-line Unicode borders",
+  "metadata": {
+    "author": "FlossWare",
+    "tags": ["light", "high-contrast", "unicode"]
+  },
+  "colors": {
+    "background": { "fg": "BLACK", "bg": "WHITE" },
+    "button": { "fg": "BLUE", "bg": "WHITE" },
+    "button_focused": { "fg": "WHITE", "bg": "BLUE" },
+    "text_input": { "fg": "BLACK", "bg": "CYAN" },
+    "border": { "fg": "BLACK", "bg": "WHITE" },
+    "selection": { "fg": "WHITE", "bg": "BLUE" },
+    "disabled": { "fg": "CYAN", "bg": "WHITE" }
+  },
+  "borders": {
+    "single": "╔═╗║╚═╝║"
+  }
+}

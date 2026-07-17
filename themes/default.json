@@ -1,0 +1,21 @@
+{
+  "name": "Default",
+  "version": "1.0",
+  "description": "Classic terminal appearance with white text on black background and ASCII borders",
+  "metadata": {
+    "author": "FlossWare",
+    "tags": ["default", "ascii", "classic"]
+  },
+  "colors": {
+    "background": { "fg": "WHITE", "bg": "BLACK" },
+    "button": { "fg": "CYAN", "bg": "BLACK" },
+    "button_focused": { "fg": "BLACK", "bg": "CYAN" },
+    "text_input": { "fg": "GREEN", "bg": "BLACK" },
+    "border": { "fg": "WHITE", "bg": "BLACK" },
+    "selection": { "fg": "BLACK", "bg": "WHITE" },
+    "disabled": { "fg": "WHITE", "bg": "BLACK" }
+  },
+  "borders": {
+    "single": "+-+||+-+"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "dBASE IV",
+  "version": "1.0",
+  "description": "dBASE IV windowed interface with blue background and yellow menus (1988-1993)",
+  "metadata": {
+    "author": "FlossWare",
+    "era": "1988-1993",
+    "tags": ["retro", "dbase", "database", "ascii"]
+  },
+  "colors": {
+    "background": { "fg": "WHITE", "bg": "BLUE" },
+    "button": { "fg": "YELLOW", "bg": "BLUE" },
+    "button_focused": { "fg": "BLUE", "bg": "YELLOW" },
+    "text_input": { "fg": "CYAN", "bg": "BLUE" },
+    "border": { "fg": "WHITE", "bg": "BLUE" },
+    "selection": { "fg": "BLUE", "bg": "WHITE" },
+    "disabled": { "fg": "BLUE", "bg": "BLUE" }
+  },
+  "borders": {
+    "single": "+-+||+-+"
+  }
+}
