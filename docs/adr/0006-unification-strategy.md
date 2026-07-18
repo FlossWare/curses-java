@@ -1,6 +1,6 @@
 # ADR 0006: Unification Strategy for curses-java and curses-themes
 
-**Status:** Partially implemented
+**Status:** Implemented
 **Date:** 2026-07-18
 **Deciders:** Project Maintainer
 **Tags:** architecture, themes, cross-language, json
@@ -9,7 +9,7 @@
 
 Two parallel implementations of curses-based theme systems exist:
 
-- **curses-java** (Java 21, 197 source files) -- Uses the Foreign Function & Memory API to call ncurses. Defines themes via Java interfaces (`Theme`, `Theme3D`) with 12 concrete theme classes, managed by a singleton `ThemeManager`.
+- **curses-java** (Java 21, 75 source files) -- Uses the Foreign Function & Memory API to call ncurses. Defines themes via Java interfaces (`Theme`, `Theme3D`) with 12 concrete theme classes, managed by a singleton `ThemeManager`.
 - **curses-themes** (Python) -- Pure Python calling ncurses via the standard library. Implements identical `Theme3D` interfaces with its own set of theme definitions.
 
 Both projects share the same conceptual model:
@@ -78,15 +78,16 @@ Completed in issue #264:
 
 ## What Remains
 
-1. **Python consumer** -- `curses-themes` needs a `ThemeLoader.from_json()` that reads the same JSON files and produces its native theme objects. This is the main remaining work item for full unification.
+1. **Shared theme repository** -- The canonical JSON files currently live in `curses-java/themes/`. A dedicated repository (e.g., `curses-theme-specs`) or git submodule could hold them so neither project is the "owner." This is optional -- both projects can also simply copy the files, since the schema enforces compatibility. (Evaluated in ADR 0007; decision: keep in curses-java repo.)
 
-2. **Shared theme repository** -- The canonical JSON files currently live in `curses-java/themes/`. A dedicated repository (e.g., `curses-theme-specs`) or git submodule could hold them so neither project is the "owner." This is optional -- both projects can also simply copy the files, since the schema enforces compatibility.
+2. **Rendering algorithm documentation** -- The ~125 lines of border-drawing and 3D shadow rendering logic are duplicated. A specification document describing the algorithm (edge coloring order, shadow offset calculation, character placement) would help keep the implementations in sync during future changes.
 
-3. **Rendering algorithm documentation** -- The ~125 lines of border-drawing and 3D shadow rendering logic are duplicated. A specification document describing the algorithm (edge coloring order, shadow offset calculation, character placement) would help keep the implementations in sync during future changes.
+3. **Theme contribution workflow** -- Document the process for adding a new theme: create the JSON file, validate against schema, and it works in both languages without code changes.
 
-4. **Schema validation in CI** -- Add a CI step that validates all JSON files in `themes/` against `schema.json` on every commit. This prevents schema drift.
+### Completed Since Initial Writing
 
-5. **Theme contribution workflow** -- Document the process for adding a new theme: create the JSON file, validate against schema, and it works in both languages without code changes.
+- **Python consumer** -- `curses-themes` now loads Java JSON files natively via `_convert_java_to_python()` adapter, with `load_from_file()` and `load_themes_from_directory()`.
+- **Schema validation in CI** -- `validate-themes.yml` validates all JSON files in `themes/` against `schema.json` on every commit.
 
 ## Consequences
 
@@ -123,7 +124,7 @@ The JSON-only approach was chosen because it eliminates the primary source of du
 
 - [Issue #233](https://github.com/FlossWare/curses-java/issues/233) -- Parent architecture issue: "Unify curses-java and curses-themes with shared implementation"
 - [Issue #264](https://github.com/FlossWare/curses-java/issues/264) -- ThemeLoader + JSON theme support (completed); implements the shared JSON data layer
-- [Issue #263](https://github.com/FlossWare/curses-java/issues/263) -- Rust/UniFFI spike (in progress); evaluates whether a shared native library is worthwhile
+- [Issue #263](https://github.com/FlossWare/curses-java/issues/263) -- Rust/UniFFI spike (rejected per ADR 0004); evaluated whether a shared native library is worthwhile
 - `themes/schema.json` -- JSON Schema (draft-07) defining the theme file format for cross-language validation
 - `themes/README.md` -- End-user documentation for the shared theme format, including examples and custom theme creation
 - `src/main/java/org/flossware/curses/theme/Theme.java` -- Base theme interface defining 7 color pairs and border characters

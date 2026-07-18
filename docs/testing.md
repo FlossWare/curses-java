@@ -4,7 +4,7 @@
 
 The curses-java library has comprehensive test coverage across multiple testing levels:
 
-- **Unit Tests**: 766 tests covering all 57 source files with 80%+ code coverage
+- **Unit Tests**: 1820 tests covering all 75 source files with 80%+ code coverage
 - **Integration Tests**: 33 tests verifying end-to-end UI behavior without requiring a terminal
 - **UI Component Testing**: Interactive verification of all 28 UI components in real terminal environments
 
@@ -52,7 +52,7 @@ mvn jacoco:prepare-agent failsafe:integration-test \
 
 **Unit Tests:**
 ```
-Tests run: 766, Failures: 0, Errors: 0, Skipped: 0
+Tests run: 1820, Failures: 0, Errors: 0, Skipped: 0
 BUILD SUCCESS
 ```
 
@@ -83,7 +83,7 @@ BUILD SUCCESS
 ### Test Coverage
 
 **Current Status:**
-- ✅ 766 tests passing
+- ✅ 1820 tests passing
 - ✅ 0 failures, 0 errors, 0 skipped
 - ✅ 46 test classes
 - ✅ 80%+ code coverage achieved
@@ -124,7 +124,7 @@ All 29 widgets tested including:
 - `JFrameTest` - Top-level window
 
 #### Theme System Tests (9 tests)
-- `ThemeTest` - Default, Dark, and Light themes
+- `ThemeTest` - All 12 built-in themes (flat and 3D)
 
 ### Test Features
 
@@ -490,7 +490,7 @@ The following tables document interactive testing of all UI components in real t
 ### Coverage Summary
 
 - **Fully Tested**: 28 UI components with interactive testing
-- **Unit Test Coverage**: 367 tests across all components
+- **Unit Test Coverage**: 1820 tests across all components
 - **Integration Test Coverage**: 33 end-to-end tests
 - **Status**: Production Ready
 

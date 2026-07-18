@@ -809,7 +809,6 @@ Find more examples in the `examples/` directory:
 - Create your own interactive application
 - Explore the component API in `src/main/java/org/flossware/curses/api/`
 - Check out the theme system in `docs/themes.md`
-- Review test results in `COMPLETE_UI_TEST_RESULTS.md`
 
 ---
 

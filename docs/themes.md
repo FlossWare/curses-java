@@ -1,6 +1,6 @@
 # curses-java Theme Gallery
 
-> 📸 **[View Theme Screenshots](docs/screenshots/README.md)** - Visual examples with ASCII art demonstrations
+> 📸 **[View Theme Screenshots](screenshots/README.md)** - Visual examples with ASCII art demonstrations
 
 
 A comprehensive guide to the visual themes available in the curses-java library. Each theme recreates the distinctive aesthetic of classic computing systems and development environments, bringing authentic retro computing experiences to modern terminal applications.
@@ -30,7 +30,7 @@ A comprehensive guide to the visual themes available in the curses-java library.
 
 ## Overview
 
-curses-java includes 10 carefully crafted themes that span four decades of computing history. Each theme authentically recreates the color schemes, border styles, and visual aesthetics of its inspiration while providing a consistent interface for modern terminal applications.
+curses-java includes 12 carefully crafted themes that span four decades of computing history. Each theme authentically recreates the color schemes, border styles, and visual aesthetics of its inspiration while providing a consistent interface for modern terminal applications.
 
 ### Theme Categories
 
@@ -1081,15 +1081,16 @@ Some potential themes for future development:
 
 ## Screenshots
 
-Coming soon: Visual examples of each theme in action.
+See the [Theme Screenshots](screenshots/README.md) for visual examples of each theme in action.
 
 ## Version History
 
-- **1.0.0** (2024): Initial release with 10 themes
+- **1.0.0** (2026): Initial release with 12 themes
   - Modern: Default, Dark, Light, Modern
   - Classic IDE: Borland
   - Retro Computers: TI-99/4A, TRS-80
   - Business Software: DOS, dBASE III, dBASE IV
+  - 3D Themes: Borland 3D, dBASE IV 3D
 
 ## License
 

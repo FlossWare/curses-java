@@ -11,7 +11,7 @@ Make curses-java the premier Java terminal UI library with modern features, exce
 - ✅ 29 UI widgets (buttons, text fields, tables, etc.)
 - ✅ Mouse support (click, drag, resize)
 - ✅ Thread-safe architecture with ReentrantLock
-- ✅ Color system (8 standard colors, 3 themes)
+- ✅ Color system (8 standard colors, 12 themes)
 - ✅ Advanced text editing (selection, cut/copy/paste, undo/redo)
 - ✅ Scrollable views (JScrollPane)
 - ✅ Layout managers (BorderLayout, FlowLayout, GridLayout)
@@ -25,14 +25,14 @@ Make curses-java the premier Java terminal UI library with modern features, exce
 - ✅ ThemeLoader (fromJson/toJson) for Java
 - ✅ ThemeManager enhanced with loadThemesFromDirectory/useTheme/getAvailableThemes
 - ✅ Architecture Decision Record ([ADR 0006](adr/0006-unification-strategy.md))
-- 🎯 Python consumer (`curses-themes`) to read shared JSON files
+- ✅ Python consumer (`curses-themes`) reads shared JSON files
 - 🎯 Rendering algorithm specification document
-- 🎯 JSON schema validation in CI
+- ✅ JSON schema validation in CI (`validate-themes.yml`)
 - 💡 Shared theme repository (`curses-theme-specs`)
 - 💡 Rust/UniFFI shared rendering library (evaluated in #263)
 
 ### Quality Assurance (Complete)
-- ✅ 399 comprehensive tests (100% passing)
+- ✅ 1820 comprehensive tests (100% passing)
 - ✅ 80%+ code coverage
 - ✅ Mutation testing (PITest)
 - ✅ Property-based testing (jqwik)

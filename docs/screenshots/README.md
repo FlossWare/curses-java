@@ -39,7 +39,7 @@ Classic Borland Turbo Vision aesthetic with 3D borders and drop shadows.
 - Sunken input fields (reversed shading)
 - Double-line window borders
 
-###dBASE IV 3D Theme
+### dBASE IV 3D Theme
 
 Authentic dBASE IV Control Center with professional business aesthetic.
 
