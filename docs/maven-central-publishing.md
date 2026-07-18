@@ -5,7 +5,7 @@ This guide provides complete step-by-step instructions for publishing the curses
 **Current Status:**
 - **GroupId:** org.flossware
 - **ArtifactId:** curses-java
-- **License:** GPL-3.0
+- **License:** Apache-2.0
 - **Repository:** https://github.com/FlossWare/curses-java
 
 ## Table of Contents
@@ -209,8 +209,8 @@ Ensure these elements are present at the root `<project>` level:
   <!-- Required: License information -->
   <licenses>
     <license>
-      <name>GNU General Public License v3.0 or later</name>
-      <url>https://www.gnu.org/licenses/gpl-3.0.html</url>
+      <name>Apache License 2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
@@ -423,8 +423,8 @@ Here's the complete structure for the root project element:
   <!-- License -->
   <licenses>
     <license>
-      <name>GNU General Public License v3.0 or later</name>
-      <url>https://www.gnu.org/licenses/gpl-3.0.html</url>
+      <name>Apache License 2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0</url>
       <distribution>repo</distribution>
     </license>
   </licenses>

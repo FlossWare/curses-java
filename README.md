@@ -5,7 +5,7 @@ A modern Java terminal UI library that brings AWT-like components to the termina
 ![Status](https://img.shields.io/badge/status-working-brightgreen)
 ![Version](https://img.shields.io/badge/version-1.28-blue)
 ![Java](https://img.shields.io/badge/java-21-orange)
-![License](https://img.shields.io/badge/license-GPL--3.0-blue)
+![License](https://img.shields.io/badge/license-Apache--2.0-blue)
 
 ## ✨ Features
 
@@ -470,7 +470,7 @@ Make sure the terminal window has focus and you're running directly (not through
 
 ## 📄 License
 
-GNU General Public License v3.0 - See [LICENSE](LICENSE) file
+Apache License 2.0 - See [LICENSE](LICENSE) file
 
 ## 🤝 Contributing
 
