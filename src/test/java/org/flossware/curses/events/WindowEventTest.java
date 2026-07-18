@@ -20,17 +20,17 @@ class WindowEventTest {
     }
 
     @Test
-    @DisplayName("should be instance of JcursesEvent")
+    @DisplayName("should be instance of CursesEvent")
     void testSealedInterface() {
         WindowEvent event = new WindowEvent(100, 50);
 
-        assertInstanceOf(JcursesEvent.class, event);
+        assertInstanceOf(CursesEvent.class, event);
     }
 
     @Test
     @DisplayName("should support record pattern matching")
     void testPatternMatching() {
-        JcursesEvent event = new WindowEvent(120, 30);
+        CursesEvent event = new WindowEvent(120, 30);
 
         switch (event) {
             case KeyEvent(int code, boolean alt, boolean ctrl) -> fail("Should be WindowEvent");
@@ -84,13 +84,13 @@ class WindowEventTest {
     @Test
     @DisplayName("should support exhaustive pattern matching")
     void testExhaustivePatternMatching() {
-        JcursesEvent[] events = {
+        CursesEvent[] events = {
             new WindowEvent(80, 24),
             new WindowEvent(100, 50),
             new WindowEvent(120, 30)
         };
 
-        for (JcursesEvent event : events) {
+        for (CursesEvent event : events) {
             String result = switch (event) {
                 case KeyEvent e -> "Key";
                 case MouseEvent e -> "Mouse";

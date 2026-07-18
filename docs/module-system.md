@@ -1,6 +1,6 @@
 # Java Module System Support
 
-jcurses is ready for Java 9+ module system (JPMS) deployment.
+curses-java is ready for Java 9+ module system (JPMS) deployment.
 
 ## Quick Start
 
@@ -12,7 +12,7 @@ The project ships without `module-info.java` to maintain flexibility for both mo
    ```
 
 2. **Update pom.xml** (for module-native access):
-   Replace `--enable-native-access=ALL-UNNAMED` with `--enable-native-access=org.flossware.jcurses` in:
+   Replace `--enable-native-access=ALL-UNNAMED` with `--enable-native-access=org.flossware.curses` in:
    - `maven-surefire-plugin` configuration
    - `exec-maven-plugin` configuration
 
@@ -24,27 +24,27 @@ The project ships without `module-info.java` to maintain flexibility for both mo
 ## Module Declaration
 
 ```java
-module org.flossware.jcurses {
-    exports org.flossware.jcurses.api;
-    exports org.flossware.jcurses.api.edit;
-    exports org.flossware.jcurses.events;
+module org.flossware.curses {
+    exports org.flossware.curses.api;
+    exports org.flossware.curses.api.edit;
+    exports org.flossware.curses.events;
 
-    opens org.flossware.jcurses.api;
-    opens org.flossware.jcurses.api.edit;
-    opens org.flossware.jcurses.events;
+    opens org.flossware.curses.api;
+    opens org.flossware.curses.api.edit;
+    opens org.flossware.curses.events;
 }
 ```
 
 ## Exported Packages
 
-- **org.flossware.jcurses.api** - Core widgets and components
-- **org.flossware.jcurses.api.edit** - Text editing support (Clipboard, TextEditCommand)
-- **org.flossware.jcurses.events** - Event system (KeyEvent, MouseEvent, WindowEvent)
+- **org.flossware.curses.api** - Core widgets and components
+- **org.flossware.curses.api.edit** - Text editing support (Clipboard, TextEditCommand)
+- **org.flossware.curses.events** - Event system (KeyEvent, MouseEvent, WindowEvent)
 
 ## Internal Packages (Not Exported)
 
-- **org.flossware.jcurses.render** - Rendering engine (DiffEngine, EventProcessor)
-- **org.flossware.jcurses.ffi** - Native ncurses FFI bridge
+- **org.flossware.curses.render** - Rendering engine (DiffEngine, EventProcessor)
+- **org.flossware.curses.ffi** - Native ncurses FFI bridge
 
 ## Why No Default module-info.java?
 
@@ -62,7 +62,7 @@ If you've added module-info.java:
 
 ```java
 module your.app {
-    requires org.flossware.jcurses;
+    requires org.flossware.curses;
 }
 ```
 
@@ -72,7 +72,7 @@ Works without any module configuration:
 
 ```bash
 java --enable-preview --enable-native-access=ALL-UNNAMED \
-  -cp jcurses-1.0.jar:your-app.jar \
+  -cp curses-java-1.0.jar:your-app.jar \
   your.app.Main
 ```
 
@@ -81,8 +81,8 @@ java --enable-preview --enable-native-access=ALL-UNNAMED \
 For modular runtime images:
 
 ```bash
-jlink --module-path target/jcurses-1.0.jar:$JAVA_HOME/jmods \
-  --add-modules org.flossware.jcurses \
+jlink --module-path target/curses-java-1.0.jar:$JAVA_HOME/jmods \
+  --add-modules org.flossware.curses \
   --output runtime-image
 ```
 

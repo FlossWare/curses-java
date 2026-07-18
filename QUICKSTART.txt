@@ -1,5 +1,5 @@
 ╔════════════════════════════════════════════════════════════╗
-║          JCurses Interactive Demo - Quick Start            ║
+║        curses-java Interactive Demo - Quick Start          ║
 ╚════════════════════════════════════════════════════════════╝
 
 🚀 RUN THE INTERACTIVE DEMO:
@@ -23,7 +23,7 @@
 
    mvn clean compile
    java --enable-preview --enable-native-access=ALL-UNNAMED \
-     -cp target/classes org.flossware.jcurses.InteractiveDemo
+     -cp target/classes org.flossware.curses.InteractiveDemo
 
 
 ⌨️  KEYBOARD CONTROLS:

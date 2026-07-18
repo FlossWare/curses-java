@@ -7,7 +7,7 @@
 
 ## Context
 
-jcurses components need to be thread-safe as they may be accessed from:
+curses-java components need to be thread-safe as they may be accessed from:
 - Virtual threads in the event loop
 - User application threads
 - Rendering thread

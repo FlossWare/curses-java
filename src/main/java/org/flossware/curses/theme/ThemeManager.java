@@ -3,7 +3,7 @@ package org.flossware.curses.theme;
 /**
  * Singleton manager for application theme configuration and switching.
  *
- * <p>ThemeManager provides centralized control over the visual appearance of jcurses
+ * <p>ThemeManager provides centralized control over the visual appearance of curses-java
  * components through a collection of predefined themes. Each theme defines color pairs
  * and border characters for all UI elements, allowing applications to switch between
  * different visual styles at runtime.</p>

@@ -1,9 +1,9 @@
-# JCurses Theme Gallery
+# curses-java Theme Gallery
 
 > 📸 **[View Theme Screenshots](docs/screenshots/README.md)** - Visual examples with ASCII art demonstrations
 
 
-A comprehensive guide to the visual themes available in the JCurses library. Each theme recreates the distinctive aesthetic of classic computing systems and development environments, bringing authentic retro computing experiences to modern terminal applications.
+A comprehensive guide to the visual themes available in the curses-java library. Each theme recreates the distinctive aesthetic of classic computing systems and development environments, bringing authentic retro computing experiences to modern terminal applications.
 
 ## Table of Contents
 
@@ -18,7 +18,7 @@ A comprehensive guide to the visual themes available in the JCurses library. Eac
 
 ## Overview
 
-JCurses includes 10 carefully crafted themes that span four decades of computing history. Each theme authentically recreates the color schemes, border styles, and visual aesthetics of its inspiration while providing a consistent interface for modern terminal applications.
+curses-java includes 10 carefully crafted themes that span four decades of computing history. Each theme authentically recreates the color schemes, border styles, and visual aesthetics of its inspiration while providing a consistent interface for modern terminal applications.
 
 ### Theme Categories
 
@@ -501,7 +501,7 @@ manager.useDBase4Theme();
 
 ### Using Themes in Components
 
-All JCurses components automatically use the current theme from the `ThemeManager`:
+All curses-java components automatically use the current theme from the `ThemeManager`:
 
 ```java
 // Create a button - it will use the current theme's button colors
@@ -754,8 +754,8 @@ Coming soon: Visual examples of each theme in action.
 
 ## License
 
-Themes are part of the JCurses library and are distributed under the same license as the main project.
+Themes are part of the curses-java library and are distributed under the same license as the main project.
 
 ---
 
-For more information about JCurses, visit the main project documentation.
+For more information about curses-java, visit the main project documentation.

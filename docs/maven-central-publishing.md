@@ -795,7 +795,7 @@ jobs:
           generate_release_notes: true
           files: |
             target/curses-java-*.jar
-            target/jcurses-sbom.*
+            target/curses-java-sbom.*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

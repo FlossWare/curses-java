@@ -3,7 +3,7 @@ package org.flossware.curses.theme;
 import org.flossware.curses.api.ColorPair;
 
 /**
- * Interface for defining visual themes for jcurses components.
+ * Interface for defining visual themes for curses-java components.
  *
  * Themes control colors and rendering characters for all UI elements.
  */

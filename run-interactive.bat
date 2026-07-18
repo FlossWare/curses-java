@@ -1,8 +1,8 @@
 @echo off
-REM Interactive JCurses Demo Runner for Windows
+REM Interactive curses-java Demo Runner for Windows
 REM This script runs the interactive demo with proper JVM flags
 
-echo Starting JCurses Interactive Demo...
+echo Starting curses-java Interactive Demo...
 echo ======================================
 echo.
 echo Controls:

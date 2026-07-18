@@ -28,7 +28,7 @@ open target/site/jacoco/index.html
 mvn test -Dtest=JButtonTest
 
 # Run tests in a specific package
-mvn test -Dtest="org.flossware.jcurses.api.widgets.*"
+mvn test -Dtest="org.flossware.curses.api.widgets.*"
 ```
 
 ### Integration Tests
@@ -139,7 +139,7 @@ Every unit test includes:
 
 ### Test Utilities
 
-Located in `src/test/java/org/flossware/jcurses/testutil/`:
+Located in `src/test/java/org/flossware/curses/testutil/`:
 
 #### BufferAssertions
 

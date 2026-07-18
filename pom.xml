@@ -322,7 +322,7 @@
           </execution>
         </executions>
         <configuration>
-          <outputName>jcurses-sbom</outputName>
+          <outputName>curses-java-sbom</outputName>
           <outputFormat>all</outputFormat>
         </configuration>
       </plugin>

@@ -1,7 +1,7 @@
-# jcurses Roadmap
+# curses-java Roadmap
 
 ## Vision
-Make jcurses the premier Java terminal UI library with modern features, exceptional performance, and comprehensive platform support.
+Make curses-java the premier Java terminal UI library with modern features, exceptional performance, and comprehensive platform support.
 
 ---
 
@@ -113,7 +113,7 @@ Make jcurses the premier Java terminal UI library with modern features, exceptio
 
 ## Community Requested Features
 
-Vote on features at [GitHub Discussions](https://github.com/FlossWare/jcurses/discussions)!
+Vote on features at [GitHub Discussions](https://github.com/FlossWare/curses-java/discussions)!
 
 ### Most Requested
 1. Windows support (v2.0)

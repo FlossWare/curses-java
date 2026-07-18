@@ -66,4 +66,4 @@ Tests run: XXX, Failures: 0, Errors: 0, Skipped: 0
 
 ---
 
-<!-- Thank you for contributing to jcurses! 🎉 -->
+<!-- Thank you for contributing to curses-java! 🎉 -->

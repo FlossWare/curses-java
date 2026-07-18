@@ -1,6 +1,6 @@
-# JCurses Examples and Demos
+# curses-java Examples and Demos
 
-A practical guide to learning JCurses through examples, interactive demos, and component galleries.
+A practical guide to learning curses-java through examples, interactive demos, and component galleries.
 
 ---
 
@@ -15,7 +15,7 @@ A practical guide to learning JCurses through examples, interactive demos, and c
 
 ## Running the Interactive Demo
 
-The interactive demo is a **fully functional terminal UI application** where you can experiment with all JCurses components in real-time.
+The interactive demo is a **fully functional terminal UI application** where you can experiment with all curses-java components in real-time.
 
 ### Quick Start
 
@@ -53,10 +53,10 @@ run-interactive.bat
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ Interactive JCurses Demo - Press TAB to navigate...          │
+│ Interactive curses-java Demo - Press TAB to navigate...          │
 ├─────────────────────────────────────────────────────────────┤
 │                                                               │
-│   Welcome to Interactive JCurses!                            │
+│   Welcome to Interactive curses-java!                            │
 │   Use TAB to move between widgets, SPACE/ENTER to activate  │
 │                                                               │
 │  >[ Click Me! ]<   [ Press Me! ]   [ Toggle Below ]          │
@@ -174,14 +174,14 @@ mvn clean compile
 java --enable-preview \
      --enable-native-access=ALL-UNNAMED \
      -cp target/classes \
-     org.flossware.jcurses.InteractiveDemo
+     org.flossware.curses.InteractiveDemo
 ```
 
 #### From IDE
 
 If you're using an IDE (IntelliJ, Eclipse, VS Code):
 
-1. Set the main class to: `org.flossware.jcurses.InteractiveDemo`
+1. Set the main class to: `org.flossware.curses.InteractiveDemo`
 2. Add VM options:
    ```
    --enable-preview --enable-native-access=ALL-UNNAMED
@@ -807,10 +807,10 @@ Find more examples in the `examples/` directory:
 - Try modifying the widget positions
 - Add new buttons with custom actions
 - Create your own interactive application
-- Explore the component API in `src/main/java/org/flossware/jcurses/api/`
+- Explore the component API in `src/main/java/org/flossware/curses/api/`
 - Check out the theme system in `docs/themes.md`
 - Review test results in `COMPLETE_UI_TEST_RESULTS.md`
 
 ---
 
-Enjoy building terminal UIs with JCurses!
+Enjoy building terminal UIs with curses-java!

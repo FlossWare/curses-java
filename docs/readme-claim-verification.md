@@ -30,7 +30,7 @@ Critical findings:
 - FFI: ✅ Genuinely used (NcursesBridge.java, 371 lines)
 - Virtual Threads: ⚠️ Used ONCE (EventProcessor.java line 40)
 - Records: ✅ 6 record types
-- Sealed Interfaces: ⚠️ Used ONCE (JcursesEvent)
+- Sealed Interfaces: ⚠️ Used ONCE (CursesEvent)
 
 "Built with" implies pervasive use. Reality: FFI substantial, others minimal.  
 **Fix:** "Uses Java 21 Foreign Function API for direct ncurses binding (no JNI). Also uses records for events, a sealed interface for the event hierarchy, and Virtual Threads for event processing."

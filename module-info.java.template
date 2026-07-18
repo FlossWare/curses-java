@@ -1,5 +1,5 @@
 /**
- * jcurses: Terminal UI library with AWT-like components using ncurses.
+ * curses-java: Terminal UI library with AWT-like components using ncurses.
  *
  * This module provides a modern Java 21 terminal UI framework with:
  * - 29 widgets (buttons, labels, text fields, tables, menus, etc.)
@@ -10,7 +10,7 @@
  *
  * To enable module support:
  * 1. Copy this file to src/main/java/module-info.java
- * 2. Update pom.xml to use --enable-native-access=org.flossware.jcurses
+ * 2. Update pom.xml to use --enable-native-access=org.flossware.curses
  *    instead of --enable-native-access=ALL-UNNAMED
  *
  * Note: Unit tests require classpath mode (not module path) for reflection access.
@@ -19,21 +19,21 @@
  *
  * @since 1.0
  */
-module org.flossware.jcurses {
+module org.flossware.curses {
     // Public API exports
-    exports org.flossware.jcurses.api;
-    exports org.flossware.jcurses.api.edit;
-    exports org.flossware.jcurses.events;
-    exports org.flossware.jcurses.theme;
+    exports org.flossware.curses.api;
+    exports org.flossware.curses.api.edit;
+    exports org.flossware.curses.events;
+    exports org.flossware.curses.theme;
 
     // Open packages for frameworks that need reflection access (e.g., dependency injection)
-    opens org.flossware.jcurses.api;
-    opens org.flossware.jcurses.api.edit;
-    opens org.flossware.jcurses.events;
-    opens org.flossware.jcurses.theme;
+    opens org.flossware.curses.api;
+    opens org.flossware.curses.api.edit;
+    opens org.flossware.curses.events;
+    opens org.flossware.curses.theme;
 
     // Internal packages (not exported):
-    // - org.flossware.jcurses.render (rendering engine)
-    // - org.flossware.jcurses.ffi (ncurses FFI bridge)
-    // - org.flossware.jcurses (application entry points)
+    // - org.flossware.curses.render (rendering engine)
+    // - org.flossware.curses.ffi (ncurses FFI bridge)
+    // - org.flossware.curses (application entry points)
 }

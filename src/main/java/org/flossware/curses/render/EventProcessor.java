@@ -1,6 +1,6 @@
 package org.flossware.curses.render;
 
-import org.flossware.curses.events.JcursesEvent;
+import org.flossware.curses.events.CursesEvent;
 import org.flossware.curses.events.KeyEvent;
 import org.flossware.curses.events.MouseEvent;
 import org.flossware.curses.events.WindowEvent;
@@ -37,10 +37,10 @@ public class EventProcessor {
     public void startInputLoop() {
         running = true;
         // Use a Virtual Thread to handle blocking IO cheaply
-        Thread.ofVirtual().name("Jcurses-Input-Loop").start(() -> {
+        Thread.ofVirtual().name("CursesJava-Input-Loop").start(() -> {
             while (running && !Thread.currentThread().isInterrupted()) {
                 try {
-                    JcursesEvent event = readNativeEvent();
+                    CursesEvent event = readNativeEvent();
                     if (event != null) {
                         processEvent(event);
                     }
@@ -65,7 +65,7 @@ public class EventProcessor {
      *
      * @param event the event to process
      */
-    private void processEvent(JcursesEvent event) {
+    private void processEvent(CursesEvent event) {
         // Use Record Patterns (Java 21) for clean event deconstruction
         switch (event) {
             case KeyEvent(int code, boolean alt, boolean ctrl) ->
@@ -85,7 +85,7 @@ public class EventProcessor {
      *
      * @return the next event, or null if none available
      */
-    private JcursesEvent readNativeEvent() {
+    private CursesEvent readNativeEvent() {
         try {
             // Read character code from ncurses (blocking call)
             int ch = NcursesBridge.getChar();

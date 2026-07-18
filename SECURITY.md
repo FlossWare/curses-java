@@ -17,7 +17,7 @@ We take security vulnerabilities seriously. If you discover a security vulnerabi
 **DO NOT** open a public GitHub issue for security vulnerabilities.
 
 Instead, please report security vulnerabilities by:
-1. Opening a [GitHub Security Advisory](https://github.com/FlossWare/jcurses/security/advisories/new)
+1. Opening a [GitHub Security Advisory](https://github.com/FlossWare/curses-java/security/advisories/new)
 2. Or emailing the maintainers directly (see GitHub profile for contact information)
 
 ### What to Include
@@ -47,11 +47,11 @@ Please include the following information in your report:
 
 ### Terminal Escape Sequence Injection
 
-jcurses implements input sanitization in text components (JTextField) to prevent terminal escape sequence injection attacks. User input is sanitized to remove control characters except newline and tab.
+curses-java implements input sanitization in text components (JTextField) to prevent terminal escape sequence injection attacks. User input is sanitized to remove control characters except newline and tab.
 
 ### Native Library Loading
 
-jcurses loads native ncurses libraries. Ensure you trust the ncurses installation on your system. On Linux, use package managers to install ncurses from trusted repositories.
+curses-java loads native ncurses libraries. Ensure you trust the ncurses installation on your system. On Linux, use package managers to install ncurses from trusted repositories.
 
 ### Virtual Threads and Concurrency
 
@@ -62,8 +62,8 @@ All components use ReentrantLock for thread-safety. If you encounter race condit
 1. **Keep ncurses Updated**: Ensure your system's ncurses library is up to date
 2. **Validate User Input**: Always validate and sanitize user input in your applications
 3. **Run with Least Privilege**: Don't run terminal applications as root unless necessary
-4. **Audit Dependencies**: jcurses has zero runtime dependencies beyond ncurses
+4. **Audit Dependencies**: curses-java has zero runtime dependencies beyond ncurses
 
 ## Attribution
 
-We appreciate responsible disclosure and will acknowledge security researchers who help improve jcurses security.
+We appreciate responsible disclosure and will acknowledge security researchers who help improve curses-java security.

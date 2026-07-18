@@ -15,7 +15,7 @@ Software projects need a versioning strategy that balances:
 
 ## Decision
 
-jcurses uses **Automatic Continuous Versioning** with X.Y format where:
+curses-java uses **Automatic Continuous Versioning** with X.Y format where:
 - Every push to `main` automatically increments the minor version (Y)
 - Major version (X) changes are manual and indicate significant milestones
 - No semantic versioning (X.Y.Z) - versions represent iteration count
