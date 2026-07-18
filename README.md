@@ -468,6 +468,10 @@ Make sure the terminal window has focus and you're running directly (not through
 - **[TESTING.md](TESTING.md)** - Unit testing guide
 - **[QUICKSTART.txt](QUICKSTART.txt)** - Quick reference card
 
+## Related Projects
+
+- **[curses-themes](https://github.com/FlossWare/curses-themes)** -- Python curses theme library that can load curses-java JSON themes directly via auto-detection. See [Migration Guide](docs/MIGRATION.md).
+
 ## 📄 License
 
 Apache License 2.0 - See [LICENSE](LICENSE) file

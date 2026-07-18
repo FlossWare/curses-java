@@ -1098,3 +1098,53 @@ Themes are part of the curses-java library and are distributed under the same li
 ---
 
 For more information about curses-java, visit the main project documentation.
+
+## Cross-Language Theme Sharing
+
+curses-java themes are portable. The Java library exports all 12 themes as JSON files in `/themes/`, and the Python [curses-themes](https://github.com/FlossWare/curses-themes) library can consume them directly.
+
+### How It Works
+
+1. Java is the **source of truth** -- themes are defined as Java classes and exported to JSON via `ThemeLoader`
+2. Python's `ThemeManager.load_from_file()` auto-detects the Java JSON format and converts it at load time
+3. No manual conversion step is needed
+
+### Using Java Themes in Python
+
+```python
+from curses_themes import ThemeManager
+
+# Load a single Java-exported theme
+theme = ThemeManager.load_from_file("path/to/dark.json")
+theme.apply(stdscr)
+
+# Load all themes from a directory
+ThemeManager.load_themes_from_directory("path/to/themes/")
+```
+
+### Format Differences Handled Automatically
+
+The Python adapter transparently handles these conversions when loading Java JSON:
+
+| Aspect | Java JSON Format | Python Native Format |
+|--------|-----------------|---------------------|
+| Colors | ncurses names (`"CYAN"`, `"BLUE"`) | RGB tuples (`(0, 255, 255)`) |
+| Border char order | TL, T, TR, L, **BL, B, BR**, R | TL, T, TR, L, **R, BL, B**, BR |
+| 3D keys | `shadow_color`, `highlight_color`, `lowlight_color` | `shadow`, `highlight`, `lowlight` |
+| 3D offsets | `shadow_offset: { x, y }` | `shadow_offset_x`, `shadow_offset_y` |
+| Color structure | `colors` (component pairs only) | `colors` (semantic) + `components` (pairs) |
+
+### API Mapping
+
+| Java | Python | Description |
+|------|--------|-------------|
+| `ThemeManager.getInstance().useTheme(name)` | `ThemeManager.load(name)` | Load built-in theme by name |
+| `ThemeManager.getInstance().getAvailableThemes()` | `ThemeManager.list_themes()` | List available theme names |
+| `ThemeManager.getInstance().loadThemeFromJson(path)` | `ThemeManager.load_from_file(path)` | Load theme from JSON file |
+| `ThemeManager.getInstance().loadThemesFromDirectory(path)` | `ThemeManager.load_themes_from_directory(path)` | Load all themes in a directory |
+
+### See Also
+
+- [curses-themes (Python)](https://github.com/FlossWare/curses-themes) -- Python curses theme library with Java theme auto-detection
+- [Migration Guide](MIGRATION.md) -- detailed Java-to-Python and Python-to-Java theme conversion
+- [Theme JSON Schema](../themes/schema.json) -- shared schema for cross-language themes
