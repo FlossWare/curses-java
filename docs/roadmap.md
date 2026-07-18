@@ -39,31 +39,51 @@ Make jcurses the premier Java terminal UI library with modern features, exceptio
 
 ---
 
-## Next: v2.0 (2026 Q3) 🎯
+## Next: v2.0 (2026 Q3-Q4) 🎯
 
-### Platform Expansion
-- 🎯 **Windows PDCurses Support** - Native Windows terminal support
-- 🎯 **Unicode & Emoji Support** - Full UTF-8, emoji rendering
-- 🎯 **True Color Support** - 24-bit color (16 million colors)
+### Phase 1: Abstract Native Bridge (Aug 2026) 🔧
+- 🎯 **TerminalBridge Interface** - Decouple from ncurses-specific static class
+- 🎯 **NcursesTerminalBridge** - Wrap existing NcursesBridge behind the interface
+- 🎯 **MockTerminalBridge** - Replace MockNcursesBridge with interface-based mock
+- 🎯 **Platform Detection Factory** - Auto-select backend by OS
+- **ADR:** [0005-windows-unicode-roadmap](adr/0005-windows-unicode-roadmap.md)
 
-### Internationalization
-- 🎯 **i18n Framework** - Internationalization support
-- 🎯 **RTL Text Support** - Right-to-left languages (Arabic, Hebrew)
-- 🎯 **Locale-aware Components** - Date/time/number formatting
+### Phase 2: Windows Support (Sep 2026) 🪟
+- 🎯 **PDCurses Backend** - PdcursesTerminalBridge for native Windows support
+- 🎯 **ANSI Fallback Backend** - Pure-ANSI escape sequence bridge for minimal environments
+- 🎯 **Bundled pdcurses.dll** - Pre-compiled native library in JAR resources
+- 🎯 **Windows CI** - GitHub Actions windows-latest runner
 
-### Advanced Features
-- 🎯 **Plugin System** - Extensible architecture for custom widgets
-- 🎯 **Animation Framework** - Smooth transitions and effects
-- 🎯 **Drag & Drop** - Full drag-and-drop support between components
-- 🎯 **Virtual Scrolling** - Handle millions of items efficiently
+### Phase 3: True Color (Oct 2026) 🎨
+- 🎯 **TerminalColor Model** - Sealed interface: StandardColor (8), ExtendedColor (256), TrueColor (24-bit RGB)
+- 🎯 **Backward-Compatible Themes** - Existing 8-color themes continue working unchanged
+- 🎯 **Terminal Capability Detection** - Auto-detect MONOCHROME / 8 / 256 / TRUE_COLOR
+- 🎯 **True Color Themes** - New themes exploiting 24-bit palette
 
-### Developer Experience
-- 🎯 **Visual Designer** - GUI builder for layouts
-- 🎯 **Hot Reload** - Live code updates during development
-- 🎯 **Better Debugging** - Enhanced debugging tools
-- 🎯 **IntelliJ Plugin** - IDE integration
+### Phase 4: Unicode & Emoji (Nov 2026) 🌍
+- 🎯 **TerminalCell Buffer** - Replace char[][] with grapheme-aware cell model
+- 🎯 **East Asian Width** - Correct column-width calculation for CJK, emoji, combining marks
+- 🎯 **Wide Character Bridge** - mvaddwstr() / ncursesw integration
+- 🎯 **Component Width Fixes** - Update all 29 widgets to use display-width instead of String.length()
 
-**Target Release:** Q3 2026
+### Internationalization (deferred to v2.5)
+- 🔜 **i18n Framework** - Internationalization support
+- 🔜 **RTL Text Support** - Right-to-left languages (Arabic, Hebrew)
+- 🔜 **Locale-aware Components** - Date/time/number formatting
+
+### Advanced Features (deferred to v2.5)
+- 🔜 **Plugin System** - Extensible architecture for custom widgets
+- 🔜 **Animation Framework** - Smooth transitions and effects
+- 🔜 **Drag & Drop** - Full drag-and-drop support between components
+- 🔜 **Virtual Scrolling** - Handle millions of items efficiently
+
+### Developer Experience (deferred to v2.5)
+- 🔜 **Visual Designer** - GUI builder for layouts
+- 🔜 **Hot Reload** - Live code updates during development
+- 🔜 **Better Debugging** - Enhanced debugging tools
+- 🔜 **IntelliJ Plugin** - IDE integration
+
+**Target Release:** v2.0 in Q4 2026 (Phases 1-4), v2.5 in Q1 2027 (i18n, plugins, DX)
 
 ---
 
@@ -116,11 +136,12 @@ Make jcurses the premier Java terminal UI library with modern features, exceptio
 Vote on features at [GitHub Discussions](https://github.com/FlossWare/jcurses/discussions)!
 
 ### Most Requested
-1. Windows support (v2.0)
-2. Unicode/emoji (v2.0)
-3. Visual designer (v2.0)
-4. Plugin system (v2.0)
-5. Web backend (v3.0)
+1. Windows support (v2.0-beta, Phase 2)
+2. Unicode/emoji (v2.0, Phase 4)
+3. True Color (v2.0-rc, Phase 3)
+4. Plugin system (v2.5)
+5. Visual designer (v2.5)
+6. Web backend (v3.0)
 
 ---
 
@@ -129,9 +150,10 @@ Vote on features at [GitHub Discussions](https://github.com/FlossWare/jcurses/di
 Want to help accelerate development? See [CONTRIBUTING.md](CONTRIBUTING.md)!
 
 **High-impact areas:**
-- Windows PDCurses integration
-- Unicode rendering engine
-- Plugin architecture design
+- TerminalBridge interface design (Phase 1 prerequisite)
+- Windows PDCurses integration (Phase 2)
+- True Color theme development (Phase 3)
+- Unicode width calculation and TerminalCell buffer (Phase 4)
 - Example applications
 - Documentation & tutorials
 
@@ -142,12 +164,15 @@ Want to help accelerate development? See [CONTRIBUTING.md](CONTRIBUTING.md)!
 | Version | Target | Key Features | Status |
 |---------|--------|--------------|--------|
 | v1.28 | 2026-05-24 | Quality & tooling | ✅ Complete |
-| v2.0 | 2026-09 | Windows, Unicode, i18n | 🎯 Planning |
-| v2.5 | 2026-12 | Plugins, animations | 💡 Future |
-| v3.0 | 2027 Q2 | GPU, WASM, network | 💡 Future |
+| v2.0-alpha | 2026-08 | TerminalBridge abstraction (Phase 1) | 🎯 Next |
+| v2.0-beta | 2026-09 | Windows PDCurses support (Phase 2) | 🎯 Planned |
+| v2.0-rc | 2026-10 | True Color 24-bit (Phase 3) | 🎯 Planned |
+| v2.0 | 2026-11 | Unicode & emoji (Phase 4) | 🎯 Planned |
+| v2.5 | 2027-Q1 | i18n, plugins, animations, DX | 🔜 Future |
+| v3.0 | 2027-Q2 | GPU, WASM, network | 💡 Future |
 
 ---
 
-**Updated:** 2026-05-24  
+**Updated:** 2026-07-18  
 **Status:** Active Development  
-**Next Review:** 2026-06-01
+**Next Review:** 2026-08-01
