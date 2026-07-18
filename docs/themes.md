@@ -13,6 +13,18 @@ A comprehensive guide to the visual themes available in the JCurses library. Eac
 - [Classic IDE Themes](#classic-ide-themes)
 - [Retro Computer Themes](#retro-computer-themes)
 - [Business Software Themes](#business-software-themes)
+- [3D Theme System](#3d-theme-system)
+  - [Architecture Overview](#architecture-overview)
+  - [The Theme3D Interface](#the-theme3d-interface)
+  - [RenderingStyle Enum](#renderingstyle-enum)
+  - [Multi-Pass Rendering Pipeline](#multi-pass-rendering-pipeline)
+  - [Shadow Rendering Details](#shadow-rendering-details)
+  - [Enabling 3D on Components](#enabling-3d-on-components)
+  - [Asymmetric Border Coloring](#asymmetric-border-coloring)
+  - [Borland 3D Theme](#borland-3d-theme)
+  - [dBASE IV 3D Theme](#dbase-iv-3d-theme)
+  - [Creating a Custom 3D Theme](#creating-a-custom-3d-theme)
+  - [Terminal Compatibility for 3D Themes](#terminal-compatibility-for-3d-themes)
 - [Usage Guide](#usage-guide)
 - [Contributing](#contributing)
 
@@ -383,32 +395,222 @@ The shift from black to blue backgrounds was part of a broader trend in late-198
 - Software requiring a professional blue-background aesthetic
 
 
-## 3D Themes
+## 3D Theme System
+
+JCurses provides an optional 3D rendering system that adds depth effects to components through drop shadows, asymmetric border coloring, and rendering style management. The system is fully backward compatible -- themes and components that do not use 3D continue to work unchanged.
+
+### Architecture Overview
+
+The 3D rendering system consists of four key elements:
+
+1. **`Theme3D` interface** -- extends `Theme` with shadow, highlight, and lowlight color definitions
+2. **`RenderingStyle` enum** -- controls per-component depth appearance (FLAT, RAISED, SUNKEN, CUSTOM)
+3. **`Component` 3D methods** -- `set3DEnabled()`, `setRenderingStyle()`, `paintShadow()`
+4. **`Container.drawBorder()`** -- applies asymmetric border coloring based on rendering style
+
+### The Theme3D Interface
+
+`Theme3D` extends the base `Theme` interface with methods that define 3D visual properties. Any theme that implements `Theme3D` automatically reports `supports3D() == true`.
+
+| Method | Purpose | Typical Value |
+|--------|---------|---------------|
+| `getShadowColor()` | Color pair for drop shadow fill | BLACK/BLACK (+ A_BOLD for gray) |
+| `getHighlightColor()` | Color pair for bright (top-left) edges | WHITE/CYAN |
+| `getLowlightColor()` | Color pair for dark (bottom-right) edges | BLACK/CYAN |
+| `getShadowOffsetX()` | Horizontal shadow displacement in columns | 1-2 |
+| `getShadowOffsetY()` | Vertical shadow displacement in rows | 1 |
+| `getShadowChar()` | Character used to fill shadow region | `' '` (space) or `'░'` |
+| `useGradientShadow()` | Whether to use shade characters for gradient shadows | `false` |
+| `getDoubleBorderChars()` | 8-char string for double-line borders (emphasized dialogs) | `"╔═╗║║╚═╝"` |
+| `getDefaultRenderingStyle()` | Theme-wide default rendering style for components | `RAISED` |
+
+The base `Theme` interface provides `supports3D()` which returns `false` by default. `Theme3D` overrides this to return `true`, enabling a clean capability check without `instanceof`:
+
+```java
+Theme theme = ThemeManager.getInstance().getCurrentTheme();
+if (theme.supports3D()) {
+    Theme3D theme3d = (Theme3D) theme;
+    ColorPair shadow = theme3d.getShadowColor();
+    int offsetX = theme3d.getShadowOffsetX();
+}
+```
+
+### RenderingStyle Enum
+
+The `RenderingStyle` enum controls how highlight and lowlight colors are applied to each component's borders:
+
+| Style | Top-Left Edges | Bottom-Right Edges | Use Case |
+|-------|---------------|-------------------|----------|
+| `FLAT` | Uniform border color | Uniform border color | Modern flat design; no 3D beveling |
+| `RAISED` | Highlight (bright) | Lowlight (dark) | Buttons, toolbars, interactive elements |
+| `SUNKEN` | Lowlight (dark) | Highlight (bright) | Input fields, list boxes, recessed panels |
+| `CUSTOM` | Component-defined | Component-defined | Complex or non-standard rendering |
+
+Visual representation of RAISED vs SUNKEN:
+
+```
+RAISED                          SUNKEN
+┌──────────┐  <- bright         ┌──────────┐  <- dark
+│          │  <- bright/dark    │          │  <- dark/bright
+└──────────┘  <- dark           └──────────┘  <- bright
+  ░░░░░░░░░   <- shadow
+```
+
+Buttons have special interaction with rendering styles: when a RAISED button is pressed, the rendering pipeline temporarily switches to SUNKEN and shifts the button content 1 character right, creating tactile "pressed down" feedback.
+
+### Multi-Pass Rendering Pipeline
+
+3D rendering uses a strict three-pass pipeline enforced by `Container.paint()`:
+
+```
+Pass 1 - Shadow Layer (Component.paintShadow):
+  - Renders L-shaped shadow at offset position
+  - Uses theme's shadow color and shadow character
+  - MUST execute before border rendering
+
+Pass 2 - Border Layer (Container.drawBorder):
+  - Applies asymmetric coloring based on RenderingStyle
+  - RAISED: highlight on top/left, lowlight on bottom/right
+  - SUNKEN: lowlight on top/left, highlight on bottom/right
+  - FLAT: uniform border color on all edges
+
+Pass 3 - Content Layer (child painting):
+  - Children painted in back-to-front order
+  - Each child repeats the shadow -> border -> content cycle
+```
+
+The rendering order is critical. Shadows must be painted first so that borders are drawn on top of them, producing correct visual z-ordering. `Container.paint()` enforces this automatically:
+
+```java
+// From Container.paint() - order is guaranteed
+paintShadow(buffer, null);     // Pass 1: shadow behind everything
+drawBorder(buffer, null);       // Pass 2: border with 3D coloring
+// Pass 3: iterate children...
+for (Component child : snapshot) {
+    child.paint(buffer);        // Each child repeats the cycle
+}
+```
+
+### Shadow Rendering Details
+
+The `paintShadow()` method in `Component` renders an L-shaped shadow consisting of two parts:
+
+- **Vertical part (right edge):** Extends from the component's right edge downward for the component's height, `shadowOffsetX` columns wide (typically 2)
+- **Horizontal part (bottom edge):** Extends from the component's left edge rightward for `width + shadowOffsetX` columns, connecting with the vertical shadow
+
+The shadow character is configurable per theme:
+- Space (`' '`) produces solid shadows using color attributes only
+- Shade characters (`░▒▓`) produce textured or gradient shadows
+- When `useGradientShadow()` returns `true`, gradient shading from light to dark is applied
+
+Shadow rendering only occurs when both conditions are met:
+1. The component has `is3DEnabled() == true`
+2. The current theme returns `supports3D() == true`
+
+### Enabling 3D on Components
+
+Any component can opt into 3D rendering with two method calls:
+
+```java
+// Enable 3D rendering (adds shadow, enables styled borders)
+component.set3DEnabled(true);
+
+// Set the rendering style (controls border coloring)
+component.setRenderingStyle(RenderingStyle.RAISED);
+```
+
+Both methods are thread-safe and trigger an automatic repaint. Components default to `enabled3D = false` and `renderingStyle = FLAT`.
+
+Typical patterns by component type:
+
+```java
+// Dialogs and windows: raised with shadow
+Dialog dialog = new Dialog("Options");
+dialog.set3DEnabled(true);
+dialog.setRenderingStyle(RenderingStyle.RAISED);
+
+// Input fields: sunken (recessed appearance)
+TextField nameField = new TextField(20);
+nameField.set3DEnabled(true);
+nameField.setRenderingStyle(RenderingStyle.SUNKEN);
+
+// Buttons: raised (pressed state auto-inverts to SUNKEN)
+Button okButton = new Button("OK");
+okButton.set3DEnabled(true);
+okButton.setRenderingStyle(RenderingStyle.RAISED);
+
+// Flat with shadow only (modern floating card look)
+Panel card = new Panel();
+card.set3DEnabled(true);
+card.setRenderingStyle(RenderingStyle.FLAT);
+```
+
+### Asymmetric Border Coloring
+
+When 3D rendering is active, `Container.drawBorder()` applies different colors to different border edges. The algorithm in `drawBorder(char[][] buffer, int[][] colorBuffer)`:
+
+1. Checks if the current theme supports 3D via `theme.supports3D()`
+2. Retrieves the component's `RenderingStyle`
+3. For RAISED style: top and left edges use `getHighlightColor()`, bottom and right edges use `getLowlightColor()`
+4. For SUNKEN style: colors are inverted (top/left use lowlight, bottom/right use highlight)
+5. For FLAT or CUSTOM: all edges use the uniform `theme.getBorder()` color
+6. Corner characters follow their respective edge (top-left corner uses the top-left color, bottom-right corner uses the bottom-right color)
+
+This asymmetric coloring simulates a light source positioned above-left, consistent with the Borland Turbo Vision convention that later influenced Windows 95 UI design.
+
+---
 
 ### Borland 3D Theme
 
-**Historical Context:** Building on the iconic Borland IDE color scheme, this theme adds authentic 3D visual effects inspired by Borland's Turbo Vision framework (1990-1995). Turbo Vision brought windowed interfaces with raised buttons, sunken input fields, and drop shadows to DOS applications.
+**Era:** 1990-1995
+**Inspiration:** Borland's Turbo Vision framework (Turbo Pascal 6.0+, Turbo C++ 3.0+, Borland C++ 4.0)
 
-**Color Scheme:**
-- Background: Yellow on blue (classic Borland desktop)
-- Menus: Cyan on blue (menu bar and buttons)
-- Focused: Black on cyan (inverted selection)
-- Input Fields: White on blue (sunken data entry)
-- Selection: Black on cyan (bright highlight)
-- Shadow: Black on black with A_BOLD (gray simulation)
-- Highlight: White on cyan (raised element top-left edges)
-- Lowlight: Black on cyan (recessed element bottom-right edges)
+#### Historical Context
 
-**3D Features:**
-- Drop shadows (1 column right, 1 row down)
-- Raised buttons and menus
-- Sunken input fields
-- Single-line borders for dialogs
-- Asymmetric border coloring
+Borland's Turbo Vision framework (1990) pioneered the "raised button" look in DOS text-mode applications, achieving a sophisticated 3D rendering system within the constraints of 16-color CGA/EGA/VGA palettes and CP437 extended ASCII. The asymmetric border coloring and drop shadow techniques it introduced later influenced Windows 95 UI design.
 
-**Usage:**
+#### Color Scheme
+
+| Element | Foreground | Background | Notes |
+|---------|-----------|------------|-------|
+| Background | Yellow | Blue | Classic Borland desktop (0x1E) |
+| Buttons | Cyan | Blue | Menu bar and toolbar |
+| Focused | Black | Cyan | Inverted selection (0x30) |
+| Text Input | White | Blue | High contrast data entry (0x1F) |
+| Borders | White | Blue | Active window frames |
+| Selection | Black | Cyan | Bright highlight |
+| Disabled | Black | Blue | Dimmed appearance |
+| Shadow | Black | Black | + A_BOLD for gray simulation |
+| Highlight | White | Cyan | Top-left edges (light reflection) |
+| Lowlight | Black | Cyan | Bottom-right edges (shadow) |
+
+#### 3D Configuration
+
+- **Shadow offset:** 2 columns right, 1 row down (adaptive: reduces to 1x1 for terminals >40 lines)
+- **Shadow character:** Space (solid) or `'░'` when gradient shadows enabled
+- **Border style:** Single-line Unicode by default, with DOUBLE_LINE, ROUNDED, and ASCII fallback options
+- **Default rendering style:** RAISED
+- **A_BOLD intensity:** Enabled by default to simulate 16-color palette on 8-color terminals
+
+#### Constructor Options
+
 ```java
-ThemeManager.useBorland3DTheme();
+// Default: single-line borders, adaptive shadow, no gradient, bold enabled
+Theme theme = new Borland3DTheme();
+
+// Custom: double-line borders, fixed offset, gradient shadows
+Theme theme = new Borland3DTheme(
+    Borland3DTheme.BorderStyle.DOUBLE_LINE,  // border style
+    false,                                     // adaptive shadow offset
+    true,                                      // gradient shadows (░▒▓)
+    true                                       // bold intensity
+);
+```
+
+#### Usage
+
+```java
+ThemeManager.getInstance().setTheme(new Borland3DTheme());
 
 Dialog dialog = new Dialog("Turbo Pascal 7.0");
 dialog.set3DEnabled(true);
@@ -421,32 +623,48 @@ dialog.setRenderingStyle(RenderingStyle.RAISED);
 
 ### dBASE IV 3D Theme
 
-**Historical Context:** dBASE IV (1988-1993) revolutionized database software with the Control Center, a graphical menu system featuring 3D-style UI elements similar to Borland's Turbo Vision framework. After Borland acquired Ashton-Tate in 1991, the interface gained even more pronounced 3D effects.
+**Era:** 1988-1993
+**Inspiration:** Ashton-Tate/Borland dBASE IV Control Center
 
-**Color Scheme:**
-- Background: White on blue (Control Center desktop)
-- Menus: Yellow on blue (menu bar and buttons)
-- Focused: Blue on yellow (inverted selection)
-- Input Fields: Cyan on blue (sunken data entry)
-- Selection: Blue on white (browse mode highlights)
-- Shadow: Black on black with A_BOLD (gray simulation)
-- Highlight: White on cyan (raised element top-left edges)
-- Lowlight: Black on cyan (recessed element bottom-right edges)
+#### Historical Context
 
-**3D Features:**
-- Drop shadows (2 columns right, 1 row down)
-- Raised buttons and menus
-- Sunken input fields
-- Double-line borders for modal dialogs
-- Asymmetric border coloring
+dBASE IV (1988) introduced a revolutionary menu-driven interface (the Control Center) with multiple windows, pull-down menus, and mouse support. After Borland acquired Ashton-Tate in 1991, the interface gained more pronounced 3D effects aligned with the Turbo Vision aesthetic. The combination of blue backgrounds, white text, yellow highlights, and gray shadows became the defining look of professional database applications.
 
-**Usage:**
+#### Color Scheme
+
+| Element | Foreground | Background | Notes |
+|---------|-----------|------------|-------|
+| Background | White | Blue | Control Center desktop |
+| Buttons | Yellow | Blue | Menu bar and options |
+| Focused | Blue | Yellow | Inverted selection |
+| Text Input | Cyan | Blue | Sunken data entry fields |
+| Borders | White | Blue | Single-line window frames |
+| Selection | Blue | White | Browse mode highlights |
+| Disabled | Blue | Blue | Dimmed options |
+| Shadow | Black | Black | + A_BOLD for gray simulation |
+| Highlight | White | Cyan | Top-left edges (raised elements) |
+| Lowlight | Black | Cyan | Bottom-right edges (recessed elements) |
+
+#### 3D Configuration
+
+- **Shadow offset:** 2 columns right, 1 row down
+- **Shadow character:** Space (solid shadows)
+- **Border style:** Single-line for windows, double-line (`╔═╗║║╚═╝`) for emphasized/modal dialogs
+- **Default rendering style:** RAISED
+
+#### Usage
+
 ```java
-ThemeManager.useDBase4_3DTheme();
+ThemeManager.getInstance().setTheme(new DBase4_3DTheme());
 
 Dialog dialog = new Dialog("Database Configuration");
 dialog.set3DEnabled(true);
 dialog.setRenderingStyle(RenderingStyle.RAISED);
+
+// Sunken input field for data entry
+TextField nameField = new TextField();
+nameField.set3DEnabled(true);
+nameField.setRenderingStyle(RenderingStyle.SUNKEN);
 ```
 
 **When to Use:** Professional database applications, business software, authentic dBASE IV recreation.
@@ -454,6 +672,127 @@ dialog.setRenderingStyle(RenderingStyle.RAISED);
 **Visual Comparison:** More businesslike than Borland3DTheme (white vs yellow background), reflecting database application heritage vs developer tool aesthetic.
 
 ---
+
+### Creating a Custom 3D Theme
+
+Implement the `Theme3D` interface to create a theme with 3D rendering support. You must implement all methods from both `Theme` (7 color pairs + border chars + name) and `Theme3D` (shadow/highlight/lowlight colors + offsets):
+
+```java
+package com.example.mythemes;
+
+import org.flossware.curses.api.Color;
+import org.flossware.curses.api.ColorPair;
+import org.flossware.curses.api.RenderingStyle;
+import org.flossware.curses.theme.Theme3D;
+
+public class My3DTheme implements Theme3D {
+
+    // --- Theme interface (base colors) ---
+
+    @Override
+    public ColorPair getBackground() {
+        return new ColorPair(Color.WHITE, Color.BLACK);
+    }
+
+    @Override
+    public ColorPair getButton() {
+        return new ColorPair(Color.CYAN, Color.BLACK);
+    }
+
+    @Override
+    public ColorPair getButtonFocused() {
+        return new ColorPair(Color.BLACK, Color.CYAN);
+    }
+
+    @Override
+    public ColorPair getTextInput() {
+        return new ColorPair(Color.GREEN, Color.BLACK);
+    }
+
+    @Override
+    public ColorPair getBorder() {
+        return new ColorPair(Color.WHITE, Color.BLACK);
+    }
+
+    @Override
+    public ColorPair getSelection() {
+        return new ColorPair(Color.BLACK, Color.WHITE);
+    }
+
+    @Override
+    public ColorPair getDisabled() {
+        return new ColorPair(Color.BLACK, Color.BLACK);
+    }
+
+    @Override
+    public String getBorderChars() {
+        return "┌─┐│└─┘│";
+    }
+
+    @Override
+    public String getName() {
+        return "My Custom 3D";
+    }
+
+    // --- Theme3D interface (3D-specific properties) ---
+
+    @Override
+    public ColorPair getShadowColor() {
+        return new ColorPair(Color.BLACK, Color.BLACK);
+    }
+
+    @Override
+    public ColorPair getHighlightColor() {
+        return new ColorPair(Color.WHITE, Color.BLUE);
+    }
+
+    @Override
+    public ColorPair getLowlightColor() {
+        return new ColorPair(Color.BLACK, Color.BLUE);
+    }
+
+    @Override
+    public int getShadowOffsetX() {
+        return 2;
+    }
+
+    @Override
+    public int getShadowOffsetY() {
+        return 1;
+    }
+
+    // Optional overrides (defaults shown):
+    // getDoubleBorderChars() -> "╔═╗║║╚═╝"
+    // getShadowChar()        -> ' '
+    // useGradientShadow()    -> false
+    // getDefaultRenderingStyle() -> RAISED
+}
+```
+
+Apply your custom 3D theme:
+
+```java
+ThemeManager.getInstance().setTheme(new My3DTheme());
+
+// All components with 3D enabled will now use your theme's colors
+Button btn = new Button("Save");
+btn.set3DEnabled(true);
+btn.setRenderingStyle(RenderingStyle.RAISED);
+```
+
+### Terminal Compatibility for 3D Themes
+
+3D rendering works across terminals but visual fidelity varies:
+
+| Terminal | Unicode | A_BOLD Behavior | Recommended |
+|----------|---------|-----------------|-------------|
+| xterm | Full | Brightens foreground | Single-line Unicode borders |
+| GNOME Terminal | Full | Brightens foreground | Single-line Unicode borders |
+| Konsole | Full | Brightens foreground | Single-line Unicode borders |
+| rxvt | Limited | A_BLINK brightens background | ASCII fallback |
+| Linux console | CP437 only | Brightens foreground | CP437 numeric codes |
+
+Shadow rendering uses `A_BOLD` on `COLOR_BLACK` to simulate dark gray (color 8) on 8-color terminals. This works reliably on xterm, GNOME Terminal, and Konsole. On terminals where `A_BOLD` does not brighten foreground colors, shadows may appear as solid black rather than gray.
 
 ---
 
