@@ -32,7 +32,7 @@ class Borland3DThemeCoverageTest {
         void testCustomBorderStyle() {
             Borland3DTheme theme = new Borland3DTheme(
                 Borland3DTheme.BorderStyle.DOUBLE_LINE, true, false, true);
-            assertEquals("╔═╗║║╚═╝", theme.getBorderChars());
+            assertEquals("╔═╗║╚═╝║", theme.getBorderChars());
         }
 
         @Test
@@ -91,7 +91,7 @@ class Borland3DThemeCoverageTest {
         @Test
         @DisplayName("should return correct characters for DOUBLE_LINE")
         void testDoubleLineChars() {
-            assertEquals("╔═╗║║╚═╝", Borland3DTheme.BorderStyle.DOUBLE_LINE.getCharacters());
+            assertEquals("╔═╗║╚═╝║", Borland3DTheme.BorderStyle.DOUBLE_LINE.getCharacters());
         }
 
         @Test
@@ -157,7 +157,7 @@ class Borland3DThemeCoverageTest {
         @DisplayName("should return double border chars")
         void testDoubleBorderChars() {
             Borland3DTheme theme = new Borland3DTheme();
-            assertEquals("╔═╗║║╚═╝", theme.getDoubleBorderChars());
+            assertEquals("╔═╗║╚═╝║", theme.getDoubleBorderChars());
         }
 
         @Test

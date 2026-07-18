@@ -71,7 +71,7 @@ class Rendering3DIT extends IntegrationTestBase {
 
             @Override
             public String getBorderChars() {
-                return "+-+||+-+";
+                return "+-+|+-+|";
             }
 
             @Override

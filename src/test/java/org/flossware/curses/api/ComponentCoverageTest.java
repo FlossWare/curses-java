@@ -54,14 +54,14 @@ class ComponentCoverageTest extends ComponentTestBase {
         @Test
         @DisplayName("should set valid 8-character border string")
         void testSetBorderCharsValid() {
-            component.setBorderChars("+-+||+-+");
-            assertEquals("+-+||+-+", component.getBorderChars());
+            component.setBorderChars("+-+|+-+|");
+            assertEquals("+-+|+-+|", component.getBorderChars());
         }
 
         @Test
         @DisplayName("should allow setting border chars to null for theme default")
         void testSetBorderCharsNull() {
-            component.setBorderChars("╔═╗║║╚═╝");
+            component.setBorderChars("╔═╗║╚═╝║");
             component.setBorderChars(null);
             // Should fall back to theme or hardcoded default
             assertNotNull(component.getBorderChars());

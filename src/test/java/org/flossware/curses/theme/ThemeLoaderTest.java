@@ -56,7 +56,7 @@ class ThemeLoaderTest {
                         "selection": { "fg": "BLACK", "bg": "WHITE" },
                         "disabled": { "fg": "WHITE", "bg": "BLACK" }
                       },
-                      "borders": { "single": "+-+||+-+" }
+                      "borders": { "single": "+-+|+-+|" }
                     }
                     """;
 
@@ -73,7 +73,7 @@ class ThemeLoaderTest {
             assertThat(theme.getSelection().foreground()).isEqualTo(Color.BLACK);
             assertThat(theme.getSelection().background()).isEqualTo(Color.WHITE);
             assertThat(theme.getDisabled().foreground()).isEqualTo(Color.WHITE);
-            assertThat(theme.getBorderChars()).isEqualTo("+-+||+-+");
+            assertThat(theme.getBorderChars()).isEqualTo("+-+|+-+|");
             assertThat(theme.supports3D()).isFalse();
             assertThat(theme).isNotInstanceOf(Theme3D.class);
         }
@@ -119,7 +119,7 @@ class ThemeLoaderTest {
                         "selection": { "fg": "WHITE", "bg": "RED" },
                         "disabled": { "fg": "MAGENTA", "bg": "WHITE" }
                       },
-                      "borders": { "single": "+-+||+-+" }
+                      "borders": { "single": "+-+|+-+|" }
                     }
                     """;
 
@@ -151,7 +151,7 @@ class ThemeLoaderTest {
                         "selection": { "fg": "BLACK", "bg": "WHITE" },
                         "disabled": { "fg": "WHITE", "bg": "BLACK" }
                       },
-                      "borders": { "single": "+-+||+-+" }
+                      "borders": { "single": "+-+|+-+|" }
                     }
                     """;
 
@@ -268,7 +268,7 @@ class ThemeLoaderTest {
                         "selection": { "fg": "BLACK", "bg": "WHITE" },
                         "disabled": { "fg": "WHITE", "bg": "BLACK" }
                       },
-                      "borders": { "single": "+-+||+-+" },
+                      "borders": { "single": "+-+|+-+|" },
                       "3d": {
                         "shadow_color": { "fg": "BLACK", "bg": "BLACK" },
                         "highlight_color": { "fg": "WHITE", "bg": "WHITE" },
@@ -300,7 +300,7 @@ class ThemeLoaderTest {
                         "selection": { "fg": "BLACK", "bg": "WHITE" },
                         "disabled": { "fg": "WHITE", "bg": "BLACK" }
                       },
-                      "borders": { "single": "+-+||+-+" },
+                      "borders": { "single": "+-+|+-+|" },
                       "3d": {
                         "shadow_color": { "fg": "BLACK", "bg": "BLACK" },
                         "highlight_color": { "fg": "WHITE", "bg": "WHITE" },
@@ -333,7 +333,7 @@ class ThemeLoaderTest {
                         "selection": { "fg": "BLACK", "bg": "WHITE" },
                         "disabled": { "fg": "WHITE", "bg": "BLACK" }
                       },
-                      "borders": { "single": "+-+||+-+" },
+                      "borders": { "single": "+-+|+-+|" },
                       "3d": {
                         "shadow_color": { "fg": "BLACK", "bg": "BLACK" },
                         "highlight_color": { "fg": "WHITE", "bg": "WHITE" },
@@ -347,7 +347,7 @@ class ThemeLoaderTest {
             Theme3D theme3d = (Theme3D) theme;
 
             // Should fall back to Theme3D default
-            assertThat(theme3d.getDoubleBorderChars()).isEqualTo("╔═╗║║╚═╝");
+            assertThat(theme3d.getDoubleBorderChars()).isEqualTo("╔═╗║╚═╝║");
         }
     }
 
@@ -468,7 +468,7 @@ class ThemeLoaderTest {
                         "selection": { "fg": "BLACK", "bg": "WHITE" },
                         "disabled": { "fg": "WHITE", "bg": "BLACK" }
                       },
-                      "borders": { "single": "+-+||+-+" }
+                      "borders": { "single": "+-+|+-+|" }
                     }
                     """;
 
@@ -484,7 +484,7 @@ class ThemeLoaderTest {
                     {
                       "name": "Bad",
                       "version": "1.0",
-                      "borders": { "single": "+-+||+-+" }
+                      "borders": { "single": "+-+|+-+|" }
                     }
                     """;
 
@@ -533,7 +533,7 @@ class ThemeLoaderTest {
                         "selection": { "fg": "BLACK", "bg": "WHITE" },
                         "disabled": { "fg": "WHITE", "bg": "BLACK" }
                       },
-                      "borders": { "single": "+-+||+-+" }
+                      "borders": { "single": "+-+|+-+|" }
                     }
                     """;
 
@@ -583,7 +583,7 @@ class ThemeLoaderTest {
                         "border": { "fg": "WHITE", "bg": "BLACK" },
                         "selection": { "fg": "BLACK", "bg": "WHITE" }
                       },
-                      "borders": { "single": "+-+||+-+" }
+                      "borders": { "single": "+-+|+-+|" }
                     }
                     """;
 
@@ -625,7 +625,7 @@ class ThemeLoaderTest {
                         "selection": { "fg": "BLACK", "bg": "WHITE" },
                         "disabled": { "fg": "WHITE", "bg": "BLACK" }
                       },
-                      "borders": { "single": "+-+||+-+" }
+                      "borders": { "single": "+-+|+-+|" }
                     }
                     """;
 
@@ -850,7 +850,7 @@ class ThemeLoaderTest {
                         "selection": { "fg": "BLACK", "bg": "RED" },
                         "disabled": { "fg": "RED", "bg": "BLACK" }
                       },
-                      "borders": { "single": "+-+||+-+" }
+                      "borders": { "single": "+-+|+-+|" }
                     }
                     """;
 
@@ -1000,7 +1000,7 @@ class ThemeLoaderTest {
                         "selection": { "fg": "BLACK", "bg": "MAGENTA" },
                         "disabled": { "fg": "RED", "bg": "BLACK" }
                       },
-                      "borders": { "single": "+-+||+-+" }
+                      "borders": { "single": "+-+|+-+|" }
                     }
                     """;
 
@@ -1060,7 +1060,7 @@ class ThemeLoaderTest {
                     "selection": { "fg": "BLACK", "bg": "WHITE" },
                     "disabled": { "fg": "WHITE", "bg": "BLACK" }
                   },
-                  "borders": { "single": "+-+||+-+" }
+                  "borders": { "single": "+-+|+-+|" }
                 }
                 """.formatted(name);
         Files.writeString(path, json);

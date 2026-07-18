@@ -143,7 +143,7 @@ public class DBase4Theme implements Theme {
     @Override
     public String getBorderChars() {
         // ASCII borders (dBASE IV would use extended ASCII for double-line boxes)
-        return "+-+||+-+";
+        return "+-+|+-+|";
     }
 
     /**

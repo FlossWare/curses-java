@@ -194,17 +194,17 @@ public abstract class Component {
      *   <li>[1] = top horizontal line</li>
      *   <li>[2] = top-right corner</li>
      *   <li>[3] = left vertical line</li>
-     *   <li>[4] = right vertical line</li>
-     *   <li>[5] = bottom-left corner</li>
-     *   <li>[6] = bottom horizontal line</li>
-     *   <li>[7] = bottom-right corner</li>
+     *   <li>[4] = bottom-left corner</li>
+     *   <li>[5] = bottom horizontal line</li>
+     *   <li>[6] = bottom-right corner</li>
+     *   <li>[7] = right vertical line</li>
      * </ol>
      *
      * <p>Examples:
      * <ul>
-     *   <li>ASCII box: "+-+||+-+"</li>
-     *   <li>Unicode single: "┌─┐││└─┘"</li>
-     *   <li>Unicode double: "╔═╗║║╚═╝"</li>
+     *   <li>ASCII box: "+-+|+-+|"</li>
+     *   <li>Unicode single: "┌─┐│└─┘│"</li>
+     *   <li>Unicode double: "╔═╗║╚═╝║"</li>
      * </ul>
      *
      * <p>Pass null to use the theme's default border characters.
@@ -217,7 +217,7 @@ public abstract class Component {
     public void setBorderChars(String borderChars) {
         if (borderChars != null && borderChars.length() != 8) {
             throw new IllegalArgumentException(
-                "borderChars must be exactly 8 characters (top-left, top, top-right, left, right, bottom-left, bottom, bottom-right), got: "
+                "borderChars must be exactly 8 characters (top-left, top, top-right, left, bottom-left, bottom, bottom-right, right), got: "
                 + borderChars.length()
             );
         }
@@ -237,7 +237,7 @@ public abstract class Component {
      * <ol>
      *   <li>If custom border characters are set via {@link #setBorderChars(String)}, return those</li>
      *   <li>Otherwise, delegate to the current theme's {@link org.flossware.curses.theme.Theme#getBorderChars()}</li>
-     *   <li>If theme returns null, return hardcoded ASCII default "+-+||+-+"</li>
+     *   <li>If theme returns null, return hardcoded ASCII default "+-+|+-+|"</li>
      * </ol>
      *
      * <p>This method is thread-safe.
@@ -267,7 +267,7 @@ public abstract class Component {
             }
 
             // Hardcoded fallback
-            return "+-+||+-+";
+            return "+-+|+-+|";
         } finally {
             renderLock.unlock();
         }

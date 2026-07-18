@@ -290,7 +290,7 @@ public class Borland3DTheme implements Theme3D {
          * Used for emphasized dialogs and important windows.
          * Requires add_wch() with WACS_ constants in ncurses.
          */
-        DOUBLE_LINE("╔═╗║║╚═╝"),
+        DOUBLE_LINE("╔═╗║╚═╝║"),
 
         /**
          * Rounded Unicode box drawing characters (╭─╮│╰─╯).

@@ -45,7 +45,7 @@ public class DefaultTheme implements Theme {
 
     @Override
     public String getBorderChars() {
-        return "+-+||+-+";  // ASCII box drawing
+        return "+-+|+-+|";  // ASCII box drawing
     }
 
     @Override

@@ -142,7 +142,7 @@ public class TRS80Theme implements Theme {
     @Override
     public String getBorderChars() {
         // ASCII borders for early 1980s authenticity
-        return "+-+||+-+";
+        return "+-+|+-+|";
     }
 
     /**

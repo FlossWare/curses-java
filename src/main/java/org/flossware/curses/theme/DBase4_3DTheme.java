@@ -62,7 +62,7 @@ import org.flossware.curses.api.RenderingStyle;
  *   <li><b>L-Shaped Drop Shadows:</b> Shadows offset 2 columns right and 1 row
  *       down, matching the original dBASE IV shadow positioning</li>
  *   <li><b>Double-Line Borders:</b> Dialog boxes use double-line characters
- *       (╔═╗║║╚═╝) for emphasis, matching dBASE IV's window chrome</li>
+ *       (╔═╗║╚═╝║) for emphasis, matching dBASE IV's window chrome</li>
  *   <li><b>Gray Shadow Simulation:</b> On 8-color terminals, BLACK on BLACK with
  *       A_BOLD attribute approximates the gray shadows used by dBASE IV on VGA</li>
  * </ul>
@@ -155,7 +155,7 @@ public class DBase4_3DTheme implements Theme3D {
 
     @Override
     public String getDoubleBorderChars() {
-        return "╔═╗║║╚═╝";
+        return "╔═╗║╚═╝║";
     }
 
     @Override

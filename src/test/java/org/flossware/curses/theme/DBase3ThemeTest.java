@@ -87,7 +87,7 @@ class DBase3ThemeTest {
     @DisplayName("should use ASCII box drawing characters")
     void shouldUseAsciiBoxDrawing() {
         String borderChars = theme.getBorderChars();
-        assertThat(borderChars).isEqualTo("+-+||+-+");
+        assertThat(borderChars).isEqualTo("+-+|+-+|");
         assertThat(borderChars).hasSize(8);
     }
 

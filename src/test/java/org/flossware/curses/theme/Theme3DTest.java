@@ -165,7 +165,7 @@ class Theme3DTest {
 
             assertThat(doubleBorderChars)
                 .as("Default implementation should use Unicode double-line box drawing characters")
-                .isEqualTo("╔═╗║║╚═╝");
+                .isEqualTo("╔═╗║╚═╝║");
         }
 
         @Test
@@ -620,7 +620,7 @@ class Theme3DTest {
                 .as("Borland theme should use Unicode double-line box characters")
                 .isNotNull()
                 .hasSize(8)
-                .isEqualTo("╔═╗║║╚═╝");
+                .isEqualTo("╔═╗║╚═╝║");
         }
 
         @Test

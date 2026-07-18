@@ -140,7 +140,7 @@ public class DBase3Theme implements Theme {
     @Override
     public String getBorderChars() {
         // ASCII borders for mid-1980s authenticity
-        return "+-+||+-+";
+        return "+-+|+-+|";
     }
 
     /**

@@ -345,10 +345,10 @@ public class Container extends Component {
         char topEdge = borderChars.charAt(1);
         char topRight = borderChars.charAt(2);
         char leftEdge = borderChars.charAt(3);
-        char rightEdge = borderChars.charAt(4);
-        char bottomLeft = borderChars.charAt(5);
-        char bottomEdge = borderChars.charAt(6);
-        char bottomRight = borderChars.charAt(7);
+        char bottomLeft = borderChars.charAt(4);
+        char bottomEdge = borderChars.charAt(5);
+        char bottomRight = borderChars.charAt(6);
+        char rightEdge = borderChars.charAt(7);
 
         int topLeftColorNum = topLeftColor.pairNumber();
         int bottomRightColorNum = bottomRightColor.pairNumber();

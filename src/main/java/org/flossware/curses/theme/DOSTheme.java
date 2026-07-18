@@ -152,7 +152,7 @@ public class DOSTheme implements Theme {
     public String getBorderChars() {
         // ASCII borders for universal compatibility
         // (DOS would use extended ASCII: ═║╔╗╚╝)
-        return "+-+||+-+";
+        return "+-+|+-+|";
     }
 
     /**

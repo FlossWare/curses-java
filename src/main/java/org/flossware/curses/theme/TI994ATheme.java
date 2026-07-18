@@ -130,7 +130,7 @@ public class TI994ATheme implements Theme {
     @Override
     public String getBorderChars() {
         // ASCII borders for 1981-era authenticity
-        return "+-+||+-+";
+        return "+-+|+-+|";
     }
 
     /**

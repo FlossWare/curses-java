@@ -183,8 +183,8 @@ public interface Theme3D extends Theme {
      *
      * <p>Common character sets:</p>
      * <ul>
-     *   <li>Unicode double-line: {@code "╔═╗║║╚═╝"}</li>
-     *   <li>ASCII fallback: {@code "+=+||+=+"}</li>
+     *   <li>Unicode double-line: {@code "╔═╗║╚═╝║"}</li>
+     *   <li>ASCII fallback: {@code "+=+|+=+|"}</li>
      * </ul>
      *
      * <p>Default implementation returns Unicode double-line characters. Implementations
@@ -193,7 +193,7 @@ public interface Theme3D extends Theme {
      * @return string of 8 characters defining double-line border, never {@code null}
      */
     default String getDoubleBorderChars() {
-        return "╔═╗║║╚═╝";
+        return "╔═╗║╚═╝║";
     }
 
     /**

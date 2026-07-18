@@ -184,7 +184,7 @@ class ModernThemeTest {
         String borderChars = theme.getBorderChars();
 
         // Verify it's using Unicode box-drawing characters, not ASCII
-        assertThat(borderChars).isNotEqualTo("+-+||+-+"); // Not ASCII
+        assertThat(borderChars).isNotEqualTo("+-+|+-+|"); // Not ASCII
         assertThat(borderChars).contains("┌", "─", "┐", "│", "└", "┘");
     }
 }

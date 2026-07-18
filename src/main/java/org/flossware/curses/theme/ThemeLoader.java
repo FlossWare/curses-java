@@ -32,7 +32,7 @@ import java.nio.file.Path;
  *     "button": { "fg": "BLUE", "bg": "BLACK" },
  *     ...
  *   },
- *   "borders": { "single": "+-+||+-+" }
+ *   "borders": { "single": "+-+|+-+|" }
  * }
  * }</pre>
  *

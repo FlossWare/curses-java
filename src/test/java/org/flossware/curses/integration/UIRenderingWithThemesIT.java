@@ -413,7 +413,7 @@ class UIRenderingWithThemesIT extends IntegrationTestBase {
 
             @Override
             public String getBorderChars() {
-                return "+-+||+-+";
+                return "+-+|+-+|";
             }
 
             @Override
@@ -477,7 +477,7 @@ class UIRenderingWithThemesIT extends IntegrationTestBase {
 
             @Override
             public String getBorderChars() {
-                return "+-+||+-+";
+                return "+-+|+-+|";
             }
 
             @Override

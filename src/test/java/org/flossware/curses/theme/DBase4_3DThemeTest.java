@@ -102,7 +102,7 @@ class DBase4_3DThemeTest {
     @DisplayName("should use double-line Unicode box drawing characters for dialogs")
     void shouldUseDoubleLineUnicodeBoxDrawingForDialogs() {
         String doubleBorderChars = theme.getDoubleBorderChars();
-        assertThat(doubleBorderChars).isEqualTo("╔═╗║║╚═╝");
+        assertThat(doubleBorderChars).isEqualTo("╔═╗║╚═╝║");
         assertThat(doubleBorderChars).hasSize(8);
     }
 
@@ -210,7 +210,7 @@ class DBase4_3DThemeTest {
         assertThat(theme.getBorderChars()).isNotEqualTo(baseTheme.getBorderChars());
 
         // Base theme uses rounded corners
-        assertThat(baseTheme.getBorderChars()).isEqualTo("+-+||+-+");
+        assertThat(baseTheme.getBorderChars()).isEqualTo("+-+|+-+|");
 
         // 3D theme uses single-line (standard for most dialogs)
         assertThat(theme.getBorderChars()).isEqualTo("┌─┐│└─┘│");
@@ -253,14 +253,15 @@ class DBase4_3DThemeTest {
         String doubleBorderChars = theme.getDoubleBorderChars();
 
         // Verify each character in the 8-character double border string
+        // Order: top-left, top, top-right, left, bottom-left, bottom, bottom-right, right
         assertThat(doubleBorderChars.charAt(0)).isEqualTo('╔'); // ╔ - top-left corner
-        assertThat(doubleBorderChars.charAt(1)).isEqualTo('═'); // ═ - horizontal
+        assertThat(doubleBorderChars.charAt(1)).isEqualTo('═'); // ═ - top horizontal
         assertThat(doubleBorderChars.charAt(2)).isEqualTo('╗'); // ╗ - top-right corner
-        assertThat(doubleBorderChars.charAt(3)).isEqualTo('║'); // ║ - vertical
-        assertThat(doubleBorderChars.charAt(4)).isEqualTo('║'); // ║ - vertical (left side)
-        assertThat(doubleBorderChars.charAt(5)).isEqualTo('╚'); // ╚ - bottom-left corner
-        assertThat(doubleBorderChars.charAt(6)).isEqualTo('═'); // ═ - horizontal
-        assertThat(doubleBorderChars.charAt(7)).isEqualTo('╝'); // ╝ - bottom-right corner
+        assertThat(doubleBorderChars.charAt(3)).isEqualTo('║'); // ║ - left vertical
+        assertThat(doubleBorderChars.charAt(4)).isEqualTo('╚'); // ╚ - bottom-left corner
+        assertThat(doubleBorderChars.charAt(5)).isEqualTo('═'); // ═ - bottom horizontal
+        assertThat(doubleBorderChars.charAt(6)).isEqualTo('╝'); // ╝ - bottom-right corner
+        assertThat(doubleBorderChars.charAt(7)).isEqualTo('║'); // ║ - right vertical
     }
 
     @Test
@@ -368,8 +369,8 @@ class DBase4_3DThemeTest {
         // Single-line uses ┌─┐│└─┘│
         assertThat(singleLine).isEqualTo("┌─┐│└─┘│");
 
-        // Double-line uses ╔═╗║║╚═╝
-        assertThat(doubleLine).isEqualTo("╔═╗║║╚═╝");
+        // Double-line uses ╔═╗║╚═╝║
+        assertThat(doubleLine).isEqualTo("╔═╗║╚═╝║");
     }
 
     @Test

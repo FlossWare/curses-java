@@ -45,8 +45,8 @@ public interface Theme {
 
     /**
      * Get the border characters used for drawing boxes.
-     * Returns a string with 8 characters: top-left, top, top-right, left, right, bottom-left, bottom, bottom-right.
-     * Default: "+-+||+-+" (ASCII)
+     * Returns a string with 8 characters: top-left, top, top-right, left, bottom-left, bottom, bottom-right, right.
+     * Default: "+-+|+-+|" (ASCII)
      * Unicode box: "┌─┐│└─┘│"
      */
     String getBorderChars();

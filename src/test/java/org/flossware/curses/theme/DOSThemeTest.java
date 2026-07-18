@@ -87,7 +87,7 @@ class DOSThemeTest {
     @DisplayName("should use ASCII box drawing characters")
     void shouldUseASCIIBoxDrawing() {
         String borderChars = theme.getBorderChars();
-        assertThat(borderChars).isEqualTo("+-+||+-+");
+        assertThat(borderChars).isEqualTo("+-+|+-+|");
         assertThat(borderChars).hasSize(8);
     }
 

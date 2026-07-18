@@ -17,6 +17,6 @@
     "disabled": { "fg": "BLUE", "bg": "BLUE" }
   },
   "borders": {
-    "single": "+-+||+-+"
+    "single": "+-+|+-+|"
   }
 }

@@ -17,7 +17,7 @@ class ThemeTest {
         assertEquals("Default", theme.getName());
         assertEquals(Color.WHITE, theme.getBackground().foreground());
         assertEquals(Color.BLACK, theme.getBackground().background());
-        assertEquals("+-+||+-+", theme.getBorderChars());
+        assertEquals("+-+|+-+|", theme.getBorderChars());
     }
 
     @Test

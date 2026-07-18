@@ -209,7 +209,7 @@ class TerminalCompatibilityIT extends IntegrationTestBase {
         DOSTheme dosTheme = new DOSTheme();
         TRS80Theme trs80Theme = new TRS80Theme();
 
-        // Should use ASCII box drawing: "+-+||+-+"
+        // Should use ASCII box drawing: "+-+|+-+|"
         assertTrue(isASCIIOnly(defaultTheme.getBorderChars()),
             "Default theme should use ASCII-only borders");
         assertTrue(isASCIIOnly(dosTheme.getBorderChars()),

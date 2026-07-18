@@ -65,7 +65,7 @@ public class BorlandTheme implements Theme {
     @Override
     public String getBorderChars() {
         // Unicode rounded box drawing characters for smooth, modern appearance
-        // Format: top-left, top, top-right, left, right, bottom-left, bottom, bottom-right
+        // Format: top-left, top, top-right, left, bottom-left, bottom, bottom-right, right
         // Characters used:
         //   ╭ (U+256D) - Box Drawings Light Arc Down and Right (top-left corner)
         //   ─ (U+2500) - Box Drawings Light Horizontal (top/bottom edge)

@@ -87,7 +87,7 @@ class TRS80ThemeTest {
     @DisplayName("should use ASCII block-style box drawing characters")
     void shouldUseAsciiBlockStyleBoxDrawing() {
         String borderChars = theme.getBorderChars();
-        assertThat(borderChars).isEqualTo("+-+||+-+");
+        assertThat(borderChars).isEqualTo("+-+|+-+|");
         assertThat(borderChars).hasSize(8);
     }
 
