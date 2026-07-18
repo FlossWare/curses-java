@@ -23,7 +23,7 @@ class ScrollPaneScrollingTest extends ComponentTestBase {
 
         content = new Label("This is scrollable content that extends beyond viewport");
         content.setLocation(0, 0);
-        content.setSize(60, 1);
+        content.setSize(60, 30);
 
         scrollPane.add(content);
     }
@@ -86,7 +86,7 @@ class ScrollPaneScrollingTest extends ComponentTestBase {
     void testContentHeight() {
         int contentHeight = scrollPane.getContentHeight();
 
-        assertEquals(1, contentHeight);  // content is 1 tall
+        assertEquals(30, contentHeight);  // content is 30 tall
     }
 
     @Test
@@ -99,7 +99,7 @@ class ScrollPaneScrollingTest extends ComponentTestBase {
         scrollPane.add(secondLabel);
 
         assertEquals(60, scrollPane.getContentWidth());  // Max of 60 and 30
-        assertEquals(6, scrollPane.getContentHeight());  // Max of 1 and 6 (5+1)
+        assertEquals(30, scrollPane.getContentHeight());  // Max of 30 and 6 (5+1)
     }
 
     @Test

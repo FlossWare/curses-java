@@ -603,5 +603,18 @@ class ContainerTest extends ComponentTestBase {
             wasLaidOut = true;
             layoutCount++;
         }
+
+        @Override
+        public Dimension preferredLayoutSize(Container parent) {
+            return new Dimension(10, 10);
+        }
+
+        @Override
+        public void addLayoutComponent(Component comp, Object constraints) {
+        }
+
+        @Override
+        public void removeLayoutComponent(Component comp) {
+        }
     }
 }

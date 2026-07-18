@@ -26,7 +26,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public abstract class Component {
     protected int x, y, width, height;
     protected final ReentrantLock renderLock = new ReentrantLock();
-    protected Component parent;
+    private volatile Component parent;
     private final List<MouseListener> mouseListeners = new CopyOnWriteArrayList<>();
     protected ColorPair colorPair = ColorPair.DEFAULT;
 
@@ -153,11 +153,21 @@ public abstract class Component {
     }
 
     public Component getParent() {
-        return parent;
+        renderLock.lock();
+        try {
+            return parent;
+        } finally {
+            renderLock.unlock();
+        }
     }
 
     public void setParent(Component parent) {
-        this.parent = parent;
+        renderLock.lock();
+        try {
+            this.parent = parent;
+        } finally {
+            renderLock.unlock();
+        }
     }
 
     public ColorPair getColorPair() {
@@ -265,11 +275,12 @@ public abstract class Component {
 
     public void repaint() {
         Component root = this;
-        while (root.parent != null) {
-            root = root.parent;
+        Component p;
+        while ((p = root.parent) != null) {
+            root = p;
         }
-        if (root instanceof RootPane) {
-            ((RootPane) root).markDirty();
+        if (root instanceof RootPane rootPane) {
+            rootPane.markDirty();
         }
     }
 

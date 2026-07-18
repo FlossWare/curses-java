@@ -20,7 +20,7 @@ public class Container extends Component {
     // Snapshot cache to reduce GC pressure (Issue #71)
     private List<Component> cachedSnapshot;
     private int lastSnapshotSize = -1;
-    private long modificationCount = 0;
+    private volatile long modificationCount = 0;
     private long cachedSnapshotModCount = -1;
 
     public Container() {
@@ -291,12 +291,21 @@ public class Container extends Component {
      * @param colorBuffer color pair buffer for per-character coloring (may be null for character-only rendering)
      */
     protected void drawBorder(char[][] buffer, int[][] colorBuffer) {
-        if (width <= 0 || height <= 0) return;
+        final int bx, by, bw, bh;
+        renderLock.lock();
+        try {
+            bx = x;
+            by = y;
+            bw = width;
+            bh = height;
+        } finally {
+            renderLock.unlock();
+        }
 
-        // Get border characters from theme (fallback to component's getBorderChars if theme unavailable)
+        if (bw <= 0 || bh <= 0) return;
+
         String borderChars = getBorderChars();
 
-        // Check if theme supports 3D rendering
         org.flossware.curses.theme.Theme theme = null;
         boolean supports3D = false;
         org.flossware.curses.theme.Theme3D theme3D = null;
@@ -312,33 +321,26 @@ public class Container extends Component {
             // Theme access failed, fall back to basic rendering
         }
 
-        // Determine colors based on rendering style and 3D support
         ColorPair topLeftColor;
         ColorPair bottomRightColor;
 
         if (supports3D && theme3D != null && style != RenderingStyle.FLAT) {
-            // 3D rendering with asymmetric coloring
             if (style == RenderingStyle.RAISED) {
-                // RAISED: top-left bright, bottom-right dark
                 topLeftColor = theme3D.getHighlightColor();
                 bottomRightColor = theme3D.getLowlightColor();
             } else if (style == RenderingStyle.SUNKEN) {
-                // SUNKEN: invert colors (top-left dark, bottom-right bright)
                 topLeftColor = theme3D.getLowlightColor();
                 bottomRightColor = theme3D.getHighlightColor();
             } else {
-                // CUSTOM or other: use default border color
                 topLeftColor = theme.getBorder();
                 bottomRightColor = theme.getBorder();
             }
         } else {
-            // FLAT style or non-3D theme: uniform coloring
             ColorPair borderColor = theme != null ? theme.getBorder() : ColorPair.DEFAULT;
             topLeftColor = borderColor;
             bottomRightColor = borderColor;
         }
 
-        // Extract border characters (8-character format: top-left, top, top-right, left, right, bottom-left, bottom, bottom-right)
         char topLeft = borderChars.charAt(0);
         char topEdge = borderChars.charAt(1);
         char topRight = borderChars.charAt(2);
@@ -348,80 +350,70 @@ public class Container extends Component {
         char bottomEdge = borderChars.charAt(6);
         char bottomRight = borderChars.charAt(7);
 
-        // Convert ColorPairs to color pair numbers for the color buffer
         int topLeftColorNum = topLeftColor.pairNumber();
         int bottomRightColorNum = bottomRightColor.pairNumber();
 
-        // Draw top edge (highlight color for RAISED, lowlight for SUNKEN, border color for FLAT)
-        for (int i = 1; i < width - 1; i++) {
-            if (y >= 0 && y < buffer.length && x + i >= 0 && x + i < buffer[0].length) {
-                buffer[y][x + i] = topEdge;
+        for (int i = 1; i < bw - 1; i++) {
+            if (by >= 0 && by < buffer.length && bx + i >= 0 && bx + i < buffer[0].length) {
+                buffer[by][bx + i] = topEdge;
                 if (colorBuffer != null) {
-                    colorBuffer[y][x + i] = topLeftColorNum;
+                    colorBuffer[by][bx + i] = topLeftColorNum;
                 }
             }
         }
 
-        // Draw bottom edge (lowlight color for RAISED, highlight for SUNKEN, border color for FLAT)
-        for (int i = 1; i < width - 1; i++) {
-            if (y + height - 1 >= 0 && y + height - 1 < buffer.length && x + i >= 0 && x + i < buffer[0].length) {
-                buffer[y + height - 1][x + i] = bottomEdge;
+        for (int i = 1; i < bw - 1; i++) {
+            if (by + bh - 1 >= 0 && by + bh - 1 < buffer.length && bx + i >= 0 && bx + i < buffer[0].length) {
+                buffer[by + bh - 1][bx + i] = bottomEdge;
                 if (colorBuffer != null) {
-                    colorBuffer[y + height - 1][x + i] = bottomRightColorNum;
+                    colorBuffer[by + bh - 1][bx + i] = bottomRightColorNum;
                 }
             }
         }
 
-        // Draw left edge (highlight color for RAISED, lowlight for SUNKEN, border color for FLAT)
-        for (int i = 1; i < height - 1; i++) {
-            if (y + i >= 0 && y + i < buffer.length && x >= 0 && x < buffer[0].length) {
-                buffer[y + i][x] = leftEdge;
+        for (int i = 1; i < bh - 1; i++) {
+            if (by + i >= 0 && by + i < buffer.length && bx >= 0 && bx < buffer[0].length) {
+                buffer[by + i][bx] = leftEdge;
                 if (colorBuffer != null) {
-                    colorBuffer[y + i][x] = topLeftColorNum;
+                    colorBuffer[by + i][bx] = topLeftColorNum;
                 }
             }
         }
 
-        // Draw right edge (lowlight color for RAISED, highlight for SUNKEN, border color for FLAT)
-        for (int i = 1; i < height - 1; i++) {
-            if (y + i >= 0 && y + i < buffer.length && x + width - 1 >= 0 && x + width - 1 < buffer[0].length) {
-                buffer[y + i][x + width - 1] = rightEdge;
+        for (int i = 1; i < bh - 1; i++) {
+            if (by + i >= 0 && by + i < buffer.length && bx + bw - 1 >= 0 && bx + bw - 1 < buffer[0].length) {
+                buffer[by + i][bx + bw - 1] = rightEdge;
                 if (colorBuffer != null) {
-                    colorBuffer[y + i][x + width - 1] = bottomRightColorNum;
+                    colorBuffer[by + i][bx + bw - 1] = bottomRightColorNum;
                 }
             }
         }
 
-        // Draw corners with appropriate colors based on rendering style
-        // Top-left corner (highlight color for RAISED, lowlight for SUNKEN)
-        if (y >= 0 && y < buffer.length && x >= 0 && x < buffer[0].length) {
-            buffer[y][x] = topLeft;
+        if (by >= 0 && by < buffer.length && bx >= 0 && bx < buffer[0].length) {
+            buffer[by][bx] = topLeft;
             if (colorBuffer != null) {
-                colorBuffer[y][x] = topLeftColorNum;
+                colorBuffer[by][bx] = topLeftColorNum;
             }
         }
 
-        // Top-right corner (transition: primarily top edge for RAISED)
-        if (y >= 0 && y < buffer.length && x + width - 1 >= 0 && x + width - 1 < buffer[0].length) {
-            buffer[y][x + width - 1] = topRight;
+        if (by >= 0 && by < buffer.length && bx + bw - 1 >= 0 && bx + bw - 1 < buffer[0].length) {
+            buffer[by][bx + bw - 1] = topRight;
             if (colorBuffer != null) {
-                colorBuffer[y][x + width - 1] = topLeftColorNum;  // Top edge dominates
+                colorBuffer[by][bx + bw - 1] = topLeftColorNum;
             }
         }
 
-        // Bottom-left corner (transition: primarily left edge for RAISED)
-        if (y + height - 1 >= 0 && y + height - 1 < buffer.length && x >= 0 && x < buffer[0].length) {
-            buffer[y + height - 1][x] = bottomLeft;
+        if (by + bh - 1 >= 0 && by + bh - 1 < buffer.length && bx >= 0 && bx < buffer[0].length) {
+            buffer[by + bh - 1][bx] = bottomLeft;
             if (colorBuffer != null) {
-                colorBuffer[y + height - 1][x] = topLeftColorNum;  // Left edge dominates
+                colorBuffer[by + bh - 1][bx] = topLeftColorNum;
             }
         }
 
-        // Bottom-right corner (lowlight color for RAISED, highlight for SUNKEN)
-        if (y + height - 1 >= 0 && y + height - 1 < buffer.length && x + width - 1 >= 0 && x + width - 1 < buffer[0].length) {
-            buffer[y + height - 1][x + width - 1] = bottomRight;
+        if (by + bh - 1 >= 0 && by + bh - 1 < buffer.length && bx + bw - 1 >= 0 && bx + bw - 1 < buffer[0].length) {
+            buffer[by + bh - 1][bx + bw - 1] = bottomRight;
             if (colorBuffer != null) {
-                colorBuffer[y + height - 1][x + width - 1] = bottomRightColorNum;
+                colorBuffer[by + bh - 1][bx + bw - 1] = bottomRightColorNum;
             }
         }
     }

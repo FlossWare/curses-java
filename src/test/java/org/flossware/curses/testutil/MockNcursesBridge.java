@@ -104,14 +104,14 @@ public class MockNcursesBridge {
     /**
      * Get terminal height.
      */
-    public int getTerminalHeight() {
+    public synchronized int getTerminalHeight() {
         return height;
     }
 
     /**
      * Get terminal width.
      */
-    public int getTerminalWidth() {
+    public synchronized int getTerminalWidth() {
         return width;
     }
 
@@ -126,7 +126,7 @@ public class MockNcursesBridge {
      * @param newHeight the new terminal height (must be > 0)
      * @throws IllegalArgumentException if width or height is <= 0
      */
-    public void setTerminalSize(int newWidth, int newHeight) {
+    public synchronized void setTerminalSize(int newWidth, int newHeight) {
         if (newWidth <= 0 || newHeight <= 0) {
             throw new IllegalArgumentException("Terminal dimensions must be positive: width=" + newWidth + ", height=" + newHeight);
         }
@@ -180,7 +180,7 @@ public class MockNcursesBridge {
     /**
      * Move cursor and write character.
      */
-    public void moveCursor(int y, int x, char ch) {
+    public synchronized void moveCursor(int y, int x, char ch) {
         if (y >= 0 && y < height && x >= 0 && x < width) {
             screen[y][x] = ch;
         }
@@ -256,7 +256,7 @@ public class MockNcursesBridge {
     /**
      * Capture current screen state as a copy.
      */
-    public char[][] captureScreen() {
+    public synchronized char[][] captureScreen() {
         char[][] copy = new char[height][width];
         for (int i = 0; i < height; i++) {
             System.arraycopy(screen[i], 0, copy[i], 0, width);
@@ -267,7 +267,7 @@ public class MockNcursesBridge {
     /**
      * Get character at specific screen position.
      */
-    public char getCharAt(int y, int x) {
+    public synchronized char getCharAt(int y, int x) {
         if (y >= 0 && y < height && x >= 0 && x < width) {
             return screen[y][x];
         }
@@ -277,7 +277,7 @@ public class MockNcursesBridge {
     /**
      * Get text from screen row.
      */
-    public String getRow(int y) {
+    public synchronized String getRow(int y) {
         if (y >= 0 && y < height) {
             return new String(screen[y]);
         }
@@ -306,7 +306,7 @@ public class MockNcursesBridge {
         return !mouseQueue.isEmpty();
     }
 
-    private void clearScreen() {
+    private synchronized void clearScreen() {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 screen[i][j] = ' ';
