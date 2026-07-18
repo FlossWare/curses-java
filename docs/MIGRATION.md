@@ -131,6 +131,20 @@ For 3D support, add the `3d` block:
 }
 ```
 
+## Common Pitfalls
+
+1. **Border char ordering** -- If writing Java JSON manually, remember the order is TL, T, TR, L, BL, B, BR, R (position 4 is BL). Python uses TL, T, TR, L, R, BL, B, BR (position 4 is R). The adapter handles this automatically, but manual JSON must use Java ordering.
+
+2. **Color name case sensitivity** -- Java's `Color.valueOf()` is case-sensitive and requires uppercase: `"CYAN"` not `"cyan"`. The Python adapter is case-insensitive, so `"cyan"` works in Python but would fail if loaded by Java directly.
+
+3. **Semantic color defaults** -- When Python loads a Java JSON file, only 3 of 8 semantic colors (background, foreground, primary) are derived from component colors. The other 5 (success, error, warning, info, accent) use hardcoded defaults (`GREEN`, `RED`, `YELLOW`, foreground, foreground). If your app relies on specific semantic colors, define them in a Python-native JSON file instead.
+
+4. **`color_pair()` wrapping** -- In Python curses, you wrap color pair numbers with `curses.color_pair(n)`. In Java, `ColorPair` objects are used directly. Don't confuse the two when porting code.
+
+5. **3D theme detection** -- Java determines 3D vs flat by the presence of a `"3d"` key in JSON. Python determines it by the presence of `"shadow"`, `"highlight"`, `"lowlight"` keys (after conversion). If you manually construct theme dicts, include the right keys for your target.
+
+6. **`schema.json` validates structure, not visuals** -- A theme can be schema-valid but look terrible. Always preview themes in both libraries before shipping.
+
 ## Schema Reference
 
 The shared JSON schema is at [`themes/schema.json`](../themes/schema.json). It defines:
