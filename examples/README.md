@@ -495,7 +495,7 @@ java --enable-preview --enable-native-access=ALL-UNNAMED \
 
 ## License
 
-GPL v3.0 - See LICENSE file for details.
+Apache License 2.0 - See LICENSE file for details.
 
 ## Contributing
 
