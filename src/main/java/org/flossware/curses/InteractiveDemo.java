@@ -77,7 +77,7 @@ public class InteractiveDemo {
         root.setSize(terminalWidth, terminalHeight);
 
         // Create main frame
-        Frame frame = new Frame("Interactive JCurses Demo - Press TAB to navigate, SPACE to activate, ESC to quit");
+        Frame frame = new Frame("Interactive curses-java Demo - Press TAB to navigate, SPACE to activate, ESC to quit");
         frame.setLocation(0, 0);
         frame.setSize(terminalWidth, terminalHeight - 2);
         frame.setVisible(true);
@@ -105,7 +105,7 @@ public class InteractiveDemo {
         int row10 = 21; // dialog/table/file dialog buttons row
 
         // Create interactive widgets
-        Label label1 = new Label("Welcome to Interactive JCurses!");
+        Label label1 = new Label("Welcome to Interactive curses-java!");
         label1.setLocation(4, row0);
         label1.setSize(50, 1);
         label1.setAlignment(Label.ALIGN_LEFT);
@@ -545,7 +545,7 @@ public class InteractiveDemo {
     private static void handleMouse() throws Throwable {
         NcursesBridge.MouseEventData mouseData = NcursesBridge.getMouseEvent();
         if (mouseData != null) {
-            // Convert ncurses mouse event to jcurses MouseEvent
+            // Convert ncurses mouse event to curses-java MouseEvent
             MouseEvent event = new MouseEvent(mouseData.x(), mouseData.y(), (int) mouseData.buttonState());
 
             // Dispatch to root pane which will propagate to children

@@ -4,7 +4,7 @@ import org.flossware.curses.api.ColorPair;
 import org.flossware.curses.api.RenderingStyle;
 
 /**
- * Extended theme interface providing 3D rendering capabilities for jcurses components.
+ * Extended theme interface providing 3D rendering capabilities for curses-java components.
  *
  * <p>This interface extends the base {@link Theme} interface with additional methods
  * that define visual properties for three-dimensional rendering effects, including

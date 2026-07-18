@@ -1,7 +1,7 @@
 package org.flossware.curses.api;
 
 /**
- * Enumeration of 3D rendering styles for jcurses components.
+ * Enumeration of 3D rendering styles for curses-java components.
  *
  * <p>This enum defines the visual appearance of components when 3D rendering is enabled.
  * Each style determines how highlight and lowlight colors are applied to component borders

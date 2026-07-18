@@ -21,17 +21,17 @@ class MouseEventTest {
     }
 
     @Test
-    @DisplayName("should be instance of JcursesEvent")
+    @DisplayName("should be instance of CursesEvent")
     void testSealedInterface() {
         MouseEvent event = new MouseEvent(0, 0, 0);
 
-        assertInstanceOf(JcursesEvent.class, event);
+        assertInstanceOf(CursesEvent.class, event);
     }
 
     @Test
     @DisplayName("should support record pattern matching")
     void testPatternMatching() {
-        JcursesEvent event = new MouseEvent(15, 25, 2);
+        CursesEvent event = new MouseEvent(15, 25, 2);
 
         switch (event) {
             case KeyEvent(int code, boolean alt, boolean ctrl) -> fail("Should be MouseEvent");
@@ -87,13 +87,13 @@ class MouseEventTest {
     @Test
     @DisplayName("should support exhaustive pattern matching")
     void testExhaustivePatternMatching() {
-        JcursesEvent[] events = {
+        CursesEvent[] events = {
             new MouseEvent(10, 20, 1),
             new MouseEvent(30, 40, 2),
             new MouseEvent(0, 0, 0)
         };
 
-        for (JcursesEvent event : events) {
+        for (CursesEvent event : events) {
             String result = switch (event) {
                 case KeyEvent e -> "Key";
                 case MouseEvent e -> "Mouse at (" + e.x() + "," + e.y() + ")";

@@ -1,7 +1,7 @@
 package org.flossware.curses.api;
 
 /**
- * Application-wide constants for jcurses library.
+ * Application-wide constants for curses-java library.
  */
 public final class Constants {
 

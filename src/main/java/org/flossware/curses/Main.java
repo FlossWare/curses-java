@@ -7,7 +7,7 @@ import org.flossware.curses.render.DiffEngine;
 public class Main {
     public static void main(String[] args) throws Throwable {
         System.out.println("=".repeat(80));
-        System.out.println("JCurses AWT Widget Demo - Comprehensive Component Showcase");
+        System.out.println("curses-java AWT Widget Demo - Comprehensive Component Showcase");
         System.out.println("=".repeat(80));
         System.out.println();
 
@@ -46,7 +46,7 @@ public class Main {
         root.setSize(120, 40);
 
         // Create a main frame
-        Frame mainFrame = new Frame("JCurses Widget Showcase");
+        Frame mainFrame = new Frame("curses-java Widget Showcase");
         mainFrame.setLocation(0, 0);
         mainFrame.setSize(120, 40);
         mainFrame.setLayout(new BorderLayout());
@@ -167,7 +167,7 @@ public class Main {
 
         System.out.println("10. JTextArea");
         TextArea textArea = new TextArea();
-        textArea.append("Welcome to JCurses!");
+        textArea.append("Welcome to curses-java!");
         textArea.append("This is a terminal UI library.");
         textArea.append("Built with Java 21 features:");
         textArea.append("- Virtual Threads");

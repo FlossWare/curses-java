@@ -1,7 +1,7 @@
-# Interactive JCurses Demo Runner for Windows (PowerShell)
+# Interactive curses-java Demo Runner for Windows (PowerShell)
 # This script runs the interactive demo with proper JVM flags
 
-Write-Host "Starting JCurses Interactive Demo..." -ForegroundColor Green
+Write-Host "Starting curses-java Interactive Demo..." -ForegroundColor Green
 Write-Host "======================================"
 Write-Host ""
 Write-Host "Controls:"

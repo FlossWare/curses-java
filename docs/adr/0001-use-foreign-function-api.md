@@ -7,7 +7,7 @@
 
 ## Context
 
-jcurses needs to interface with the native ncurses library for terminal manipulation. There are two main approaches:
+curses-java needs to interface with the native ncurses library for terminal manipulation. There are two main approaches:
 
 1. **JNI (Java Native Interface)** - Traditional approach requiring C/C++ code compilation
 2. **Foreign Function & Memory API (Project Panama)** - Modern Java 21 approach, pure Java
@@ -36,7 +36,7 @@ We will use the Foreign Function & Memory API (FFI) from Project Panama.
 
 ## Implementation
 
-See `src/main/java/org/flossware/jcurses/ffi/NcursesBridge.java` for the implementation.
+See `src/main/java/org/flossware/curses/ffi/NcursesBridge.java` for the implementation.
 
 Key patterns used:
 - `SymbolLookup.libraryLookup()` for dynamic library loading

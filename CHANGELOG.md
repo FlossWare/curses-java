@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [X.Y Versioning](https://github.com/FlossWare/jcurses/blob/main/CONTRIBUTING.md#versioning-strategy).
+and this project adheres to [X.Y Versioning](https://github.com/FlossWare/curses-java/blob/main/CONTRIBUTING.md#versioning-strategy).
 
 ## [Unreleased]
 
@@ -100,4 +100,4 @@ and this project adheres to [X.Y Versioning](https://github.com/FlossWare/jcurse
 
 ---
 
-For full commit history, see [GitHub Commits](https://github.com/FlossWare/jcurses/commits/main)
+For full commit history, see [GitHub Commits](https://github.com/FlossWare/curses-java/commits/main)

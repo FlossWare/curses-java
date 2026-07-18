@@ -1,6 +1,6 @@
 # CI/CD Pipeline
 
-jcurses uses GitHub Actions for automated continuous integration and deployment.
+curses-java uses GitHub Actions for automated continuous integration and deployment.
 
 ## Overview
 
@@ -107,7 +107,7 @@ To use in your project:
 <dependencies>
     <dependency>
         <groupId>org.flossware</groupId>
-        <artifactId>jcurses</artifactId>
+        <artifactId>curses-java</artifactId>
         <version>1.0</version>
     </dependency>
 </dependencies>
@@ -117,7 +117,7 @@ To use in your project:
 
 Check the Actions tab in GitHub to monitor builds:
 ```
-https://github.com/FlossWare/jcurses/actions
+https://github.com/FlossWare/curses-java/actions
 ```
 
 ## Preventing Builds

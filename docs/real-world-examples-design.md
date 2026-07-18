@@ -20,7 +20,7 @@ All designs verified against actual library source code.
 ### Component Hierarchy
 ```
 RootPane
-  └─ Frame "JCurses File Manager"
+  └─ Frame "curses-java File Manager"
       ├─ MenuBar
       │   ├─ Menu "File" → MenuItem[] {"New Folder", "Quit"}
       │   ├─ Menu "Edit" → MenuItem[] {"Copy", "Move", "Delete", "Rename"}
@@ -72,7 +72,7 @@ public class FileManager {
     }
     
     private static void setupUI() {
-        Frame frame = new Frame("JCurses File Manager");
+        Frame frame = new Frame("curses-java File Manager");
         
         // Menu bar
         MenuBar menuBar = new MenuBar();
@@ -292,7 +292,7 @@ public class SystemDashboard {
 ### Component Hierarchy
 ```
 RootPane
-  └─ Frame "JCurses Editor - untitled.txt"
+  └─ Frame "curses-java Editor - untitled.txt"
       ├─ MenuBar
       │   ├─ Menu "File" → MenuItem[] {"New", "Open", "Save", "Save As", "Quit"}
       │   ├─ Menu "Edit" → MenuItem[] {"Find", "Replace", "Go to Line"}
@@ -331,7 +331,7 @@ public class TextEditor {
     }
     
     private static void setupUI() {
-        Frame frame = new Frame("JCurses Editor - untitled.txt");
+        Frame frame = new Frame("curses-java Editor - untitled.txt");
         
         // Menu bar
         MenuBar menuBar = new MenuBar();

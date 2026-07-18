@@ -429,7 +429,7 @@ int key = (int) getch.invokeExact();
 
 **Sealed Interfaces & Pattern Matching:**
 ```java
-sealed interface JcursesEvent permits KeyEvent, MouseEvent, WindowEvent {}
+sealed interface CursesEvent permits KeyEvent, MouseEvent, WindowEvent {}
 
 switch (event) {
     case KeyEvent(int code, boolean alt, boolean ctrl) -> handleKey(code);

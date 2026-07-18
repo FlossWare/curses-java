@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Interactive JCurses Demo Runner
+# Interactive curses-java Demo Runner
 # This script runs the interactive demo with proper JVM flags
 
-echo "Starting JCurses Interactive Demo..."
+echo "Starting curses-java Interactive Demo..."
 echo "======================================"
 echo ""
 echo "Controls:"

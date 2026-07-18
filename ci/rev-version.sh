@@ -40,4 +40,4 @@ echo "Pushing changes and tags to origin..."
 git push origin "${CURRENT_BRANCH}"
 git push origin "v${NEXT_VERSION}"
 
-echo "CI/CD Lifecycle complete for org.flossware:jcurses:${NEXT_VERSION}"
+echo "CI/CD Lifecycle complete for org.flossware:curses-java:${NEXT_VERSION}"

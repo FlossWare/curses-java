@@ -1,6 +1,6 @@
-# Contributing to jcurses
+# Contributing to curses-java
 
-Thank you for your interest in contributing to jcurses! This document provides guidelines and instructions for contributing.
+Thank you for your interest in contributing to curses-java! This document provides guidelines and instructions for contributing.
 
 ## Table of Contents
 
@@ -25,12 +25,12 @@ Thank you for your interest in contributing to jcurses! This document provides g
 1. **Fork the repository** on GitHub
 2. **Clone your fork** locally:
    ```bash
-   git clone git@github.com:YOUR_USERNAME/jcurses.git
-   cd jcurses
+   git clone git@github.com:YOUR_USERNAME/curses-java.git
+   cd curses-java
    ```
 3. **Add upstream remote**:
    ```bash
-   git remote add upstream git@github.com:FlossWare/jcurses.git
+   git remote add upstream git@github.com:FlossWare/curses-java.git
    ```
 
 ## Development Setup
@@ -174,7 +174,7 @@ git push origin feature/my-feature-name
 
 ## Versioning Strategy
 
-jcurses uses **automatic continuous versioning**:
+curses-java uses **automatic continuous versioning**:
 
 - **Every push to `main`** automatically increments the minor version (X.Y format)
 - Version bumps are automated via CI/CD (no manual intervention)

@@ -31,7 +31,7 @@ JButton button = new JButton("Test");
 ## Environment
 - **OS**: [e.g. Ubuntu 22.04, macOS 14.2, Windows 11]
 - **Java Version**: [e.g. 21.0.2]
-- **jcurses Version**: [e.g. 1.28]
+- **curses-java Version**: [e.g. 1.28]
 - **ncurses Version**: [e.g. 6.4]
 
 ## Stack Trace
