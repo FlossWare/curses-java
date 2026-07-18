@@ -1,7 +1,7 @@
 # curses-java & curses-themes Alignment Project
 
 **Last Updated**: July 18, 2026
-**Status**: Phase 1 complete | Phase 2 complete | Phase 3 in progress
+**Status**: Phase 1 complete | Phase 2 complete | Phase 3 complete
 
 **Goal**: Create a cohesive cross-language terminal UI ecosystem where themes, concepts, and developer experience are consistent between the full Java framework and the lightweight Python theming library.
 
@@ -9,7 +9,7 @@
 - **curses-java**: Mature full TUI framework (29+ AWT-like widgets, mouse support, advanced rendering, Java 21 features). Strong theming subsystem with JSON export/import.
 - **curses-themes**: Lightweight, zero-dep Python theming layer. Semantic colors, config support, retro/3D themes, and Java JSON format adapter.
 - **Shared DNA**: 12 JSON theme files, semantic + component color APIs, 3D effects, `ThemeManager` patterns.
-- **Gaps**: Remaining Phase 3 DX items (shared examples, theme converter utility).
+- **Gaps**: Phase 4 release & maintenance items remain.
 
 ## Success Criteria
 - Single source of truth for theme definitions (JSON in curses-java)
@@ -68,21 +68,22 @@
 - [x] Python uses RGB tuples with `NCURSES_COLOR_MAP` for conversion
 - [x] Conversion is automatic — Python adapter handles ncurses→RGB at parse time
 
-## Phase 3: DX & Ecosystem (In Progress)
+## Phase 3: DX & Ecosystem (Complete)
 
 ### 3.1 Examples & Demos
-- [ ] Shared example UIs (form, dashboard, theme switcher, retro app)
+- [x] Cross-language examples README with matched Java/Python pairs (curses-themes `examples/README.md`)
 - [x] Side-by-side code snippets in docs (in `docs/themes.md` and `docs/MIGRATION.md`)
 
 ### 3.2 Documentation
 - [x] Cross-language section in `docs/themes.md` with API mapping table
 - [x] Cross-repository links in READMEs
-- [x] Migration guide (`docs/MIGRATION.md` — Java↔Python theme conversion)
+- [x] Migration guide (`docs/MIGRATION.md` — Java↔Python theme conversion, common pitfalls)
+- [x] ADR 0007: Shared theme data package evaluation (keep in curses-java repo)
 
 ### 3.3 Tooling & CI
 - [x] Theme validation in CI for both repos (schema validation + Python adapter tests)
-- [ ] Sync check in GitHub workflows (detect schema drift between repos)
-- [ ] Optional theme converter utility
+- [x] Schema drift detection in CI (curses-themes `validate-themes` job)
+- [x] Theme converter CLI tool (`tools/theme-converter.py` — Java↔Python JSON conversion)
 
 ## Phase 4: Release & Maintenance
 - [ ] Coordinated version bump + announcement
@@ -91,7 +92,6 @@
 
 ## Open Questions
 - How much widget helper code should Python add to narrow the gap?
-- Should we publish a shared `flossware-themes` data package (npm/PyPI)?
 - Priority for Windows/Unicode support alignment?
 - Should schema.json allow RGB values alongside ncurses color names?
 
@@ -99,6 +99,7 @@
 - **ADR 0006**: JSON-only unification strategy (no YAML, no XML for shared themes)
 - **ADR 0004**: Rust/UniFFI evaluated and rejected for shared rendering
 - **ADR 0005**: Windows/Unicode 4-phase roadmap for curses-java v2.0
+- **ADR 0007**: Shared theme data package — keep in curses-java repo (revisit at 50+ themes)
 
 ## Key Files
 
@@ -108,6 +109,8 @@
 - `src/.../theme/ThemeLoader.java` — JSON parser/serializer
 - `src/.../theme/ThemeManager.java` — theme registry + lifecycle
 - `docs/adr/0006-unification-strategy.md` — decision record
+- `docs/adr/0007-shared-theme-data-package.md` — shared data package evaluation
+- `tools/theme-converter.py` — CLI tool for Java↔Python theme conversion
 
 **curses-themes** (consumer):
 - `curses_themes/config_theme.py` — Java format adapter (`_convert_java_to_python()`)
