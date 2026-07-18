@@ -87,7 +87,7 @@ Example -- the string `"+-+||+-+"`:
 - **Java reads:** `+` `-` `+` `|` `|` `+` `-` `+` (positions 4-5 = BL, B)
 - **Python reads:** `+` `-` `+` `|` `|` `+` `-` `+` (positions 4-5 = R, BL)
 
-The Python adapter swaps positions 4/7 and 5/6 automatically when loading Java JSON.
+The Python adapter moves position 7 (R) to position 4 and shifts positions 4-6 (BL, B, BR) to positions 5-7 automatically when loading Java JSON.
 
 ## Creating Themes That Work in Both
 
