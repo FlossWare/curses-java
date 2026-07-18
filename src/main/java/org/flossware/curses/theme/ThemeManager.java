@@ -1,5 +1,13 @@
 package org.flossware.curses.theme;
 
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 /**
  * Singleton manager for application theme configuration and switching.
  *
@@ -111,8 +119,30 @@ package org.flossware.curses.theme;
 public class ThemeManager {
     private static final ThemeManager INSTANCE = new ThemeManager();
     private Theme currentTheme = new DefaultTheme();
+    private final Map<String, Theme> themes = new LinkedHashMap<>();
 
-    private ThemeManager() {}
+    private ThemeManager() {
+        registerBuiltInThemes();
+    }
+
+    private void registerBuiltInThemes() {
+        registerTheme(new DefaultTheme());
+        registerTheme(new DarkTheme());
+        registerTheme(new LightTheme());
+        registerTheme(new ModernTheme());
+        registerTheme(new BorlandTheme());
+        registerTheme(new Borland3DTheme());
+        registerTheme(new TI994ATheme());
+        registerTheme(new TRS80Theme());
+        registerTheme(new DOSTheme());
+        registerTheme(new DBase3Theme());
+        registerTheme(new DBase4Theme());
+        registerTheme(new DBase4_3DTheme());
+    }
+
+    private void registerTheme(Theme theme) {
+        themes.put(theme.getName(), theme);
+    }
 
     public static ThemeManager getInstance() {
         return INSTANCE;
@@ -343,5 +373,81 @@ public class ThemeManager {
      */
     public void useDBase4Theme() {
         setTheme(new DBase4Theme());
+    }
+
+    // ========================================================================
+    // JSON theme loading and theme registry
+    // ========================================================================
+
+    /**
+     * Loads a theme from a JSON file and sets it as the current theme.
+     *
+     * <p>The loaded theme is also registered in the theme registry, making it
+     * available through {@link #useTheme(String)} and {@link #getAvailableThemes()}.</p>
+     *
+     * @param path the path to the JSON theme file
+     * @throws ThemeLoader.ThemeLoadException if the file cannot be read or parsed
+     */
+    public void loadThemeFromJson(Path path) {
+        Theme theme = ThemeLoader.fromJson(path);
+        registerTheme(theme);
+        setTheme(theme);
+    }
+
+    /**
+     * Scans a directory for JSON theme files and registers all found themes.
+     *
+     * <p>Files named {@code schema.json} are skipped. Only files with a {@code .json}
+     * extension are processed. Themes that fail to parse are silently skipped.</p>
+     *
+     * @param directory the directory to scan for JSON theme files
+     * @return the number of themes successfully loaded
+     * @throws ThemeLoader.ThemeLoadException if the directory cannot be read
+     */
+    public int loadThemesFromDirectory(Path directory) {
+        int loaded = 0;
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(directory, "*.json")) {
+            for (Path file : stream) {
+                String filename = file.getFileName().toString();
+                if ("schema.json".equals(filename)) {
+                    continue;
+                }
+                try {
+                    Theme theme = ThemeLoader.fromJson(file);
+                    registerTheme(theme);
+                    loaded++;
+                } catch (ThemeLoader.ThemeLoadException e) {
+                    // Skip files that fail to parse
+                }
+            }
+        } catch (IOException e) {
+            throw new ThemeLoader.ThemeLoadException(
+                    "Failed to read theme directory: " + directory, e);
+        }
+        return loaded;
+    }
+
+    /**
+     * Returns an unmodifiable map of all registered themes keyed by name.
+     *
+     * @return map of theme name to Theme instance
+     */
+    public Map<String, Theme> getAvailableThemes() {
+        return Collections.unmodifiableMap(new LinkedHashMap<>(themes));
+    }
+
+    /**
+     * Switches to a registered theme by name.
+     *
+     * @param name the theme name (case-sensitive)
+     * @return {@code true} if the theme was found and activated, {@code false} otherwise
+     */
+    public boolean useTheme(String name) {
+        Theme theme = themes.get(name);
+        if (theme != null) {
+            setTheme(theme);
+            return true;
+        }
+        return false;
     }
 }

@@ -75,6 +75,12 @@
       <version>1.8.2</version>
       <scope>test</scope>
     </dependency>
+    <!-- Gson for JSON theme parsing -->
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.11.0</version>
+    </dependency>
     <!-- API Guardian for API Stability Annotations -->
     <dependency>
       <groupId>org.apiguardian</groupId>
