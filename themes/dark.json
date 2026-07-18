@@ -5,11 +5,11 @@
   "colors": {
     "background": { "fg": "CYAN", "bg": "BLACK" },
     "button": { "fg": "BLUE", "bg": "BLACK" },
-    "button_focused": { "fg": "BLACK", "bg": "CYAN" },
+    "button_focused": { "fg": "BLACK", "bg": "BLUE" },
     "text_input": { "fg": "WHITE", "bg": "BLACK" },
-    "border": { "fg": "CYAN", "bg": "BLACK" },
-    "selection": { "fg": "BLACK", "bg": "WHITE" },
-    "disabled": { "fg": "BLACK", "bg": "BLACK" }
+    "border": { "fg": "BLUE", "bg": "BLACK" },
+    "selection": { "fg": "BLACK", "bg": "CYAN" },
+    "disabled": { "fg": "BLUE", "bg": "BLACK" }
   },
   "borders": {
     "single": "┌─┐│└─┘│"
