@@ -1,0 +1,64 @@
+name: Validate Theme JSON
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'themes/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'themes/**'
+
+jobs:
+  validate-themes:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install jsonschema
+        run: pip install jsonschema
+
+      - name: Validate theme files against schema
+        run: |
+          python3 - <<'PYEOF'
+          import json
+          import sys
+          import glob
+          from jsonschema import validate, ValidationError
+
+          schema_path = "themes/schema.json"
+          with open(schema_path) as f:
+              schema = json.load(f)
+
+          theme_files = sorted(glob.glob("themes/*.json"))
+          theme_files = [f for f in theme_files if f != schema_path]
+
+          if not theme_files:
+              print("No theme files found to validate.")
+              sys.exit(1)
+
+          passed = 0
+          failed = 0
+
+          for path in theme_files:
+              try:
+                  with open(path) as f:
+                      theme = json.load(f)
+                  validate(instance=theme, schema=schema)
+                  print(f"PASS: {path}")
+                  passed += 1
+              except json.JSONDecodeError as e:
+                  print(f"FAIL: {path} - invalid JSON: {e}")
+                  failed += 1
+              except ValidationError as e:
+                  print(f"FAIL: {path} - {e.message}")
+                  failed += 1
+
+          print(f"\nResults: {passed} passed, {failed} failed, {passed + failed} total")
+
+          if failed > 0:
+              sys.exit(1)
+          PYEOF
