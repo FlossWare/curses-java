@@ -19,6 +19,18 @@ Make jcurses the premier Java terminal UI library with modern features, exceptio
 - ✅ Virtual Threads integration
 - ✅ Foreign Function & Memory API for ncurses
 
+### Theme Unification (In Progress)
+- ✅ JSON theme schema (`themes/schema.json`)
+- ✅ 12 themes exported as JSON (borland, borland3d, dark, dbase3, dbase4, dbase4-3d, default, dos, light, modern, ti994a, trs80)
+- ✅ ThemeLoader (fromJson/toJson) for Java
+- ✅ ThemeManager enhanced with loadThemesFromDirectory/useTheme/getAvailableThemes
+- ✅ Architecture Decision Record ([ADR 0006](adr/0006-unification-strategy.md))
+- 🎯 Python consumer (`curses-themes`) to read shared JSON files
+- 🎯 Rendering algorithm specification document
+- 🎯 JSON schema validation in CI
+- 💡 Shared theme repository (`curses-theme-specs`)
+- 💡 Rust/UniFFI shared rendering library (evaluated in #263)
+
 ### Quality Assurance (Complete)
 - ✅ 399 comprehensive tests (100% passing)
 - ✅ 80%+ code coverage
@@ -142,12 +154,13 @@ Want to help accelerate development? See [CONTRIBUTING.md](CONTRIBUTING.md)!
 | Version | Target | Key Features | Status |
 |---------|--------|--------------|--------|
 | v1.28 | 2026-05-24 | Quality & tooling | ✅ Complete |
+| v1.29 | 2026-07 | Theme unification (JSON) | 🔄 In progress |
 | v2.0 | 2026-09 | Windows, Unicode, i18n | 🎯 Planning |
 | v2.5 | 2026-12 | Plugins, animations | 💡 Future |
 | v3.0 | 2027 Q2 | GPU, WASM, network | 💡 Future |
 
 ---
 
-**Updated:** 2026-05-24  
+**Updated:** 2026-07-18  
 **Status:** Active Development  
-**Next Review:** 2026-06-01
+**Next Review:** 2026-08-01
