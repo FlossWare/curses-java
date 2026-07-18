@@ -3,7 +3,7 @@
 A modern Java terminal UI library that brings AWT-like components to the terminal using ncurses. Built with cutting-edge Java 21 features including Virtual Threads, Foreign Function & Memory API, Record Patterns, and Sealed Interfaces.
 
 ![Status](https://img.shields.io/badge/status-working-brightgreen)
-![Version](https://img.shields.io/badge/version-1.28-blue)
+![Version](https://img.shields.io/badge/version-1.0-blue)
 ![Java](https://img.shields.io/badge/java-21-orange)
 ![License](https://img.shields.io/badge/license-Apache--2.0-blue)
 
@@ -11,17 +11,17 @@ A modern Java terminal UI library that brings AWT-like components to the termina
 
 - 🎮 **Fully Interactive** - Real keyboard & mouse navigation and widget interaction
 - 🖱️ **Window Manipulation** - Drag to move windows, resize by dragging edges and corners
-- 🎨 **Color Support** - 8 standard colors with predefined color pairs and 10 built-in themes
-- 📝 **Advanced Text Editing** - Selection, cut/copy/paste, undo/redo, word navigation in text fields
+- 🎨 **Color Support** - 8 standard colors with predefined color pairs and 12 built-in themes
+- 📝 **Advanced Text Editing** - Selection, cut/copy/paste, word navigation in text fields
 - 📜 **Scrollable Views** - JScrollPane with viewport clipping and scrollbar integration
 - ☕ **Modern Java 21** - Virtual Threads, Foreign Function API, Record Patterns, Sealed Interfaces
-- 🎯 **29 Widgets** - Complete AWT-compatible component set
+- 🎯 **28 Widgets** - Complete AWT-compatible component set
 - 🔒 **Thread-Safe** - ReentrantLock protection for all components
 - ⚡ **Fast Rendering** - Differential updates, dirty rectangles, layout caching
-- 🎭 **Themes** - 10 built-in themes (modern, retro computing, and classic IDE styles) with pluggable architecture
+- 🎭 **Themes** - 12 built-in themes (modern, retro computing, and classic IDE styles) with pluggable architecture
 - 🧩 **Module System** - Java 9+ JPMS support (opt-in via `module-info.java.template`)
-- 📦 **Zero Dependencies** - Only ncurses (native) and test libraries
-- ✅ **Comprehensive Tests** - 799 tests (766 unit + 33 integration) with 99% coverage
+- 📦 **Minimal Dependencies** - SLF4J logging, Gson for JSON themes, plus ncurses (native)
+- ✅ **Comprehensive Tests** - 1820 tests (1683 unit + 137 integration) with 80%+ coverage
 
 ## 🚀 Quick Start
 
@@ -162,7 +162,7 @@ Or manually:
 ```bash
 mvn clean compile
 java --enable-preview --enable-native-access=ALL-UNNAMED \
-  -cp target/classes org.flossware.curses-java.InteractiveDemo
+  -cp target/classes org.flossware.curses.InteractiveDemo
 ```
 
 **What you can do:**
@@ -287,7 +287,7 @@ RootPane.getInstance().add(frame);
 
 ## 🎨 Themes
 
-The library includes **10 built-in themes** providing modern, retro, and classic IDE color schemes:
+The library includes **12 built-in themes** providing modern, retro, and classic IDE color schemes:
 
 | Theme Name | Description | Example Use Case |
 |------------|-------------|------------------|
@@ -333,7 +333,7 @@ ThemeManager.getInstance().useTI994ATheme();   // TI-99/4A
 ThemeManager.getInstance().useTRS80Theme();    // TRS-80
 ```
 
-For detailed theme documentation, color palettes, and creating custom themes, see **[THEMES.md](THEMES.md)**.
+For detailed theme documentation, color palettes, and creating custom themes, see **[themes.md](docs/themes.md)**.
 
 ## 🔧 Building from Source
 
@@ -341,13 +341,13 @@ For detailed theme documentation, color palettes, and creating custom themes, se
 # Compile
 mvn clean compile
 
-# Run unit tests (766 tests)
+# Run unit tests (1683 tests)
 mvn test
 
-# Run integration tests (33 tests)
+# Run integration tests (137 tests)
 mvn jacoco:prepare-agent failsafe:integration-test
 
-# Run all tests (799 tests)
+# Run all tests (1820 tests)
 mvn clean test jacoco:prepare-agent failsafe:integration-test failsafe:verify
 
 # Generate coverage report
@@ -364,48 +364,46 @@ mvn package
 
 ```
 curses-java/
-├── src/main/java/org/flossware/curses-java/
-│   ├── api/              # 29 UI components + 7 support classes
+├── src/main/java/org/flossware/curses/
+│   ├── api/              # 28 UI components + support classes
 │   ├── events/           # Event system (4 sealed event types)
 │   ├── ffi/              # ncurses FFI bridge
 │   ├── render/           # Rendering engine (diff engine, event processor)
 │   ├── Main.java         # Static demo
 │   └── InteractiveDemo.java  # Interactive demo
 ├── src/test/java/org/flossware/curses/
-│   ├── integration/      # 33 integration tests (4 test classes)
+│   ├── integration/      # 137 integration tests
 │   ├── testutil/         # Test utilities (MockNcursesBridge)
-│   └── api/              # 766 unit tests
+│   └── api/              # 1683 unit tests
 ├── run-interactive.sh    # Launch script
 ├── test-interactive.sh   # Quick test script
 ├── README.md             # This file
-├── INTEGRATION_TESTING.md # Integration testing guide
-├── INTERACTIVE_DEMO.md   # Detailed interactive guide
 └── QUICKSTART.txt        # Quick reference
 ```
 
 ## 🎯 Current Status
 
 **Working:**
-- ✅ Full component hierarchy (57 Java source files)
-- ✅ All 29 widgets + 9 support classes implemented
+- ✅ Full component hierarchy (75 Java source files)
+- ✅ All 28 widgets + support classes implemented
 - ✅ Interactive keyboard navigation (TAB, arrows, SPACE, ENTER)
 - ✅ Mouse event handling with click detection and component dispatch
 - ✅ Window drag-to-move and resize operations (title bar, edges, corners)
-- ✅ Color support with 8 standard colors, predefined color pairs, and 10 built-in themes
-- ✅ Advanced text editing (selection, cut/copy/paste, undo/redo, word navigation)
+- ✅ Color support with 8 standard colors, predefined color pairs, and 12 built-in themes
+- ✅ Advanced text editing (selection, cut/copy/paste, word navigation)
 - ✅ Scrolling in JScrollPane with viewport clipping and scrollbar integration
 - ✅ ncurses integration via Foreign Function API
 - ✅ Event loop with focus management
 - ✅ Thread-safe rendering with differential updates
 - ✅ Performance optimizations (dirty rectangles, layout caching)
 - ✅ Module system support (opt-in with module-info.java.template)
-- ✅ Theme system (10 built-in themes with pluggable architecture - see [THEMES.md](THEMES.md))
+- ✅ Theme system (12 built-in themes with pluggable architecture - see [themes.md](docs/themes.md))
 - ✅ ASCII rendering (cross-platform compatible)
-- ✅ **Comprehensive test suite** (799 tests: 766 unit + 33 integration)
+- ✅ **Comprehensive test suite** (1820 tests: 1683 unit + 137 integration)
 - ✅ **Automated integration tests** (headless UI testing without terminal)
 - ✅ Thread-safety tests with Virtual Threads
 - ✅ Performance benchmarks (render < 100ms for 50 components)
-- ✅ Code coverage reporting (JaCoCo - 99% instruction coverage)
+- ✅ Code coverage reporting (JaCoCo - 80%+ instruction coverage)
 
 ## 🔬 Technology Stack
 
@@ -461,11 +459,9 @@ Make sure the terminal window has focus and you're running directly (not through
 ## 📖 Documentation
 
 - **[README.md](README.md)** (this file) - Overview and quick start
-- **[THEMES.md](THEMES.md)** - Theme system guide and color palettes
-- **[INTEGRATION_TESTING.md](INTEGRATION_TESTING.md)** - Integration testing guide
-- **[INTERACTIVE_DEMO.md](INTERACTIVE_DEMO.md)** - Detailed interactive demo guide
-- **[EXAMPLES_AND_SCREENSHOTS.md](EXAMPLES_AND_SCREENSHOTS.md)** - Example applications
-- **[TESTING.md](TESTING.md)** - Unit testing guide
+- **[themes.md](docs/themes.md)** - Theme system guide and color palettes
+- **[testing.md](docs/testing.md)** - Testing guide (unit and integration)
+- **[examples.md](docs/examples.md)** - Example applications
 - **[QUICKSTART.txt](QUICKSTART.txt)** - Quick reference card
 
 ## Related Projects
@@ -496,19 +492,19 @@ Built with ☕ Java 21 | Powered by ncurses | Made for terminal enthusiasts
 The project includes comprehensive test coverage with both unit and integration tests:
 
 ```bash
-# Run unit tests (766 tests)
+# Run unit tests (1683 tests)
 mvn test
 
-# Run integration tests (33 tests - headless, no terminal needed)
+# Run integration tests (137 tests - headless, no terminal needed)
 mvn jacoco:prepare-agent failsafe:integration-test
 
-# Run all tests (799 total)
+# Run all tests (1820 total)
 mvn clean test jacoco:prepare-agent failsafe:integration-test failsafe:verify
 
 # Generate coverage report
 mvn clean test jacoco:report
 
-# View coverage report (99% instruction coverage)
+# View coverage report (80%+ instruction coverage)
 open target/site/jacoco/index.html
 
 # Run specific test class
@@ -517,11 +513,11 @@ mvn jacoco:prepare-agent failsafe:integration-test -Dit.test=ButtonInteractionIT
 ```
 
 **Test Coverage:**
-- ✅ **766 unit tests** - Component logic, rendering, thread safety
-- ✅ **33 integration tests** - End-to-end UI interactions (buttons, keyboard, mouse, tables, forms)
+- ✅ **1683 unit tests** - Component logic, rendering, thread safety
+- ✅ **137 integration tests** - End-to-end UI interactions (buttons, keyboard, mouse, tables, forms)
 - ✅ **Mock-based testing** - No terminal required, runs in CI/CD
 - ✅ **Performance benchmarks** - Render timing, event loop efficiency
-- ✅ **99% instruction coverage** - JaCoCo verified
+- ✅ **80%+ instruction coverage** - JaCoCo verified
 
 **Integration Tests:**
 - ButtonInteractionIT - 8 tests (click handlers, forms, progress bars)
@@ -529,14 +525,14 @@ mvn jacoco:prepare-agent failsafe:integration-test -Dit.test=ButtonInteractionIT
 - TableInteractionIT - 9 tests (sorting, selection, add/delete)
 - PerformanceIT - 7 tests (render < 100ms, event loop < 50ms)
 
-See **[INTEGRATION_TESTING.md](INTEGRATION_TESTING.md)** for detailed integration testing guide.
+See **[testing.md](docs/testing.md)** for detailed integration testing guide.
 - ✅ All 28 widgets tested
 - ✅ Mouse event handling tests
 - ✅ Window drag/resize tests (WindowDragManager, JFrame integration)
 - ✅ Color system tests (Color, ColorPair)
 - ✅ Advanced text editing tests
 - ✅ Scrolling tests (JScrollPane)
-- ✅ Theme system tests (all 10 themes validated)
+- ✅ Theme system tests (all 12 themes validated)
 - ✅ Thread-safety validation with Virtual Threads
 - ✅ Event system (sealed interfaces & records)
 - ✅ Layout managers (BorderLayout, FlowLayout, JGridLayout)
@@ -552,7 +548,7 @@ src/test/java/
 │   ├── ColorTest, ColorPairTest, MouseListenerTest
 │   ├── containers/ (JPanel, JFrame tests)
 │   ├── layouts/ (BorderLayout, FlowLayout, JGridLayout tests)
-│   ├── widgets/ (29 widget tests + advanced tests)
+│   ├── widgets/ (28 widget tests + advanced tests)
 │   └── edit/ (Clipboard, text editing support)
 ├── events/ (KeyEvent, MouseEvent, WindowEvent tests)
 ├── theme/ (ThemeTest for Default, Dark, Light themes)
