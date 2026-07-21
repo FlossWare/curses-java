@@ -12,7 +12,7 @@
     <junit.version>5.11.0</junit.version>
     <mockito.version>5.14.2</mockito.version>
     <assertj.version>3.27.3</assertj.version>
-    <slf4j.version>2.0.9</slf4j.version>
+    <slf4j.version>2.0.18</slf4j.version>
     <message>Automated Version Bump ${project.version} [ci skip]</message>
     <!-- Reproducible builds - https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->
     <project.build.outputTimestamp>2026-05-24T06:34:42Z</project.build.outputTimestamp>
