@@ -17,7 +17,7 @@ jobs:
         run: sudo apt-get install -y libncurses-dev
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup JDK 21
         uses: actions/setup-java@v5
