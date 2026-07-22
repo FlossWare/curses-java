@@ -117,7 +117,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.2.5</version>
+        <version>3.5.6</version>
         <configuration>
           <!-- @{argLine} is set by jacoco-maven-plugin's prepare-agent goal -->
           <argLine>@{argLine} --enable-preview --enable-native-access=ALL-UNNAMED</argLine>
